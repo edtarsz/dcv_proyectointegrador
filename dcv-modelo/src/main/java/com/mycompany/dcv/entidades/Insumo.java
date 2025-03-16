@@ -11,7 +11,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.util.List;
 
 /**
  *
@@ -38,14 +42,23 @@ public class Insumo implements Serializable {
     @Column(name = "unidadMedida", nullable = false)
     private String unidadMedida;
 
+    @ManyToOne
+    @JoinColumn(name = "merma_id")
+    private Merma merma;
+
+    @ManyToMany(mappedBy = "insumos")
+    private List<Producto> productos;
+
     public Insumo() {
     }
 
-    public Insumo(String nombre, String descripcion, int stock, String unidadMedida) {
+    public Insumo(String nombre, String descripcion, int stock, String unidadMedida, Merma merma, List<Producto> productos) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.stock = stock;
         this.unidadMedida = unidadMedida;
+        this.merma = merma;
+        this.productos = productos;
     }
 
     public long getId() {
@@ -88,14 +101,32 @@ public class Insumo implements Serializable {
         this.unidadMedida = unidadMedida;
     }
 
+    public Merma getMerma() {
+        return merma;
+    }
+
+    public void setMerma(Merma merma) {
+        this.merma = merma;
+    }
+
+    public List<Producto> getProductos() {
+        return productos;
+    }
+
+    public void setProductos(List<Producto> productos) {
+        this.productos = productos;
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 43 * hash + (int) (this.id ^ (this.id >>> 32));
-        hash = 43 * hash + Objects.hashCode(this.nombre);
-        hash = 43 * hash + Objects.hashCode(this.descripcion);
-        hash = 43 * hash + this.stock;
-        hash = 43 * hash + Objects.hashCode(this.unidadMedida);
+        hash = 17 * hash + (int) (this.id ^ (this.id >>> 32));
+        hash = 17 * hash + Objects.hashCode(this.nombre);
+        hash = 17 * hash + Objects.hashCode(this.descripcion);
+        hash = 17 * hash + this.stock;
+        hash = 17 * hash + Objects.hashCode(this.unidadMedida);
+        hash = 17 * hash + Objects.hashCode(this.merma);
+        hash = 17 * hash + Objects.hashCode(this.productos);
         return hash;
     }
 
@@ -123,6 +154,13 @@ public class Insumo implements Serializable {
         if (!Objects.equals(this.descripcion, other.descripcion)) {
             return false;
         }
-        return Objects.equals(this.unidadMedida, other.unidadMedida);
+        if (!Objects.equals(this.unidadMedida, other.unidadMedida)) {
+            return false;
+        }
+        if (!Objects.equals(this.merma, other.merma)) {
+            return false;
+        }
+        return Objects.equals(this.productos, other.productos);
     }
+
 }

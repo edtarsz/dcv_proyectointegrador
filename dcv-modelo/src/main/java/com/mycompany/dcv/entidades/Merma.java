@@ -4,6 +4,7 @@
  */
 package com.mycompany.dcv.entidades;
 
+import jakarta.persistence.CascadeType;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.Objects;
@@ -12,7 +13,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.List;
 
 /**
  *
@@ -36,13 +41,22 @@ public class Merma implements Serializable {
     @Column(name = "cantidad", nullable = false)
     private Integer cantidad;
 
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
+
+    @OneToMany(mappedBy = "merma", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Insumo> insumos;
+
     public Merma() {
     }
 
-    public Merma(Date fecha, String motivo, Integer cantidad) {
+    public Merma(Date fecha, String motivo, Integer cantidad, Usuario usuario, List<Insumo> insumos) {
         this.fecha = fecha;
         this.motivo = motivo;
         this.cantidad = cantidad;
+        this.usuario = usuario;
+        this.insumos = insumos;
     }
 
     public long getId() {
@@ -77,13 +91,31 @@ public class Merma implements Serializable {
         this.cantidad = cantidad;
     }
 
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public List<Insumo> getInsumos() {
+        return insumos;
+    }
+
+    public void setInsumos(List<Insumo> insumos) {
+        this.insumos = insumos;
+    }
+
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 71 * hash + (int) (this.id ^ (this.id >>> 32));
-        hash = 71 * hash + Objects.hashCode(this.fecha);
-        hash = 71 * hash + Objects.hashCode(this.motivo);
-        hash = 71 * hash + Objects.hashCode(this.cantidad);
+        hash = 17 * hash + (int) (this.id ^ (this.id >>> 32));
+        hash = 17 * hash + Objects.hashCode(this.fecha);
+        hash = 17 * hash + Objects.hashCode(this.motivo);
+        hash = 17 * hash + Objects.hashCode(this.cantidad);
+        hash = 17 * hash + Objects.hashCode(this.usuario);
+        hash = 17 * hash + Objects.hashCode(this.insumos);
         return hash;
     }
 
@@ -108,6 +140,13 @@ public class Merma implements Serializable {
         if (!Objects.equals(this.fecha, other.fecha)) {
             return false;
         }
-        return Objects.equals(this.cantidad, other.cantidad);
+        if (!Objects.equals(this.cantidad, other.cantidad)) {
+            return false;
+        }
+        if (!Objects.equals(this.usuario, other.usuario)) {
+            return false;
+        }
+        return Objects.equals(this.insumos, other.insumos);
     }
+
 }

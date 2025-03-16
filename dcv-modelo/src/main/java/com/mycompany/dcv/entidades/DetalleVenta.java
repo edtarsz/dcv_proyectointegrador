@@ -4,13 +4,17 @@
  */
 package com.mycompany.dcv.entidades;
 
+import jakarta.persistence.CascadeType;
 import java.io.Serializable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.List;
+import java.util.Objects;
 
 /**
  *
@@ -34,54 +38,27 @@ public class DetalleVenta implements Serializable {
     @Column(name = "subtotal", nullable = false)
     private int subtotal;
 
+    @OneToMany(mappedBy = "detalleVenta", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Producto> productos;
+
     public DetalleVenta() {
     }
 
-    public DetalleVenta(int cantidad, int precioUnitario, int subtotal) {
+    public DetalleVenta(int cantidad, int precioUnitario, int subtotal, List<Producto> productos) {
         this.cantidad = cantidad;
         this.precioUnitario = precioUnitario;
         this.subtotal = subtotal;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public int getCantidad() {
-        return cantidad;
-    }
-
-    public void setCantidad(int cantidad) {
-        this.cantidad = cantidad;
-    }
-
-    public int getPrecioUnitario() {
-        return precioUnitario;
-    }
-
-    public void setPrecioUnitario(int precioUnitario) {
-        this.precioUnitario = precioUnitario;
-    }
-
-    public int getSubtotal() {
-        return subtotal;
-    }
-
-    public void setSubtotal(int subtotal) {
-        this.subtotal = subtotal;
+        this.productos = productos;
     }
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 43 * hash + (int) (this.id ^ (this.id >>> 32));
-        hash = 43 * hash + this.cantidad;
-        hash = 43 * hash + this.precioUnitario;
-        hash = 43 * hash + this.subtotal;
+        int hash = 7;
+        hash = 67 * hash + (int) (this.id ^ (this.id >>> 32));
+        hash = 67 * hash + this.cantidad;
+        hash = 67 * hash + this.precioUnitario;
+        hash = 67 * hash + this.subtotal;
+        hash = 67 * hash + Objects.hashCode(this.productos);
         return hash;
     }
 
@@ -106,6 +83,9 @@ public class DetalleVenta implements Serializable {
         if (this.precioUnitario != other.precioUnitario) {
             return false;
         }
-        return this.subtotal == other.subtotal;
+        if (this.subtotal != other.subtotal) {
+            return false;
+        }
+        return Objects.equals(this.productos, other.productos);
     }
 }

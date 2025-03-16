@@ -4,6 +4,7 @@
  */
 package com.mycompany.dcv.entidades;
 
+import jakarta.persistence.CascadeType;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.Objects;
@@ -12,6 +13,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 /**
@@ -39,14 +43,28 @@ public class Venta implements Serializable {
     @Column(name = "estado", nullable = false)
     private String estado;
 
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
+
+    @OneToOne(mappedBy = "venta", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Reembolso reembolso;
+
+    @OneToOne(mappedBy = "venta", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Pedido pedido;
+
     public Venta() {
     }
 
-    public Venta(Date fecha, double total, String metodoPago, String estado) {
+    public Venta(long id, Date fecha, double total, String metodoPago, String estado, Usuario usuario, Reembolso reembolso, Pedido pedido) {
+        this.id = id;
         this.fecha = fecha;
         this.total = total;
         this.metodoPago = metodoPago;
         this.estado = estado;
+        this.usuario = usuario;
+        this.reembolso = reembolso;
+        this.pedido = pedido;
     }
 
     public long getId() {
@@ -89,14 +107,41 @@ public class Venta implements Serializable {
         this.estado = estado;
     }
 
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public Reembolso getReembolso() {
+        return reembolso;
+    }
+
+    public void setReembolso(Reembolso reembolso) {
+        this.reembolso = reembolso;
+    }
+
+    public Pedido getPedido() {
+        return pedido;
+    }
+
+    public void setPedido(Pedido pedido) {
+        this.pedido = pedido;
+    }
+
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 29 * hash + (int) (this.id ^ (this.id >>> 32));
-        hash = 29 * hash + Objects.hashCode(this.fecha);
-        hash = 29 * hash + (int) (Double.doubleToLongBits(this.total) ^ (Double.doubleToLongBits(this.total) >>> 32));
-        hash = 29 * hash + Objects.hashCode(this.metodoPago);
-        hash = 29 * hash + Objects.hashCode(this.estado);
+        hash = 67 * hash + (int) (this.id ^ (this.id >>> 32));
+        hash = 67 * hash + Objects.hashCode(this.fecha);
+        hash = 67 * hash + (int) (Double.doubleToLongBits(this.total) ^ (Double.doubleToLongBits(this.total) >>> 32));
+        hash = 67 * hash + Objects.hashCode(this.metodoPago);
+        hash = 67 * hash + Objects.hashCode(this.estado);
+        hash = 67 * hash + Objects.hashCode(this.usuario);
+        hash = 67 * hash + Objects.hashCode(this.reembolso);
+        hash = 67 * hash + Objects.hashCode(this.pedido);
         return hash;
     }
 
@@ -124,6 +169,16 @@ public class Venta implements Serializable {
         if (!Objects.equals(this.estado, other.estado)) {
             return false;
         }
-        return Objects.equals(this.fecha, other.fecha);
+        if (!Objects.equals(this.fecha, other.fecha)) {
+            return false;
+        }
+        if (!Objects.equals(this.usuario, other.usuario)) {
+            return false;
+        }
+        if (!Objects.equals(this.reembolso, other.reembolso)) {
+            return false;
+        }
+        return Objects.equals(this.pedido, other.pedido);
     }
+
 }

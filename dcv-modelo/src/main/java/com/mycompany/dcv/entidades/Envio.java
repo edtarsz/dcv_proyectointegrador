@@ -12,6 +12,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 /**
@@ -39,14 +41,19 @@ public class Envio implements Serializable {
     @Column(name = "metodoPago", nullable = false)
     private String metodoPago;
 
+    @ManyToOne
+    @JoinColumn(name = "pedido_id")
+    private Pedido pedido;
+
     public Envio() {
     }
 
-    public Envio(Date fechaEnvio, String estado, String direccionEntrega, String metodoPago) {
+    public Envio(Date fechaEnvio, String estado, String direccionEntrega, String metodoPago, Pedido pedido) {
         this.fechaEnvio = fechaEnvio;
         this.estado = estado;
         this.direccionEntrega = direccionEntrega;
         this.metodoPago = metodoPago;
+        this.pedido = pedido;
     }
 
     public long getId() {
@@ -89,14 +96,23 @@ public class Envio implements Serializable {
         this.metodoPago = metodoPago;
     }
 
+    public Pedido getPedido() {
+        return pedido;
+    }
+
+    public void setPedido(Pedido pedido) {
+        this.pedido = pedido;
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 13 * hash + (int) (this.id ^ (this.id >>> 32));
-        hash = 13 * hash + Objects.hashCode(this.fechaEnvio);
-        hash = 13 * hash + Objects.hashCode(this.estado);
-        hash = 13 * hash + Objects.hashCode(this.direccionEntrega);
-        hash = 13 * hash + Objects.hashCode(this.metodoPago);
+        hash = 67 * hash + (int) (this.id ^ (this.id >>> 32));
+        hash = 67 * hash + Objects.hashCode(this.fechaEnvio);
+        hash = 67 * hash + Objects.hashCode(this.estado);
+        hash = 67 * hash + Objects.hashCode(this.direccionEntrega);
+        hash = 67 * hash + Objects.hashCode(this.metodoPago);
+        hash = 67 * hash + Objects.hashCode(this.pedido);
         return hash;
     }
 
@@ -124,6 +140,10 @@ public class Envio implements Serializable {
         if (!Objects.equals(this.metodoPago, other.metodoPago)) {
             return false;
         }
-        return Objects.equals(this.fechaEnvio, other.fechaEnvio);
+        if (!Objects.equals(this.fechaEnvio, other.fechaEnvio)) {
+            return false;
+        }
+        return Objects.equals(this.pedido, other.pedido);
     }
+
 }

@@ -12,6 +12,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 /**
@@ -39,14 +41,20 @@ public class Reembolso implements Serializable {
     @Column(name = "monto", nullable = false)
     private double monto;
 
+    @OneToOne
+    @JoinColumn(name = "venta_id")
+    private Venta venta;
+
     public Reembolso() {
     }
 
-    public Reembolso(Date fecha, String motivo, String estado, double monto) {
+    public Reembolso(long id, Date fecha, String motivo, String estado, double monto, Venta venta) {
+        this.id = id;
         this.fecha = fecha;
         this.motivo = motivo;
         this.estado = estado;
         this.monto = monto;
+        this.venta = venta;
     }
 
     public long getId() {
@@ -89,14 +97,23 @@ public class Reembolso implements Serializable {
         this.monto = monto;
     }
 
+    public Venta getVenta() {
+        return venta;
+    }
+
+    public void setVenta(Venta venta) {
+        this.venta = venta;
+    }
+
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 29 * hash + (int) (this.id ^ (this.id >>> 32));
-        hash = 29 * hash + Objects.hashCode(this.fecha);
-        hash = 29 * hash + Objects.hashCode(this.motivo);
-        hash = 29 * hash + Objects.hashCode(this.estado);
-        hash = 29 * hash + (int) (Double.doubleToLongBits(this.monto) ^ (Double.doubleToLongBits(this.monto) >>> 32));
+        int hash = 3;
+        hash = 17 * hash + (int) (this.id ^ (this.id >>> 32));
+        hash = 17 * hash + Objects.hashCode(this.fecha);
+        hash = 17 * hash + Objects.hashCode(this.motivo);
+        hash = 17 * hash + Objects.hashCode(this.estado);
+        hash = 17 * hash + (int) (Double.doubleToLongBits(this.monto) ^ (Double.doubleToLongBits(this.monto) >>> 32));
+        hash = 17 * hash + Objects.hashCode(this.venta);
         return hash;
     }
 
@@ -124,6 +141,10 @@ public class Reembolso implements Serializable {
         if (!Objects.equals(this.estado, other.estado)) {
             return false;
         }
-        return Objects.equals(this.fecha, other.fecha);
+        if (!Objects.equals(this.fecha, other.fecha)) {
+            return false;
+        }
+        return Objects.equals(this.venta, other.venta);
     }
+
 }

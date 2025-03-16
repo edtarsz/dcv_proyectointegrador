@@ -11,7 +11,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.util.List;
 
 /**
  *
@@ -44,16 +49,36 @@ public class Producto implements Serializable {
     @Column(name = "esPersonalizado", nullable = false)
     private boolean esPersonalizado;
 
+    @ManyToMany
+    @JoinTable(
+            name = "producto_se_compone_de_insumo",
+            joinColumns = @JoinColumn(name = "producto_id"),
+            inverseJoinColumns = @JoinColumn(name = "insumo_id")
+    )
+    private List<Insumo> insumos;
+
+    @ManyToOne
+    @JoinColumn(name = "categoria_id")
+    private Categoria categoria;
+
+    @ManyToOne
+    @JoinColumn(name = "detallesVenta_id")
+    private DetalleVenta detalleVenta;
+
     public Producto() {
     }
 
-    public Producto(String nombre, String descripcion, Double precio, int stock, String imagen, boolean esPersonalizado) {
+    public Producto(long id, String nombre, String descripcion, Double precio, int stock, String imagen, boolean esPersonalizado, List<Insumo> insumos, Categoria categoria, DetalleVenta detallesVenta) {
+        this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.precio = precio;
         this.stock = stock;
         this.imagen = imagen;
         this.esPersonalizado = esPersonalizado;
+        this.insumos = insumos;
+        this.categoria = categoria;
+        this.detalleVenta = detallesVenta;
     }
 
     public long getId() {
@@ -112,16 +137,43 @@ public class Producto implements Serializable {
         this.esPersonalizado = esPersonalizado;
     }
 
+    public List<Insumo> getInsumos() {
+        return insumos;
+    }
+
+    public void setInsumos(List<Insumo> insumos) {
+        this.insumos = insumos;
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
+    }
+
+    public DetalleVenta getDetalleVenta() {
+        return detalleVenta;
+    }
+
+    public void setDetalleVenta(DetalleVenta detalleVenta) {
+        this.detalleVenta = detalleVenta;
+    }
+
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 83 * hash + (int) (this.id ^ (this.id >>> 32));
-        hash = 83 * hash + Objects.hashCode(this.nombre);
-        hash = 83 * hash + Objects.hashCode(this.descripcion);
-        hash = 83 * hash + Objects.hashCode(this.precio);
-        hash = 83 * hash + this.stock;
-        hash = 83 * hash + Objects.hashCode(this.imagen);
-        hash = 83 * hash + (this.esPersonalizado ? 1 : 0);
+        int hash = 7;
+        hash = 97 * hash + (int) (this.id ^ (this.id >>> 32));
+        hash = 97 * hash + Objects.hashCode(this.nombre);
+        hash = 97 * hash + Objects.hashCode(this.descripcion);
+        hash = 97 * hash + Objects.hashCode(this.precio);
+        hash = 97 * hash + this.stock;
+        hash = 97 * hash + Objects.hashCode(this.imagen);
+        hash = 97 * hash + (this.esPersonalizado ? 1 : 0);
+        hash = 97 * hash + Objects.hashCode(this.insumos);
+        hash = 97 * hash + Objects.hashCode(this.categoria);
+        hash = 97 * hash + Objects.hashCode(this.detalleVenta);
         return hash;
     }
 
@@ -155,6 +207,15 @@ public class Producto implements Serializable {
         if (!Objects.equals(this.imagen, other.imagen)) {
             return false;
         }
-        return Objects.equals(this.precio, other.precio);
+        if (!Objects.equals(this.precio, other.precio)) {
+            return false;
+        }
+        if (!Objects.equals(this.insumos, other.insumos)) {
+            return false;
+        }
+        if (!Objects.equals(this.categoria, other.categoria)) {
+            return false;
+        }
+        return Objects.equals(this.detalleVenta, other.detalleVenta);
     }
 }
