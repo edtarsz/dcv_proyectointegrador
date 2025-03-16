@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="3.2" xmlns="https://jakarta.ee/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_2.xsd">
+  <persistence-unit name="detallesConVasosPU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>com.mycompany.dcv.entidades.Categoria</class>
+    <class>com.mycompany.dcv.entidades.CompraInsumo</class>
+    <class>com.mycompany.dcv.entidades.DetalleCompraInsumo</class>
+    <class>com.mycompany.dcv.entidades.DetalleVenta</class>
+    <class>com.mycompany.dcv.entidades.Envio</class>
+    <class>com.mycompany.dcv.entidades.Insumo</class>
+    <class>com.mycompany.dcv.entidades.Merma</class>
+    <class>com.mycompany.dcv.entidades.Pedido</class>
+    <class>com.mycompany.dcv.entidades.Producto</class>
+    <class>com.mycompany.dcv.entidades.Reembolso</class>
+    <class>com.mycompany.dcv.entidades.Usuario</class>
+    <class>com.mycompany.dcv.entidades.Venta</class>
+    <properties>
+      <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/detallesconvasos?zeroDateTimeBehavior=CONVERT_TO_NULL"/>
+      <property name="jakarta.persistence.jdbc.user" value="root"/>
+      <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+      <property name="jakarta.persistence.jdbc.password" value="1234"/>
+      <property name="jakarta.persistence.schema-generation.database.action" value="create"/>
+    </properties>
+  </persistence-unit>
+</persistence>
