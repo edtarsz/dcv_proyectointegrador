@@ -10,6 +10,8 @@ import com.mycompany.dcvconexion.IConexion;
 import com.mycompany.dcvconexion.ModelException;
 import com.mycompany.dcvdao.DAOFactory;
 import com.mycompany.dcvdao.producto.IProductoDAO;
+import com.mycompany.dcventidades.Producto;
+import com.mycompany.dcvexceptions.ControllerException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jakarta.persistence.Persistence;
@@ -28,6 +30,16 @@ public class ProductoBO implements IProductoBO {
             this.productoDAO = DAOFactory.instanciaProductoDAO(conexion);
         } catch (ModelException ex) {
             Logger.getLogger(UsuarioBO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    @Override
+    public Producto crearProducto(Producto producto) throws ControllerException {
+        try {
+            return productoDAO.crearProducto(producto);
+        } catch (ModelException ex) {
+            Logger.getLogger(UsuarioBO.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ControllerException("Error creating comment", ex);
         }
     }
 }

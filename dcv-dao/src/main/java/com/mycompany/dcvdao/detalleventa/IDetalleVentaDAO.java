@@ -4,10 +4,19 @@
  */
 package com.mycompany.dcvdao.detalleventa;
 
+import com.mycompany.dcvconexion.ModelException;
+import com.mycompany.dcventidades.DetalleVenta;
+import java.util.List;
+
 /**
  *
  * @author Ramos
  */
 public interface IDetalleVentaDAO {
-
+    
+    public DetalleVenta crearDetalleVenta(DetalleVenta detalleVenta) throws ModelException;
+    public DetalleVenta obtenerDetalleVentaPorId(long id);
+    public List<DetalleVenta> obtenerTodosLosDetallesVentas();
+    public DetalleVenta actualizarVenta(DetalleVenta detalleVenta) throws ModelException;
+    public DetalleVenta eliminarVenta(long id) throws ModelException;
 }

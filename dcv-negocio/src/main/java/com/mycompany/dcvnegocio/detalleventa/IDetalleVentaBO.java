@@ -4,9 +4,13 @@
  */
 package com.mycompany.dcvnegocio.detalleventa;
 
+import com.mycompany.dcventidades.DetalleVenta;
+import com.mycompany.dcvexceptions.ControllerException;
+
 /**
  * @author
  */
 public interface IDetalleVentaBO {
 
+    public DetalleVenta crearVenta(DetalleVenta detalleVenta) throws ControllerException;
 }

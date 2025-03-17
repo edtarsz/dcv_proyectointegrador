@@ -4,10 +4,19 @@
  */
 package com.mycompany.dcvdao.producto;
 
+import com.mycompany.dcvconexion.ModelException;
+import com.mycompany.dcventidades.Producto;
+import java.util.List;
+
 /**
  *
  * @author Ramos
  */
 public interface IProductoDAO {
 
+    public Producto crearProducto(Producto producto) throws ModelException;
+    public Producto obtenerProductoPorId(long id);
+    public List<Producto> obtenerTodosLosProductos();
+    public Producto actualizarProducto(Producto producto) throws ModelException;
+    public Producto eliminarProducto(long id) throws ModelException;
 }

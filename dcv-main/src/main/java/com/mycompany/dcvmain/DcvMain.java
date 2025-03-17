@@ -26,5 +26,7 @@ public class DcvMain {
 
         usuarioBO = new UsuarioBO();
         usuarioBO.crearUsuario(new Usuario("nombreUsuario", "contrasena", "rol", new ArrayList<CompraInsumo>(), new ArrayList<Merma>(), new ArrayList<Venta>()));
+        
+        
     }
 }

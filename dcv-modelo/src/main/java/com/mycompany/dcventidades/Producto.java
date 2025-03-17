@@ -43,8 +43,6 @@ public class Producto implements Serializable {
     @Column(name = "stock", nullable = false)
     private int stock;
 
-    @Column(name = "imagen", nullable = false)
-    private String imagen;
 
     @Column(name = "esPersonalizado", nullable = false)
     private boolean esPersonalizado;
@@ -73,7 +71,6 @@ public class Producto implements Serializable {
         this.descripcion = descripcion;
         this.precio = precio;
         this.stock = stock;
-        this.imagen = imagen;
         this.esPersonalizado = esPersonalizado;
         this.insumos = insumos;
         this.categoria = categoria;
@@ -120,13 +117,6 @@ public class Producto implements Serializable {
         this.stock = stock;
     }
 
-    public String getImagen() {
-        return imagen;
-    }
-
-    public void setImagen(String imagen) {
-        this.imagen = imagen;
-    }
 
     public boolean isEsPersonalizado() {
         return esPersonalizado;
@@ -168,7 +158,6 @@ public class Producto implements Serializable {
         hash = 97 * hash + Objects.hashCode(this.descripcion);
         hash = 97 * hash + Objects.hashCode(this.precio);
         hash = 97 * hash + this.stock;
-        hash = 97 * hash + Objects.hashCode(this.imagen);
         hash = 97 * hash + (this.esPersonalizado ? 1 : 0);
         hash = 97 * hash + Objects.hashCode(this.insumos);
         hash = 97 * hash + Objects.hashCode(this.categoria);
@@ -201,9 +190,6 @@ public class Producto implements Serializable {
             return false;
         }
         if (!Objects.equals(this.descripcion, other.descripcion)) {
-            return false;
-        }
-        if (!Objects.equals(this.imagen, other.imagen)) {
             return false;
         }
         if (!Objects.equals(this.precio, other.precio)) {

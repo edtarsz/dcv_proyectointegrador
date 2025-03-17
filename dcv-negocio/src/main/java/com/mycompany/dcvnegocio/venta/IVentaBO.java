@@ -4,9 +4,13 @@
  */
 package com.mycompany.dcvnegocio.venta;
 
+import com.mycompany.dcventidades.Venta;
+import com.mycompany.dcvexceptions.ControllerException;
+
 /**
  * @author
  */
 public interface IVentaBO {
 
+    public Venta crearVenta(Venta venta) throws ControllerException;
 }
