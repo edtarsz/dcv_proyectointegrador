@@ -15,8 +15,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import java.util.List;
 
 /**
  *
@@ -50,20 +52,24 @@ public class Venta implements Serializable {
     @OneToOne(mappedBy = "venta", cascade = CascadeType.ALL, orphanRemoval = true)
     private Reembolso reembolso;
 
-    @OneToOne(mappedBy = "venta", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Pedido pedido;
+    @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Envio> envios;
+    
+    @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DetalleVenta> detallesVenta;
 
     public Venta() {
     }
 
-    public Venta(Date fecha, double total, String metodoPago, String estado, Usuario usuario, Reembolso reembolso, Pedido pedido) {
+    public Venta(Date fecha, double total, String metodoPago, String estado, Usuario usuario, Reembolso reembolso, List<Envio> envios, List<DetalleVenta> detallesVenta) {
         this.fecha = fecha;
         this.total = total;
         this.metodoPago = metodoPago;
         this.estado = estado;
         this.usuario = usuario;
         this.reembolso = reembolso;
-        this.pedido = pedido;
+        this.envios = envios;
+        this.detallesVenta = detallesVenta;
     }
 
     public long getId() {
@@ -122,25 +128,34 @@ public class Venta implements Serializable {
         this.reembolso = reembolso;
     }
 
-    public Pedido getPedido() {
-        return pedido;
+    public List<Envio> getEnvios() {
+        return envios;
     }
 
-    public void setPedido(Pedido pedido) {
-        this.pedido = pedido;
+    public void setEnvios(List<Envio> envios) {
+        this.envios = envios;
     }
 
+    public List<DetalleVenta> getDetallesVenta() {
+        return detallesVenta;
+    }
+
+    public void setDetallesVenta(List<DetalleVenta> detallesVenta) {
+        this.detallesVenta = detallesVenta;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 67 * hash + (int) (this.id ^ (this.id >>> 32));
-        hash = 67 * hash + Objects.hashCode(this.fecha);
-        hash = 67 * hash + (int) (Double.doubleToLongBits(this.total) ^ (Double.doubleToLongBits(this.total) >>> 32));
-        hash = 67 * hash + Objects.hashCode(this.metodoPago);
-        hash = 67 * hash + Objects.hashCode(this.estado);
-        hash = 67 * hash + Objects.hashCode(this.usuario);
-        hash = 67 * hash + Objects.hashCode(this.reembolso);
-        hash = 67 * hash + Objects.hashCode(this.pedido);
+        hash = 61 * hash + (int) (this.id ^ (this.id >>> 32));
+        hash = 61 * hash + Objects.hashCode(this.fecha);
+        hash = 61 * hash + (int) (Double.doubleToLongBits(this.total) ^ (Double.doubleToLongBits(this.total) >>> 32));
+        hash = 61 * hash + Objects.hashCode(this.metodoPago);
+        hash = 61 * hash + Objects.hashCode(this.estado);
+        hash = 61 * hash + Objects.hashCode(this.usuario);
+        hash = 61 * hash + Objects.hashCode(this.reembolso);
+        hash = 61 * hash + Objects.hashCode(this.envios);
+        hash = 61 * hash + Objects.hashCode(this.detallesVenta);
         return hash;
     }
 
@@ -177,7 +192,10 @@ public class Venta implements Serializable {
         if (!Objects.equals(this.reembolso, other.reembolso)) {
             return false;
         }
-        return Objects.equals(this.pedido, other.pedido);
+        if (!Objects.equals(this.envios, other.envios)) {
+            return false;
+        }
+        return Objects.equals(this.detallesVenta, other.detallesVenta);
     }
-
+    
 }

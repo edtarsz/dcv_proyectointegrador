@@ -40,13 +40,6 @@ public class Producto implements Serializable {
     @Column(name = "precio", nullable = false)
     private Double precio;
 
-    @Column(name = "stock", nullable = false)
-    private int stock;
-
-
-    @Column(name = "esPersonalizado", nullable = false)
-    private boolean esPersonalizado;
-
     @ManyToMany
     @JoinTable(
             name = "producto_se_compone_de_insumo",
@@ -59,22 +52,16 @@ public class Producto implements Serializable {
     @JoinColumn(name = "categoria_id")
     private Categoria categoria;
 
-    @ManyToOne
-    @JoinColumn(name = "detallesVenta_id")
-    private DetalleVenta detalleVenta;
 
     public Producto() {
     }
 
-    public Producto(String nombre, String descripcion, Double precio, int stock, String imagen, boolean esPersonalizado, List<Insumo> insumos, Categoria categoria, DetalleVenta detalleVenta) {
+    public Producto(String nombre, String descripcion, Double precio, String imagen, boolean esPersonalizado, List<Insumo> insumos, Categoria categoria) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.precio = precio;
-        this.stock = stock;
-        this.esPersonalizado = esPersonalizado;
         this.insumos = insumos;
         this.categoria = categoria;
-        this.detalleVenta = detalleVenta;
     }
 
     public long getId() {
@@ -109,23 +96,6 @@ public class Producto implements Serializable {
         this.precio = precio;
     }
 
-    public int getStock() {
-        return stock;
-    }
-
-    public void setStock(int stock) {
-        this.stock = stock;
-    }
-
-
-    public boolean isEsPersonalizado() {
-        return esPersonalizado;
-    }
-
-    public void setEsPersonalizado(boolean esPersonalizado) {
-        this.esPersonalizado = esPersonalizado;
-    }
-
     public List<Insumo> getInsumos() {
         return insumos;
     }
@@ -142,14 +112,6 @@ public class Producto implements Serializable {
         this.categoria = categoria;
     }
 
-    public DetalleVenta getDetalleVenta() {
-        return detalleVenta;
-    }
-
-    public void setDetalleVenta(DetalleVenta detalleVenta) {
-        this.detalleVenta = detalleVenta;
-    }
-
     @Override
     public int hashCode() {
         int hash = 7;
@@ -157,11 +119,8 @@ public class Producto implements Serializable {
         hash = 97 * hash + Objects.hashCode(this.nombre);
         hash = 97 * hash + Objects.hashCode(this.descripcion);
         hash = 97 * hash + Objects.hashCode(this.precio);
-        hash = 97 * hash + this.stock;
-        hash = 97 * hash + (this.esPersonalizado ? 1 : 0);
         hash = 97 * hash + Objects.hashCode(this.insumos);
         hash = 97 * hash + Objects.hashCode(this.categoria);
-        hash = 97 * hash + Objects.hashCode(this.detalleVenta);
         return hash;
     }
 
@@ -180,12 +139,6 @@ public class Producto implements Serializable {
         if (this.id != other.id) {
             return false;
         }
-        if (this.stock != other.stock) {
-            return false;
-        }
-        if (this.esPersonalizado != other.esPersonalizado) {
-            return false;
-        }
         if (!Objects.equals(this.nombre, other.nombre)) {
             return false;
         }
@@ -198,9 +151,8 @@ public class Producto implements Serializable {
         if (!Objects.equals(this.insumos, other.insumos)) {
             return false;
         }
-        if (!Objects.equals(this.categoria, other.categoria)) {
-            return false;
-        }
-        return Objects.equals(this.detalleVenta, other.detalleVenta);
+        return Objects.equals(this.categoria, other.categoria);
     }
+
+    
 }

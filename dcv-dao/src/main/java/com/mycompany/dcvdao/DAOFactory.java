@@ -13,7 +13,6 @@ import com.mycompany.dcvdao.detalleventa.DetalleVentaDAO;
 import com.mycompany.dcvdao.envio.EnvioDAO;
 import com.mycompany.dcvdao.insumo.InsumoDAO;
 import com.mycompany.dcvdao.merma.MermaDAO;
-import com.mycompany.dcvdao.pedido.PedidoDAO;
 import com.mycompany.dcvdao.producto.ProductoDAO;
 import com.mycompany.dcvdao.reembolso.ReembolsoDAO;
 import com.mycompany.dcvdao.usuario.UsuarioDAO;
@@ -54,10 +53,6 @@ public class DAOFactory {
 
     public static MermaDAO instanciaMermaDAO(IConexion conexion) throws ModelException {
         return new MermaDAO(conexion);
-    }
-
-    public static PedidoDAO instanciaPedidoDAO(IConexion conexion) throws ModelException {
-        return new PedidoDAO(conexion);
     }
 
     public static ProductoDAO instanciaProductoDAO(IConexion conexion) throws ModelException {

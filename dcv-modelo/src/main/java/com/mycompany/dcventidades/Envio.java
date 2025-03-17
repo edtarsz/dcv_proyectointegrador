@@ -37,23 +37,27 @@ public class Envio implements Serializable {
 
     @Column(name = "direccionEntrega", nullable = false)
     private String direccionEntrega;
+    
+    @Column(name = "costo", nullable = false)
+    private double costo;
 
     @Column(name = "metodoPago", nullable = false)
     private String metodoPago;
 
     @ManyToOne
-    @JoinColumn(name = "pedido_id")
-    private Pedido pedido;
+    @JoinColumn(name = "venta_id")
+    private Venta venta;
 
     public Envio() {
     }
 
-    public Envio(Date fechaEnvio, String estado, String direccionEntrega, String metodoPago, Pedido pedido) {
+    public Envio(Date fechaEnvio, String estado, String direccionEntrega, double costo, String metodoPago, Venta venta) {
         this.fechaEnvio = fechaEnvio;
         this.estado = estado;
         this.direccionEntrega = direccionEntrega;
+        this.costo = costo;
         this.metodoPago = metodoPago;
-        this.pedido = pedido;
+        this.venta = venta;
     }
 
     public long getId() {
@@ -96,23 +100,32 @@ public class Envio implements Serializable {
         this.metodoPago = metodoPago;
     }
 
-    public Pedido getPedido() {
-        return pedido;
+    public double getCosto() {
+        return costo;
     }
 
-    public void setPedido(Pedido pedido) {
-        this.pedido = pedido;
+    public void setCosto(double costo) {
+        this.costo = costo;
+    }
+
+    public Venta getVenta() {
+        return venta;
+    }
+
+    public void setVenta(Venta venta) {
+        this.venta = venta;
     }
 
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 67 * hash + (int) (this.id ^ (this.id >>> 32));
-        hash = 67 * hash + Objects.hashCode(this.fechaEnvio);
-        hash = 67 * hash + Objects.hashCode(this.estado);
-        hash = 67 * hash + Objects.hashCode(this.direccionEntrega);
-        hash = 67 * hash + Objects.hashCode(this.metodoPago);
-        hash = 67 * hash + Objects.hashCode(this.pedido);
+        hash = 83 * hash + (int) (this.id ^ (this.id >>> 32));
+        hash = 83 * hash + Objects.hashCode(this.fechaEnvio);
+        hash = 83 * hash + Objects.hashCode(this.estado);
+        hash = 83 * hash + Objects.hashCode(this.direccionEntrega);
+        hash = 83 * hash + (int) (Double.doubleToLongBits(this.costo) ^ (Double.doubleToLongBits(this.costo) >>> 32));
+        hash = 83 * hash + Objects.hashCode(this.metodoPago);
+        hash = 83 * hash + Objects.hashCode(this.venta);
         return hash;
     }
 
@@ -131,6 +144,9 @@ public class Envio implements Serializable {
         if (this.id != other.id) {
             return false;
         }
+        if (Double.doubleToLongBits(this.costo) != Double.doubleToLongBits(other.costo)) {
+            return false;
+        }
         if (!Objects.equals(this.estado, other.estado)) {
             return false;
         }
@@ -143,7 +159,7 @@ public class Envio implements Serializable {
         if (!Objects.equals(this.fechaEnvio, other.fechaEnvio)) {
             return false;
         }
-        return Objects.equals(this.pedido, other.pedido);
+        return Objects.equals(this.venta, other.venta);
     }
-
+    
 }
