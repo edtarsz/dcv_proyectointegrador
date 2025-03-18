@@ -13,6 +13,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -37,21 +39,22 @@ public class Categoria implements Serializable {
     @Column(name = "descripcion", nullable = false)
     private String descripcion;
 
-    @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToMany
+    @JoinTable(
+        name = "categoria_producto",  // Nombre de la tabla intermedia
+        joinColumns = @JoinColumn(name = "categoria_id"),
+        inverseJoinColumns = @JoinColumn(name = "producto_id")
+    )
     private List<Producto> productos;
 
-    @ManyToOne
-    @JoinColumn(name = "producto_id")
-    private Producto producto;
 
     public Categoria() {
     }
 
-    public Categoria(String nombre, String descripcion, List<Producto> productos, Producto producto) {
+    public Categoria(String nombre, String descripcion, List<Producto> productos) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.productos = productos;
-        this.producto = producto;
     }
 
     public long getId() {
@@ -78,6 +81,16 @@ public class Categoria implements Serializable {
         this.descripcion = descripcion;
     }
 
+    public List<Producto> getProductos() {
+        return productos;
+    }
+
+    public void setProductos(List<Producto> productos) {
+        this.productos = productos;
+    }
+    
+    
+
     @Override
     public int hashCode() {
         int hash = 3;
@@ -85,7 +98,6 @@ public class Categoria implements Serializable {
         hash = 43 * hash + Objects.hashCode(this.nombre);
         hash = 43 * hash + Objects.hashCode(this.descripcion);
         hash = 43 * hash + Objects.hashCode(this.productos);
-        hash = 43 * hash + Objects.hashCode(this.producto);
         return hash;
     }
 
@@ -110,9 +122,8 @@ public class Categoria implements Serializable {
         if (!Objects.equals(this.descripcion, other.descripcion)) {
             return false;
         }
-        if (!Objects.equals(this.productos, other.productos)) {
-            return false;
-        }
-        return Objects.equals(this.producto, other.producto);
+        return Objects.equals(this.productos, other.productos);
     }
+
+    
 }

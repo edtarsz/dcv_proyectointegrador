@@ -7,6 +7,7 @@ package com.mycompany.dcvdao;
 import com.mycompany.dcvdao.categoria.CategoriaDAO;
 import com.mycompany.dcvconexion.IConexion;
 import com.mycompany.dcvconexion.ModelException;
+import com.mycompany.dcvdao.cliente.ClienteDAO;
 import com.mycompany.dcvdao.comprainsumo.CompraInsumoDAO;
 import com.mycompany.dcvdao.detallecomprainsumo.DetalleCompraInsumoDAO;
 import com.mycompany.dcvdao.detalleventa.DetalleVentaDAO;
@@ -69,5 +70,9 @@ public class DAOFactory {
 
     public static VentaDAO instanciaVentaDAO(IConexion conexion) throws ModelException {
         return new VentaDAO(conexion);
+    }
+    
+    public static ClienteDAO instanciaClienteDAO(IConexion conexion) throws ModelException {
+        return new ClienteDAO(conexion);
     }
 }

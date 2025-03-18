@@ -38,7 +38,7 @@ public class VentaBO implements IVentaBO {
         try {
             return ventaDAO.crearVenta(venta);
         } catch (ModelException ex) {
-            Logger.getLogger(UsuarioBO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(VentaBO.class.getName()).log(Level.SEVERE, null, ex);
             throw new ControllerException("Error creating comment", ex);
         }
     }

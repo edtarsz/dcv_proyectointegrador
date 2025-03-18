@@ -10,6 +10,8 @@ import com.mycompany.dcvconexion.IConexion;
 import com.mycompany.dcvconexion.ModelException;
 import com.mycompany.dcvdao.DAOFactory;
 import com.mycompany.dcvdao.envio.IEnvioDAO;
+import com.mycompany.dcventidades.Envio;
+import com.mycompany.dcvexceptions.ControllerException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jakarta.persistence.Persistence;
@@ -28,6 +30,16 @@ public class EnvioBO implements IEnvioBO {
             this.envioDAO = DAOFactory.instanciaEnvioDAO(conexion);
         } catch (ModelException ex) {
             Logger.getLogger(UsuarioBO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    @Override
+    public Envio crearEnvio(Envio envio) throws ControllerException {
+        try {
+            return envioDAO.crearEnvio(envio);
+        } catch (ModelException ex) {
+            Logger.getLogger(EnvioBO.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ControllerException("Error creating envio", ex);
         }
     }
 }

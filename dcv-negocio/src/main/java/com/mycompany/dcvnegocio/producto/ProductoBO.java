@@ -15,6 +15,7 @@ import com.mycompany.dcvexceptions.ControllerException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jakarta.persistence.Persistence;
+import java.util.List;
 
 /**
  * @author
@@ -32,14 +33,20 @@ public class ProductoBO implements IProductoBO {
             Logger.getLogger(UsuarioBO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     @Override
     public Producto crearProducto(Producto producto) throws ControllerException {
         try {
             return productoDAO.crearProducto(producto);
         } catch (ModelException ex) {
-            Logger.getLogger(UsuarioBO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ProductoBO.class.getName()).log(Level.SEVERE, null, ex);
             throw new ControllerException("Error creating comment", ex);
         }
     }
+
+    @Override
+    public List<Producto> obtenerTodosLosProductos() throws ControllerException {
+        return productoDAO.obtenerTodosLosProductos();
+    }
+
 }

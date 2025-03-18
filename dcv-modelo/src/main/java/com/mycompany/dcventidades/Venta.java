@@ -18,6 +18,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -49,27 +50,35 @@ public class Venta implements Serializable {
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
-    @OneToOne(mappedBy = "venta", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "venta", cascade = CascadeType.ALL, orphanRemoval = true, optional = true)
+    @JoinColumn(name = "reembolso_id", nullable = true)
     private Reembolso reembolso;
 
     @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Envio> envios;
-    
+
     @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DetalleVenta> detallesVenta;
 
+     @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "cliente_id")
+    private Cliente cliente;
+
     public Venta() {
+        this.envios = new ArrayList<>();
+        this.detallesVenta = new ArrayList<>();
     }
 
-    public Venta(Date fecha, double total, String metodoPago, String estado, Usuario usuario, Reembolso reembolso, List<Envio> envios, List<DetalleVenta> detallesVenta) {
+    public Venta(Date fecha, double total, String metodoPago, String estado, Usuario usuario, Reembolso reembolso, Cliente cliente) {
         this.fecha = fecha;
         this.total = total;
         this.metodoPago = metodoPago;
         this.estado = estado;
         this.usuario = usuario;
         this.reembolso = reembolso;
-        this.envios = envios;
-        this.detallesVenta = detallesVenta;
+        this.envios = new ArrayList<>();
+        this.detallesVenta = new ArrayList<>();
+        this.cliente = cliente;
     }
 
     public long getId() {
@@ -143,19 +152,28 @@ public class Venta implements Serializable {
     public void setDetallesVenta(List<DetalleVenta> detallesVenta) {
         this.detallesVenta = detallesVenta;
     }
-    
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 61 * hash + (int) (this.id ^ (this.id >>> 32));
-        hash = 61 * hash + Objects.hashCode(this.fecha);
-        hash = 61 * hash + (int) (Double.doubleToLongBits(this.total) ^ (Double.doubleToLongBits(this.total) >>> 32));
-        hash = 61 * hash + Objects.hashCode(this.metodoPago);
-        hash = 61 * hash + Objects.hashCode(this.estado);
-        hash = 61 * hash + Objects.hashCode(this.usuario);
-        hash = 61 * hash + Objects.hashCode(this.reembolso);
-        hash = 61 * hash + Objects.hashCode(this.envios);
-        hash = 61 * hash + Objects.hashCode(this.detallesVenta);
+        int hash = 3;
+        hash = 43 * hash + (int) (this.id ^ (this.id >>> 32));
+        hash = 43 * hash + Objects.hashCode(this.fecha);
+        hash = 43 * hash + (int) (Double.doubleToLongBits(this.total) ^ (Double.doubleToLongBits(this.total) >>> 32));
+        hash = 43 * hash + Objects.hashCode(this.metodoPago);
+        hash = 43 * hash + Objects.hashCode(this.estado);
+        hash = 43 * hash + Objects.hashCode(this.usuario);
+        hash = 43 * hash + Objects.hashCode(this.reembolso);
+        hash = 43 * hash + Objects.hashCode(this.envios);
+        hash = 43 * hash + Objects.hashCode(this.detallesVenta);
+        hash = 43 * hash + Objects.hashCode(this.cliente);
         return hash;
     }
 
@@ -195,7 +213,10 @@ public class Venta implements Serializable {
         if (!Objects.equals(this.envios, other.envios)) {
             return false;
         }
-        return Objects.equals(this.detallesVenta, other.detallesVenta);
+        if (!Objects.equals(this.detallesVenta, other.detallesVenta)) {
+            return false;
+        }
+        return Objects.equals(this.cliente, other.cliente);
     }
-    
+
 }

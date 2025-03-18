@@ -42,7 +42,7 @@ public class Reembolso implements Serializable {
     private double monto;
 
     @OneToOne
-    @JoinColumn(name = "venta_id")
+    @JoinColumn(name = "venta_id", nullable = false)
     private Venta venta;
 
     public Reembolso() {

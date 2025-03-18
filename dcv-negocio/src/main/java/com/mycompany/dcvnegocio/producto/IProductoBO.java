@@ -6,6 +6,7 @@ package com.mycompany.dcvnegocio.producto;
 
 import com.mycompany.dcventidades.Producto;
 import com.mycompany.dcvexceptions.ControllerException;
+import java.util.List;
 
 /**
  * @author
@@ -13,4 +14,5 @@ import com.mycompany.dcvexceptions.ControllerException;
 public interface IProductoBO {
 
     public Producto crearProducto(Producto producto) throws ControllerException;
+    public List<Producto> obtenerTodosLosProductos() throws ControllerException;
 }

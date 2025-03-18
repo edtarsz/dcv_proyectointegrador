@@ -32,13 +32,13 @@ public class DetalleVenta implements Serializable {
     private long id;
 
     @Column(name = "cantidad", nullable = false)
-    private int cantidad;
+    private double cantidad;
 
     @Column(name = "precioUnitario", nullable = false)
-    private int precioUnitario;
+    private double precioUnitario;
 
     @Column(name = "subtotal", nullable = false)
-    private int subtotal;
+    private double subtotal;
 
     @ManyToOne
     @JoinColumn(name = "producto_id", nullable = false)
@@ -57,7 +57,7 @@ public class DetalleVenta implements Serializable {
     public DetalleVenta() {
     }
 
-    public DetalleVenta(int cantidad, int precioUnitario, int subtotal, Producto producto, boolean esPersonalizado, String personalizacion, Venta venta) {
+    public DetalleVenta(double cantidad, double precioUnitario, double subtotal, Producto producto, boolean esPersonalizado, String personalizacion, Venta venta) {
         this.cantidad = cantidad;
         this.precioUnitario = precioUnitario;
         this.subtotal = subtotal;
@@ -77,27 +77,27 @@ public class DetalleVenta implements Serializable {
         this.id = id;
     }
 
-    public int getCantidad() {
+    public double getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(int cantidad) {
+    public void setCantidad(double cantidad) {
         this.cantidad = cantidad;
     }
 
-    public int getPrecioUnitario() {
+    public double getPrecioUnitario() {
         return precioUnitario;
     }
 
-    public void setPrecioUnitario(int precioUnitario) {
+    public void setPrecioUnitario(double precioUnitario) {
         this.precioUnitario = precioUnitario;
     }
 
-    public int getSubtotal() {
+    public double getSubtotal() {
         return subtotal;
     }
 
-    public void setSubtotal(int subtotal) {
+    public void setSubtotal(double subtotal) {
         this.subtotal = subtotal;
     }
 
@@ -136,14 +136,14 @@ public class DetalleVenta implements Serializable {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 37 * hash + (int) (this.id ^ (this.id >>> 32));
-        hash = 37 * hash + this.cantidad;
-        hash = 37 * hash + this.precioUnitario;
-        hash = 37 * hash + this.subtotal;
-        hash = 37 * hash + Objects.hashCode(this.producto);
-        hash = 37 * hash + (this.esPersonalizado ? 1 : 0);
-        hash = 37 * hash + Objects.hashCode(this.personalizacion);
-        hash = 37 * hash + Objects.hashCode(this.venta);
+        hash = 97 * hash + (int) (this.id ^ (this.id >>> 32));
+        hash = 97 * hash + (int) (Double.doubleToLongBits(this.cantidad) ^ (Double.doubleToLongBits(this.cantidad) >>> 32));
+        hash = 97 * hash + (int) (Double.doubleToLongBits(this.precioUnitario) ^ (Double.doubleToLongBits(this.precioUnitario) >>> 32));
+        hash = 97 * hash + (int) (Double.doubleToLongBits(this.subtotal) ^ (Double.doubleToLongBits(this.subtotal) >>> 32));
+        hash = 97 * hash + Objects.hashCode(this.producto);
+        hash = 97 * hash + (this.esPersonalizado ? 1 : 0);
+        hash = 97 * hash + Objects.hashCode(this.personalizacion);
+        hash = 97 * hash + Objects.hashCode(this.venta);
         return hash;
     }
 
@@ -162,13 +162,13 @@ public class DetalleVenta implements Serializable {
         if (this.id != other.id) {
             return false;
         }
-        if (this.cantidad != other.cantidad) {
+        if (Double.doubleToLongBits(this.cantidad) != Double.doubleToLongBits(other.cantidad)) {
             return false;
         }
-        if (this.precioUnitario != other.precioUnitario) {
+        if (Double.doubleToLongBits(this.precioUnitario) != Double.doubleToLongBits(other.precioUnitario)) {
             return false;
         }
-        if (this.subtotal != other.subtotal) {
+        if (Double.doubleToLongBits(this.subtotal) != Double.doubleToLongBits(other.subtotal)) {
             return false;
         }
         if (this.esPersonalizado != other.esPersonalizado) {
@@ -182,5 +182,7 @@ public class DetalleVenta implements Serializable {
         }
         return Objects.equals(this.venta, other.venta);
     }
+
+    
 
 }

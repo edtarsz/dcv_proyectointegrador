@@ -4,9 +4,14 @@
  */
 package com.mycompany.dcvnegocio.envio;
 
+import com.mycompany.dcventidades.Envio;
+import com.mycompany.dcvexceptions.ControllerException;
+
 /**
  * @author
  */
 public interface IEnvioBO {
+
+    public Envio crearEnvio(Envio envio) throws ControllerException;
 
 }

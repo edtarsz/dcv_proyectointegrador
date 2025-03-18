@@ -4,6 +4,8 @@
  */
 package com.mycompany.dcventidades;
 
+import static com.google.protobuf.JavaFeaturesProto.java;
+import jakarta.persistence.CascadeType;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.Objects;
@@ -29,36 +31,40 @@ public class Envio implements Serializable {
     @Column(name = "idEnvio", nullable = false)
     private long id;
 
-    @Column(name = "fechaEnvio", nullable = false)
+    @Column(name = "fechaEnvio")
     private Date fechaEnvio;
-
-    @Column(name = "estado", nullable = false)
-    private String estado;
-
+    
+    @Column(name = "fechaEntrega")
+    private Date fechaEntrega;
+    
     @Column(name = "direccionEntrega", nullable = false)
     private String direccionEntrega;
-    
+
     @Column(name = "costo", nullable = false)
     private double costo;
-
-    @Column(name = "metodoPago", nullable = false)
-    private String metodoPago;
 
     @ManyToOne
     @JoinColumn(name = "venta_id")
     private Venta venta;
+    
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "cliente_id")
+    private Cliente cliente;
 
     public Envio() {
     }
 
-    public Envio(Date fechaEnvio, String estado, String direccionEntrega, double costo, String metodoPago, Venta venta) {
+    public Envio(long id, Date fechaEnvio, Date fechaEntrega, String direccionEntrega, double costo, Venta venta, Cliente cliente) {
+        this.id = id;
         this.fechaEnvio = fechaEnvio;
-        this.estado = estado;
+        this.fechaEntrega = fechaEntrega;
         this.direccionEntrega = direccionEntrega;
         this.costo = costo;
-        this.metodoPago = metodoPago;
         this.venta = venta;
+        this.cliente = cliente;
     }
+
+    
 
     public long getId() {
         return id;
@@ -76,13 +82,6 @@ public class Envio implements Serializable {
         this.fechaEnvio = fechaEnvio;
     }
 
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
 
     public String getDireccionEntrega() {
         return direccionEntrega;
@@ -90,14 +89,6 @@ public class Envio implements Serializable {
 
     public void setDireccionEntrega(String direccionEntrega) {
         this.direccionEntrega = direccionEntrega;
-    }
-
-    public String getMetodoPago() {
-        return metodoPago;
-    }
-
-    public void setMetodoPago(String metodoPago) {
-        this.metodoPago = metodoPago;
     }
 
     public double getCosto() {
@@ -116,16 +107,32 @@ public class Envio implements Serializable {
         this.venta = venta;
     }
 
+    public Date getFechaEntrega() {
+        return fechaEntrega;
+    }
+
+    public void setFechaEntrega(Date fechaEntrega) {
+        this.fechaEntrega = fechaEntrega;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 83 * hash + (int) (this.id ^ (this.id >>> 32));
-        hash = 83 * hash + Objects.hashCode(this.fechaEnvio);
-        hash = 83 * hash + Objects.hashCode(this.estado);
-        hash = 83 * hash + Objects.hashCode(this.direccionEntrega);
-        hash = 83 * hash + (int) (Double.doubleToLongBits(this.costo) ^ (Double.doubleToLongBits(this.costo) >>> 32));
-        hash = 83 * hash + Objects.hashCode(this.metodoPago);
-        hash = 83 * hash + Objects.hashCode(this.venta);
+        hash = 59 * hash + (int) (this.id ^ (this.id >>> 32));
+        hash = 59 * hash + Objects.hashCode(this.fechaEnvio);
+        hash = 59 * hash + Objects.hashCode(this.fechaEntrega);
+        hash = 59 * hash + Objects.hashCode(this.direccionEntrega);
+        hash = 59 * hash + (int) (Double.doubleToLongBits(this.costo) ^ (Double.doubleToLongBits(this.costo) >>> 32));
+        hash = 59 * hash + Objects.hashCode(this.venta);
+        hash = 59 * hash + Objects.hashCode(this.cliente);
         return hash;
     }
 
@@ -147,19 +154,21 @@ public class Envio implements Serializable {
         if (Double.doubleToLongBits(this.costo) != Double.doubleToLongBits(other.costo)) {
             return false;
         }
-        if (!Objects.equals(this.estado, other.estado)) {
-            return false;
-        }
         if (!Objects.equals(this.direccionEntrega, other.direccionEntrega)) {
-            return false;
-        }
-        if (!Objects.equals(this.metodoPago, other.metodoPago)) {
             return false;
         }
         if (!Objects.equals(this.fechaEnvio, other.fechaEnvio)) {
             return false;
         }
-        return Objects.equals(this.venta, other.venta);
+        if (!Objects.equals(this.fechaEntrega, other.fechaEntrega)) {
+            return false;
+        }
+        if (!Objects.equals(this.venta, other.venta)) {
+            return false;
+        }
+        return Objects.equals(this.cliente, other.cliente);
     }
+
     
+
 }
