@@ -21,7 +21,7 @@ public class Cliente implements Serializable {
     @Column(name = "telefono", nullable = false)
     private String telefono;
     
-    @Column(name = "correo", nullable = false, unique = true)
+    @Column(name = "correo", unique = true)
     private String correo;
     
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)

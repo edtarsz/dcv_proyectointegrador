@@ -111,7 +111,9 @@ public class DcvMain {
         String telefonoCliente = scanner.nextLine();
         System.out.print("Ingrese el correo del cliente (opcional): ");
         String correoCliente = scanner.nextLine();
-
+        if (correoCliente == "") {
+            correoCliente = null;
+        }
         Cliente cliente1 = new Cliente(nombreCliente, telefonoCliente, correoCliente);
 
         if (requiereEnvio) {
