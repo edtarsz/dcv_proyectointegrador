@@ -24,12 +24,96 @@
         <body>
             <%@ include file="/partials/header.jspf" %>
                 <main class="main-catalogo">
-                    <header class="header-main">
-                        <div class="search-bar-container">
-                            <input type="search" name="search-bar" id="search-bar" placeholder="Buscar producto">
-                            <img src="svg/search.svg" alt="">
-                        </div>
-                    </header>
+                    <div class="container-catalogo">
+                        <header class="header-main">
+                            <div class="search-bar-container">
+                                <input type="search" name="search-bar" id="search-bar" placeholder="Buscar producto">
+                                <img src="svg/search.svg" alt="">
+                            </div>
+                            <div class="nav-catalogo">
+                                <ul class="nav-catalogo-list">
+                                    <li>
+                                        <a href="" class="items-catalogo">
+                                            Tazas
+                                            <img src="svg/arrow-down.svg" alt="">
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="" class="items-catalogo">
+                                            Vasos
+                                            <img src="svg/arrow-down.svg" alt="">
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="" class="items-catalogo">
+                                            Cartas
+                                            <img src="svg/arrow-down.svg" alt="">
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="" class="items-catalogo">
+                                            Etiquetas
+                                            <img src="svg/arrow-down.svg" alt="">
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="" class="items-catalogo">
+                                            Popular
+                                            <img src="svg/arrow-down.svg" alt="">
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="" class="items-catalogo">
+                                            Temporadas
+                                            <img src="svg/arrow-down.svg" alt="">
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </header>
+                        <section class="contenido-catalogo">
+                            <h1>Productos</h1>
+                            <section class="grid-productos-catalogo">
+                                <div class="card-producto">
+                                    <h4>TAZAS</h4>
+                                </div>
+                                <div class="card-producto">
+                                    <h4>TAZAS</h4>
+                                </div>
+                                <div class="card-producto">
+                                    <h4>TAZAS</h4>
+                                </div>
+                            </section>
+                        </section>
+                    </div>
+                    <aside class="aside-catalogo">
+                        <header class="header-aside">
+                            <h1>
+                                PRODUCTO
+                            </h1>
+                            <div>
+                                Categoria
+                            </div>
+                        </header>
+                        <section>
+                            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Vero accusamus iure minus
+                                placeat vitae. Est natus accusamus cupiditate ducimus atque. Quis aperiam eius ratione
+                                minus, maiores sint perspiciatis nobis libero.
+                                Ullam molestias autem incidunt consequuntur consectetur, atque eaque minima, dicta
+                                commodi minus accusantium nihil ipsum omnis vitae odit dignissimos impedit suscipit
+                                corrupti consequatur. Eveniet sit rerum, expedita cupiditate quibusdam molestias!</p>
+                        </section>
+                        <section>
+                            <h4>
+                                CANTIDAD
+                            </h4>
+                        </section>
+                        <section>
+                            <h4>
+                                PERSONALIZAR
+                            </h4>
+                        </section>
+                    </aside>
                 </main>
         </body>
 

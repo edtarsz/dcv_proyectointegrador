@@ -1,6 +1,7 @@
 :root {
     --main-color: #D27272;
     --secondary-color: #FFEFEF;
+    --third-color: #DC9A99;
 }
 
 #search-bar {
@@ -14,6 +15,15 @@
     color: var(--main-color);
 }
 
+#search-bar::placeholder {
+    color: var(--main-color);
+}
+
+/* Quita la "x" al buscar */
+#search-bar::-webkit-search-cancel-button {
+    display: none;
+}
+
 .search-bar-container {
     display: flex;
     justify-content: center;
@@ -21,12 +31,16 @@
     width: 40%;
     background-color: var(--secondary-color);
     border: 2px solid var(--main-color);
-    border-radius: 1rem;
+    border-radius: 2rem;
     padding: 0 1rem;
 }
 
 .main-catalogo {
-    margin: auto;
+    display: grid;
+    margin-top: 4rem;
+    grid-template-columns: 3fr 1fr;
+    gap: 2rem;
+    margin: 4rem auto 0 auto;
     width: 90%;
 }
 
@@ -36,6 +50,87 @@
 }
 
 .header-main {
-    margin-top: 4rem;
-    background-color: beige;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 1.2rem;
+}
+
+.items-catalogo {
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0 1rem;
+}
+
+.nav-catalogo {
+    align-content: center;
+}
+
+.nav-catalogo-list {
+    display: flex;
+}
+
+.nav-catalogo-list img {
+    width: 20px;
+    height: 20px;
+}
+
+.header-aside {
+    display: flex;
+    gap: 5%;
+    justify-content: space-between;
+}
+
+.header-aside h1 {
+    align-self: center;
+    color: var(--main-color);
+    display: block;
+}
+
+.header-aside div {
+    font-weight: 700;
+    border-radius: 2rem;
+    color: white;
+    text-align: center;
+    align-self: center;
+    padding: 0.4rem 0;
+    width: 100%;
+    background-color: var(--third-color);
+}
+
+.aside-catalogo {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.aside-catalogo {
+    color: var(--main-color);
+}
+
+.aside-catalogo p {
+    font-size: 1em;
+    line-height: 1.7;
+}
+
+.contenido-catalogo {
+    color: var(--main-color);
+    margin-top: 2rem;
+}
+
+.contenido-catalogo h1 {
+    margin: 1.2rem 0;
+}
+
+.grid-productos-catalogo {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.card-producto {
+    width: 100%;
+    background-color: var(--secondary-color);
 }
