@@ -1,0 +1,70 @@
+:root {
+    --main-color: #D27272;
+    --hover-main-color: #AC3B3B;
+}
+
+a:visited {
+    color: var(--main-color);
+}
+
+.main-header {
+    font-weight: 700;
+    width: 90%;
+    padding: 1.3rem 0rem 0.8rem 0rem;
+    display: flex;
+    margin: auto;
+    justify-content: space-between;
+    border-bottom: 2px solid var(--main-color);
+}
+
+.left-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--main-color);
+}
+
+.right-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--main-color);
+}
+
+.left-nav li {
+    padding: 0 1rem;
+}
+
+.right-nav li {
+    padding: 0 0 0 1rem;
+}
+
+.main-nav {
+    gap: 4rem;
+    display: flex;
+}
+
+.main-nav li {
+    font-size: 0.9em;
+}
+
+.main-nav li a:hover {
+    transition: 0.2s ease-out;
+    color: var(--hover-main-color);
+}
+
+.main-logo {
+    width: clamp(150px, 8vw, 300px);
+    height: auto;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+li img {
+    width: 30px;
+    height: 30px;
+}
