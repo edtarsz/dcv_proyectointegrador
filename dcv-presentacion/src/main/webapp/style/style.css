@@ -5,14 +5,25 @@
     font-family: "Ubuntu", sans-serif;
 }
 
+:root {
+    --main-color: #D27272;
+    --hover-main-color: #AC3B3B;
+
+    --secondary-color: #FFEFEF;
+    --third-color: #DC9A99;
+    --fourth-color: #C75D5B;
+    --light-pink: #FFEFEF;
+
+    --font-size-small: 0.8em;
+    --font-size-medium: 1.5em;
+}
+
 ul {
     list-style: none;
 }
 
 a {
     text-decoration: none;
-    /* justify-content: center;
-    align-content: center; */
 }
 
 p {

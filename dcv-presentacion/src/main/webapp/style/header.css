@@ -1,13 +1,9 @@
-:root {
-    --main-color: #D27272;
-    --hover-main-color: #AC3B3B;
-}
-
 a:visited {
     color: var(--main-color);
 }
 
 .main-header {
+    font-size: clamp(0.8em, 1.1vw, 1em);
     font-weight: 700;
     width: 90%;
     padding: 1.3rem 0rem 0.8rem 0rem;
