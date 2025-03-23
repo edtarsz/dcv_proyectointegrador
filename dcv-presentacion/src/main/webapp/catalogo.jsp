@@ -93,9 +93,14 @@
                                             <p>$Costo.00</p>
                                         </div>
                                     </div>
-                                    <a href="">
-                                        <img src="svg/cart.svg" alt="">
-                                    </a>
+                                    <div class="btn-operation-group">
+                                        <a href="">
+                                            <img src="svg/pen.svg" alt="">
+                                        </a>
+                                        <a href="">
+                                            <img src="svg/trash.svg" alt="">
+                                        </a>
+                                    </div>
                                 </div>
                                 <div class="card-producto">
                                     <div class="content-card-producto">
@@ -116,9 +121,14 @@
                                             <p>$Costo.00</p>
                                         </div>
                                     </div>
-                                    <a href="">
-                                        <img src="svg/cart.svg" alt="">
-                                    </a>
+                                    <div class="btn-operation-group">
+                                        <a href="">
+                                            <img src="svg/cart.svg" alt="">
+                                        </a>
+                                        <a href="">
+                                            <img src="svg/cart.svg" alt="">
+                                        </a>
+                                    </div>
                                 </div>
                                 <div class="card-producto">
                                     <div class="content-card-producto">
@@ -139,9 +149,14 @@
                                             <p>$Costo.00</p>
                                         </div>
                                     </div>
-                                    <a href="">
-                                        <img src="svg/cart.svg" alt="">
-                                    </a>
+                                    <div class="btn-operation-group">
+                                        <a href="">
+                                            <img src="svg/pen.svg" alt="">
+                                        </a>
+                                        <a href="">
+                                            <img src="svg/trash.svg" alt="">
+                                        </a>
+                                    </div>
                                 </div>
                                 <div class="card-producto">
                                     <div class="content-card-producto">
@@ -162,9 +177,70 @@
                                             <p>$Costo.00</p>
                                         </div>
                                     </div>
-                                    <a href="">
-                                        <img src="svg/cart.svg" alt="">
-                                    </a>
+                                    <div class="btn-operation-group">
+                                        <a href="">
+                                            <img src="svg/cart.svg" alt="">
+                                        </a>
+                                        <a href="">
+                                            <img src="svg/cart.svg" alt="">
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="card-producto">
+                                    <div class="content-card-producto">
+                                        <div class="group-left-card">
+                                            <h4>TAZAS</h4>
+                                            <div class="categoria-producto">
+                                                Categoria
+                                            </div>
+                                        </div>
+                                        <div class="group-right-card">
+                                            <button class="btn-format-card btn-personalizar-card">Personalizar</button>
+                                            <button class="btn-format-card btn-add-carrito">Agregar al carrito</button>
+                                            <div class="counter-container">
+                                                <button class="counter-btn decrease">−</button>
+                                                <div class="counter-value">1</div>
+                                                <button class="counter-btn increase">+</button>
+                                            </div>
+                                            <p>$Costo.00</p>
+                                        </div>
+                                    </div>
+                                    <div class="btn-operation-group">
+                                        <a href="">
+                                            <img src="svg/pen.svg" alt="">
+                                        </a>
+                                        <a href="">
+                                            <img src="svg/trash.svg" alt="">
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="card-producto">
+                                    <div class="content-card-producto">
+                                        <div class="group-left-card">
+                                            <h4>TAZAS</h4>
+                                            <div class="categoria-producto">
+                                                Categoria
+                                            </div>
+                                        </div>
+                                        <div class="group-right-card">
+                                            <button class="btn-format-card btn-personalizar-card">Personalizar</button>
+                                            <button class="btn-format-card btn-add-carrito">Agregar al carrito</button>
+                                            <div class="counter-container">
+                                                <button class="counter-btn decrease">−</button>
+                                                <div class="counter-value">1</div>
+                                                <button class="counter-btn increase">+</button>
+                                            </div>
+                                            <p>$Costo.00</p>
+                                        </div>
+                                    </div>
+                                    <div class="btn-operation-group">
+                                        <a href="">
+                                            <img src="svg/cart.svg" alt="">
+                                        </a>
+                                        <a href="">
+                                            <img src="svg/cart.svg" alt="">
+                                        </a>
+                                    </div>
                                 </div>
                             </section>
                         </section>
@@ -178,7 +254,7 @@
                                 Categoria
                             </div>
                         </header>
-                        <section>
+                        <section class="aside-descripcion">
                             <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Vero accusamus iure minus
                                 placeat vitae. Est natus accusamus cupiditate ducimus atque. Quis aperiam eius ratione
                                 minus, maiores sint perspiciatis nobis libero.
