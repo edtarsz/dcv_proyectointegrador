@@ -1,0 +1,272 @@
+/* 
+    Created on : 22 mar 2025, 4:32:43 p.m.
+    Author     : esmeraldamolinaestrada
+*/
+
+:root {
+    --main-color: #D27272;
+    --secondary-color: #FFEFEF;
+    --light-pink: #FDDEDD;
+    --completed-color: #D27272;
+    --process-color: #DBA5A5;
+    --waiting-color: #D27272;
+    --text-color: #a94442;
+    --border-radius: 8px;
+}
+
+body {
+    font-family: 'Ubuntu', sans-serif;
+}
+
+.main-pedidos {
+    width: 90%;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.pedidos-title {
+    color: var(--text-color);
+    font-weight: 700;
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.pedidos-container {
+    display: flex;
+    gap: 30px;
+}
+
+.pedidos-izquierda {
+    flex: 1;
+}
+
+.pedidos-derecha {
+    flex: 0.8;
+}
+
+.search-filter-container {
+    margin-bottom: 20px;
+}
+
+.search-bar-container {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border: 1px solid var(--main-color);
+    border-radius: 20px;
+    padding: 0 15px;
+    margin-bottom: 15px;
+    height: 40px;
+}
+
+#search-bar {
+    flex: 1;
+    border: none;
+    background: none;
+    outline: none;
+    font-size: 16px;
+    color: var(--text-color);
+}
+
+#search-bar ::placeholder {
+    color: var(--main-color);
+}
+
+.search-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.search-button img {
+    width: 18px;
+    height: 18px;
+}
+
+.filtros-container {
+    display: flex;
+    gap: 15px;
+    overflow-x: auto;
+}
+
+.filtro {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 15px;
+    color: var(--text-color);
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.filtro img {
+    width: 14px;
+    height: 14px;
+}
+
+.pedidos-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.pedido-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--light-pink);
+    border-radius: var(--border-radius);
+    padding: 15px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.pedido-item:hover {
+    background-color: #f8c9c9;
+}
+
+.pedido-item.selected {
+    background-color: #f8c9c9;
+    border-left: 4px solid var(--main-color);
+}
+
+.pedido-numero {
+    font-weight: 700;
+    color: var(--text-color);
+    width: 10%;
+}
+
+.pedido-cliente {
+    font-weight: 500;
+    color: var(--text-color);
+    width: 40%;
+}
+
+.pedido-fecha {
+    color: var(--text-color);
+    width: 20%;
+}
+
+.pedido-estado {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-radius: 15px;
+    padding: 5px 15px;
+    font-size: 14px;
+    color: white;
+    font-weight: 500;
+    width: 30%;
+    justify-content: space-between;
+}
+
+.completado {
+    background-color: var(--completed-color);
+}
+
+.en-proceso {
+    background-color: var(--process-color);
+}
+
+.esperando {
+    background-color: var(--waiting-color);
+}
+
+.pedido-estado img {
+    width: 14px;
+    height: 14px;
+    filter: brightness(0) invert(1);
+}
+
+.detalles-title {
+    color: var(--text-color);
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.detalles-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.detalles-cliente {
+    font-weight: 700;
+    color: var(--text-color);
+    font-size: 18px;
+}
+
+.detalles-fecha {
+    color: var(--text-color);
+}
+
+.detalles-items {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.detalle-item {
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--light-pink);
+    border-radius: var(--border-radius);
+    padding: 15px;
+}
+
+.item-info {
+    flex: 1;
+}
+
+.item-title {
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: 5px;
+}
+
+.item-descripcion {
+    color: var(--text-color);
+    font-size: 14px;
+}
+
+.item-acciones {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.item-precio {
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+.item-editar {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.item-editar img {
+    width: 18px;
+    height: 18px;
+}
+
+.total-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    padding-top: 15px;
+    border-top: 1px solid var(--main-color);
+}
+
+.total-label {
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+.total-valor {
+    font-weight: 700;
+    color: var(--text-color);
+    font-size: 18px;
+}

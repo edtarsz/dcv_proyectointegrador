@@ -1,7 +1,39 @@
+/* 
+    Created on : 22 mar 2025, 4:32:43 p.m.
+    Author     : esmeraldamolinaestrada
+*/
+
 :root {
     --main-color: #D27272;
     --secondary-color: #FFEFEF;
     --third-color: #DC9A99;
+}
+
+.main-catalogo {
+    display: grid;
+    margin-top: 4rem;
+    grid-template-columns: 3fr 1fr;
+    gap: 2rem;
+    margin: 4rem auto 0 auto;
+    width: 90%;
+}
+
+.header-main {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 1.2rem;
+}
+
+.search-bar-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40%;
+    background-color: var(--secondary-color);
+    border: 2px solid var(--main-color);
+    border-radius: 2rem;
+    padding: 0 1rem;
 }
 
 #search-bar {
@@ -19,29 +51,8 @@
     color: var(--main-color);
 }
 
-/* Quita la "x" al buscar */
 #search-bar::-webkit-search-cancel-button {
     display: none;
-}
-
-.search-bar-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 40%;
-    background-color: var(--secondary-color);
-    border: 2px solid var(--main-color);
-    border-radius: 2rem;
-    padding: 0 1rem;
-}
-
-.main-catalogo {
-    display: grid;
-    margin-top: 4rem;
-    grid-template-columns: 3fr 1fr;
-    gap: 2rem;
-    margin: 4rem auto 0 auto;
-    width: 90%;
 }
 
 .search-bar-container img {
@@ -49,11 +60,23 @@
     height: 20px;
 }
 
-.header-main {
-    width: 100%;
+.search-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+/* Estilos para el menú de navegación */
+.nav-catalogo {
+    align-content: center;
+}
+
+.nav-catalogo-list {
     display: flex;
-    justify-content: space-between;
-    gap: 1.2rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
 .items-catalogo {
@@ -62,57 +85,18 @@
     align-items: center;
     gap: 0.5rem;
     margin: 0 1rem;
+    text-decoration: none;
+    color: #666;
+    transition: color 0.3s;
 }
 
-.nav-catalogo {
-    align-content: center;
-}
-
-.nav-catalogo-list {
-    display: flex;
+.items-catalogo:hover {
+    color: var(--main-color);
 }
 
 .nav-catalogo-list img {
     width: 20px;
     height: 20px;
-}
-
-.header-aside {
-    display: flex;
-    gap: 5%;
-    justify-content: space-between;
-}
-
-.header-aside h1 {
-    align-self: center;
-    color: var(--main-color);
-    display: block;
-}
-
-.header-aside div {
-    font-weight: 700;
-    border-radius: 2rem;
-    color: white;
-    text-align: center;
-    align-self: center;
-    padding: 0.4rem 0;
-    width: 100%;
-    background-color: var(--third-color);
-}
-
-.aside-catalogo {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.aside-catalogo {
-    color: var(--main-color);
-}
-
-.aside-catalogo p {
-    font-size: 1em;
-    line-height: 1.7;
 }
 
 .contenido-catalogo {
@@ -133,4 +117,300 @@
 .card-producto {
     width: 100%;
     background-color: var(--secondary-color);
+    border-radius: 8px;
+    padding: 1.5rem;
+    position: relative;
+}
+
+.card-producto h4 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: var(--main-color);
+    font-weight: 700;
+}
+
+.btn-categoria {
+    font-weight: 700;
+    border-radius: 2rem;
+    color: white;
+    text-align: center;
+    align-self: center;
+    padding: 0.4rem 1rem;
+    border: none;
+    background-color: var(--third-color);
+}
+
+.producto-info {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.producto-cantidad {
+    display: flex;
+    align-items: center;
+}
+
+.btn-cantidad {
+    width: 2rem;
+    height: 2rem;
+    border: 1px solid #ddd;
+    background: white;
+    color: var(--main-color);
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-menos {
+    border-radius: 4px 0 0 4px;
+}
+
+.btn-mas {
+    border-radius: 0 4px 4px 0;
+}
+
+.input-cantidad {
+    width: 2.5rem;
+    height: 2rem;
+    border: 1px solid #ddd;
+    border-left: none;
+    border-right: none;
+    text-align: center;
+    font-weight: 700;
+    color: var(--main-color);
+}
+
+.producto-acciones {
+    display: flex;
+    gap: 0.5rem;
+    flex-grow: 1;
+}
+
+.btn-personalizar {
+    background-color: var(--main-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.btn-agregar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--main-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.btn-agregar img {
+    width: 1.2rem;
+    height: 1.2rem;
+}
+
+.producto-precio {
+    font-weight: 700;
+    color: var(--main-color);
+    font-size: 1.2rem;
+}
+
+.producto-opciones {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn-editar, .btn-eliminar {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.3rem;
+}
+
+.btn-editar img, .btn-eliminar img {
+    width: 1.2rem;
+    height: 1.2rem;
+}
+
+/* Variantes por temporada */
+.card-navidad {
+    border-left: 4px solid var(--main-color);
+}
+
+.card-halloween {
+    border-left: 4px solid #ff7800;
+}
+
+/* Estilos para el aside */
+.aside-catalogo {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    background-color: var(--secondary-color);
+    border-radius: 8px;
+    padding: 1.5rem;
+}
+
+.header-aside {
+    display: flex;
+    gap: 5%;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.header-aside h1 {
+    align-self: center;
+    color: var(--main-color);
+    display: block;
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+
+.aside-catalogo {
+    color: var(--main-color);
+}
+
+.description-producto {
+    margin-bottom: 1rem;
+}
+
+.aside-catalogo p {
+    font-size: 1em;
+    line-height: 1.7;
+    color: #666;
+    margin: 0;
+}
+
+/* Secciones del aside */
+.section-cantidad, .section-personalizar {
+    margin-top: 1rem;
+}
+
+.section-cantidad h4, .section-personalizar h4 {
+    color: var(--main-color);
+    margin-bottom: 0.8rem;
+    font-weight: 700;
+}
+
+.control-cantidad {
+    display: flex;
+    align-items: center;
+}
+
+.input-personalizar, .input-extra {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    resize: none;
+    min-height: 5rem;
+    color: #666;
+}
+
+.input-extra {
+    min-height: 3rem;
+}
+
+.section-total {
+    margin-top: 2rem;
+}
+
+.total-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.precio-total {
+    color: var(--main-color);
+}
+
+.btn-editar-total {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.3rem;
+}
+
+.btn-editar-total img {
+    width: 1.2rem;
+    height: 1.2rem;
+}
+
+.total-acciones {
+    display: flex;
+    gap: 0.8rem;
+}
+
+.btn-limpiar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #555;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.btn-limpiar img {
+    width: 1.2rem;
+    height: 1.2rem;
+}
+
+.btn-agregar-total {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background-color: var(--main-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-weight: 700;
+    flex-grow: 1;
+}
+
+.btn-agregar-total img {
+    width: 1.2rem;
+    height: 1.2rem;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .main-catalogo {
+        grid-template-columns: 1fr;
+    }
+
+    .search-bar-container {
+        width: 100%;
+    }
+
+    .header-main {
+        flex-direction: column;
+    }
+
+    .nav-catalogo-list {
+        overflow-x: auto;
+    }
 }
