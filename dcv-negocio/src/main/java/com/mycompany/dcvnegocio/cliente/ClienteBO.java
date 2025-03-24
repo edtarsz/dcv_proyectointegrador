@@ -41,4 +41,9 @@ public class ClienteBO implements IClienteBO{
             throw new ControllerException("Error creating comment", ex);
         }
     }
+
+    @Override
+    public Cliente obtenerClientePorId(Long clienteId) {
+        return clienteDAO.obtenerClientePorId(clienteId);
+    }
 }

@@ -10,6 +10,9 @@ import com.mycompany.dcvconexion.IConexion;
 import com.mycompany.dcvconexion.ModelException;
 import com.mycompany.dcvdao.DAOFactory;
 import com.mycompany.dcvdao.venta.IVentaDAO;
+import com.mycompany.dcventidades.Cliente;
+import com.mycompany.dcventidades.DetalleVenta;
+import com.mycompany.dcventidades.Usuario;
 import com.mycompany.dcventidades.Venta;
 import com.mycompany.dcvexceptions.ControllerException;
 import java.util.logging.Level;
@@ -42,4 +45,24 @@ public class VentaBO implements IVentaBO {
             throw new ControllerException("Error creating comment", ex);
         }
     }
+    
+    @Override
+    public Venta guardarVenta(double total, String metodoPago, Cliente clienteId, Usuario usuarioId) throws ControllerException {
+        try {
+            return ventaDAO.guardarVenta(total, metodoPago, clienteId, usuarioId);
+        } catch (ModelException ex) {
+            Logger.getLogger(VentaBO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public void guardarDetalleVenta(Venta ventaId, DetalleVenta detalle) throws ControllerException {
+        try {
+            ventaDAO.guardarDetalleVenta(ventaId, detalle);
+        } catch (ModelException ex) {
+            Logger.getLogger(VentaBO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+   
+
 }

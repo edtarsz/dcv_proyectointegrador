@@ -4,6 +4,9 @@
  */
 package com.mycompany.dcvnegocio.venta;
 
+import com.mycompany.dcventidades.Cliente;
+import com.mycompany.dcventidades.DetalleVenta;
+import com.mycompany.dcventidades.Usuario;
 import com.mycompany.dcventidades.Venta;
 import com.mycompany.dcvexceptions.ControllerException;
 
@@ -13,4 +16,6 @@ import com.mycompany.dcvexceptions.ControllerException;
 public interface IVentaBO {
 
     public Venta crearVenta(Venta venta) throws ControllerException;
+    Venta guardarVenta(double total, String metodoPago, Cliente clienteId, Usuario usuarioId) throws ControllerException;
+    void guardarDetalleVenta(Venta ventaId, DetalleVenta detalle) throws ControllerException;
 }

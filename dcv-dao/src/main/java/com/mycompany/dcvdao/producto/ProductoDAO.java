@@ -6,9 +6,11 @@ package com.mycompany.dcvdao.producto;
 
 import com.mycompany.dcvconexion.IConexion;
 import com.mycompany.dcvconexion.ModelException;
+import com.mycompany.dcventidades.Insumo;
 import com.mycompany.dcventidades.Producto;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.NoResultException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,8 +34,8 @@ public class ProductoDAO implements IProductoDAO {
         this.entityManager = conexion.crearConexion();
         logger.info("PostDAO initialized with a new EntityManager.");
     }
-    
-     @Override
+
+    @Override
     public Producto crearProducto(Producto producto) throws ModelException {
         EntityTransaction transaction = entityManager.getTransaction();
         try {
@@ -91,6 +93,22 @@ public class ProductoDAO implements IProductoDAO {
             transaction.rollback();
             logger.log(Level.SEVERE, "Error al eliminar la producto", e);
             throw new ModelException("Error al eliminar producto", e);
+        }
+    }
+
+    @Override
+    public double obtenerPrecioProducto(int idProducto) {
+        // Usamos un query para seleccionar el precio del producto por ID
+        String query = "SELECT p.precio FROM Producto p WHERE p.idProducto = :idProducto";
+        try {
+            // Ejecutamos la consulta y obtenemos el resultado
+            return entityManager.createQuery(query, Double.class)
+                    .setParameter("idProducto", idProducto)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            // En caso de que no se encuentre el producto, manejar el error adecuadamente
+            System.out.println("No se encontró el producto con ID: " + idProducto);
+            return 0.0; // Devuelve un valor predeterminado si el producto no se encuentra
         }
     }
 }

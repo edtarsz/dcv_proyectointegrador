@@ -41,4 +41,9 @@ public class UsuarioBO implements IUsuarioBO {
             throw new ControllerException("Error creating comment", ex);
         }
     }
+    
+    @Override
+    public Usuario obtenerUsuarioPorId(long id){
+        return usuarioDAO.obtenerUsuarioPorId(id);
+    }
 }

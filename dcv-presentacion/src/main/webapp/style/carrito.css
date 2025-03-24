@@ -1,0 +1,227 @@
+/* 
+    Created on : 22 mar 2025, 4:32:43 p.m.
+    Author     : esmeraldamolinaestrada
+*/
+
+
+.main-carrito {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: 'Ubuntu', sans-serif;
+}
+
+.item-title {
+    color: #C26E6E; 
+    font-size: 16px; 
+    font-weight: 500;
+    font-family: 'Ubuntu', sans-serif; 
+}
+
+.item-description {
+    color: #777; /* Color gris para el texto secundario */
+    font-size: 13px;
+    font-family: 'Ubuntu', sans-serif;
+    line-height: 1.4;
+}
+
+.container-carrito {
+    display: flex;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.carrito-content {
+    flex: 3;
+}
+
+.resumen-pedido {
+    flex: 1;
+    min-width: 250px;
+}
+
+.carrito-title {
+    color: #C26E6E;
+    font-size: 24px;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.productos-count {
+    color: #C26E6E;
+    margin-top: 0;
+    font-size: 16px;
+}
+
+.carrito-table {
+    border-top: 1px solid #e0e0e0;
+    margin-top: 20px;
+}
+
+.carrito-header, .carrito-item {
+    display: grid;
+    grid-template-columns: 3fr 1fr 1fr 1fr 1fr;
+    gap: 10px;
+    align-items: center;
+    text-align: center;
+    padding: 15px 0;
+}
+
+.carrito-header {
+    color: #666;
+    font-size: 14px;
+    font-weight: 500;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.carrito-item {
+    border-top: 1px solid #e0e0e0;
+}
+
+.col-detalles {
+    text-align: left;
+    padding-left: 10px;
+}
+
+.col-cantidad {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.quantity-control {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+    width: 80px;
+    margin: 0 auto;
+}
+
+.quantity-btn {
+    background: none;
+    border: none;
+    width: 24px;
+    height: 24px;
+    font-size: 16px;
+    cursor: pointer;
+    color: #C26E6E;
+}
+
+.quantity-input {
+    width: 30px;
+    text-align: center;
+    border: none;
+    font-size: 14px;
+}
+
+.col-precio, .col-total {
+    font-weight: 500;
+    color: #C26E6E;
+    text-align: center;
+}
+
+.col-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-delete,
+.btn-edit {
+    background: none;
+    border: 1px solid #eee;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.btn-delete img,
+.btn-edit img {
+    width: 16px;
+    height: 16px;
+}
+
+.btn-delete {
+    background-color: #FEE8E8;
+}
+
+.btn-edit {
+    background-color: #F5F5F5;
+}
+
+.resumen-pedido {
+    background-color: transparent;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.resumen-title {
+    color: #C26E6E;
+    font-size: 18px;
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+.total-line {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.total-label {
+    font-weight: 500;
+    color: #C26E6E;
+    font-size: 18px;
+}
+
+.total-value {
+    font-weight: 700;
+    color: #C26E6E;
+    font-size: 18px;
+}
+
+.btn-edit-total {
+    background: none;
+    border: 1px solid #eee;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background-color: #F5F5F5;
+    margin-left: 10px;
+}
+
+.btn-edit-total img {
+    width: 12px;
+    height: 12px;
+}
+
+.btn-continuar {
+    background-color: #C26E6E;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 12px;
+    width: 100%;
+    font-weight: 500;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.btn-continuar:hover {
+    background-color: #b35f5f;
+}

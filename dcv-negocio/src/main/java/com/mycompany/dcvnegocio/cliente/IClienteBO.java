@@ -13,4 +13,6 @@ import com.mycompany.dcvexceptions.ControllerException;
  */
 public interface IClienteBO {
     public Cliente crearCliente(Cliente cliente) throws ControllerException;
+
+    public Cliente obtenerClientePorId(Long clienteId);
 }
