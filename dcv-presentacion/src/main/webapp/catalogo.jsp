@@ -79,9 +79,6 @@
                                         <div class="content-card-producto">
                                             <div class="group-left-card">
                                                 <h4>TAZAS</h4>
-                                                <div class="categoria-producto">
-                                                    Categoria
-                                                </div>
                                             </div>
                                             <div class="group-right-card">
                                                 <div class="counter-container">
