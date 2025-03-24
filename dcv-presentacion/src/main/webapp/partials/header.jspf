@@ -5,7 +5,7 @@
     <nav class="main-nav">
         <ul class="left-nav">
             <li><a href="">INICIO</a></li>
-            <li><a href="catalogo.jsp">CATÁLOGO</a></li>
+            <li><a href="SVProducto">CATÁLOGO</a></li>
             <li><a href="">REPORTES</a></li>
             <li><a href="">INVENTARIO</a></li>
             <li><a href="Pedidos.jsp">PEDIDOS</a></li>
