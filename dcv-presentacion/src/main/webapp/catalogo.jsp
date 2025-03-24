@@ -185,6 +185,14 @@
                         <section class="aside-personalizar">
                             <textarea name="" id="" placeholder="Extra..." rows="5"></textarea>
                         </section>
+                        <section class="total-aside">
+                            <h4>Total: $110.99</h4>
+                            <img src="svg/pen.svg" alt="">
+                        </section>
+                        <section class="btn-aside-group">
+                            <button class="btn-format-card btn-limpiar-carrito">Limpiar</button>
+                            <button class="btn-format-card btn-add-carrito">Agregar al carrito</button>
+                        </section>
                     </aside>
                 </main>
         </body>
