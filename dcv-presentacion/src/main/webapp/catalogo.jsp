@@ -87,7 +87,17 @@
                                     </div>
                                     <div class="producto-acciones">
                                         <button class="btn-personalizar">Personalizar</button>
-                                        <button class="btn-agregar">Agregar al carrito <img src="svg/cart.svg" alt=""></button>
+                                        <button class="btn-agregar" onclick="agregarAlCarrito(
+                                                ${producto.id},
+                                                        '${producto.nombre}',
+                                                ${producto.precio},
+                                                        document.querySelector(`[data-id='${producto.id}'] .input-personalizar`)?.value || 'No',
+                                                        '${producto.descripcion || 'Sin descripción'}',
+                                                        parseInt(document.querySelector(`[data-id='${producto.id}'] .input-cantidad`)?.value || 1)
+                                                        )">
+                                            Agregar al carrito <img src="svg/cart.svg" alt="">
+                                        </button>
+
                                     </div>
                                     <div class="producto-precio">${producto.precio}</div>
                                 </div>
@@ -99,7 +109,7 @@
             <aside class="aside-catalogo">
                 <header class="header-aside">
                     <h1>TAZAS</h1>
-                     <button class="btn-categoria">Navidad</button>
+                    <button class="btn-categoria">Navidad</button>
                 </header>
                 <section class="description-producto">
                     <p>Dale un toque especial a tus celebraciones con nuestros vasos decorados con bastones de caramelo. Personalizados con el nombre o mensaje que quieras, ideales para fiestas, regalos y eventos.</p>
@@ -129,9 +139,68 @@
                     </div>
 
                     <script>
-                        document.querySelector('.btn-agregar-total').addEventListener('click', function() {
-                            window.location.href = 'Datos.jsp';
-                        });
+                        // Estructura para guardar el carrito
+                        let carrito = [];
+
+// Función para agregar un producto al carrito
+                        function agregarAlCarrito(idProducto, nombre, precio, esPersonalizado, personalizacion, cantidad) {
+                            // Validar cantidad mayor a 0
+                            if (cantidad <= 0) {
+                                cantidad = 1;
+                            }
+
+                            // Validar datos del producto
+                            if (!nombre) {
+                                console.error("El nombre del producto no es válido:", nombre);
+                                return;
+                            }
+
+                            if (!personalizacion) {
+                                personalizacion = "Sin descripción";
+                            }
+
+                            // Verificar si el producto ya está en el carrito
+                            const productoExistente = carrito.find(item => item.idProducto === idProducto);
+
+                            if (productoExistente) {
+                                // Si el producto ya existe, aumentar la cantidad
+                                productoExistente.cantidad += cantidad;
+                            } else {
+                                // Si no existe, agregar el producto
+                                carrito.push({
+                                    idProducto: idProducto,
+                                    nombre: nombre,
+                                    precio: precio,
+                                    personalizado: esPersonalizado,
+                                    personalizacion: personalizacion,
+                                    cantidad: cantidad
+                                });
+                            }
+
+                            // Guardar el carrito en localStorage
+                            localStorage.setItem("carrito", JSON.stringify(carrito));
+                            console.log("Carrito actualizado:", carrito);
+                        }
+
+// Función para cargar el carrito desde localStorage
+                        function cargarCarrito() {
+                            const carritoGuardado = localStorage.getItem("carrito");
+                            if (carritoGuardado) {
+                                carrito = JSON.parse(carritoGuardado);
+                                console.log("Carrito cargado:", carrito);
+                            }
+                        }
+
+// Función para limpiar el carrito
+                        function limpiarCarrito() {
+                            carrito = [];
+                            localStorage.removeItem("carrito");
+                            console.log("Carrito vaciado.");
+                        }
+
+// Llamar esta función al inicio para cargar el carrito existente
+                        document.addEventListener("DOMContentLoaded", cargarCarrito);
+
                     </script>
                 </section>
             </aside>

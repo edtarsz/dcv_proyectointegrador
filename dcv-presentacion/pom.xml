@@ -60,7 +60,12 @@
             <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
             <version>3.0.2</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.firework.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1.0</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
     
     <build>

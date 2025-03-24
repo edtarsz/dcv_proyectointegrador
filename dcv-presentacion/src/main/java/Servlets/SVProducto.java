@@ -27,11 +27,6 @@ public class SVProducto extends HttpServlet {
 
     private IProductoBO productoBO;
 
-//    private Connection getConnection() throws NamingException, SQLException {
-//        InitialContext ctx = new InitialContext();
-//        DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/miBD");
-//        return ds.getConnection();
-//    }
     @Override
     public void init() throws ServletException {
         super.init();
@@ -60,75 +55,28 @@ public class SVProducto extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String action = request.getParameter("action");
+        try {
+            String[] idProductos = request.getParameterValues("idProducto[]");
+            String[] cantidades = request.getParameterValues("cantidad[]");
+            String[] descripciones = request.getParameterValues("descripcion[]");
 
-//        try (Connection conn = getConnection()) {
-//            if ("updateStock".equals(action)) {
-//                actualizarStock(request, conn);
-//            } else if ("addToCart".equals(action)) {
-//                agregarAlCarrito(request);
-//                response.sendRedirect("catalogo.jsp");
-//            }
-//        } catch (Exception e) {
-//        }
-        response.sendRedirect("catalogo.jsp");
-    }
+            // Procesar cada producto
+            for (int i = 0; i < idProductos.length; i++) {
+                int idProducto = Integer.parseInt(idProductos[i]);
+                int cantidad = Integer.parseInt(cantidades[i]);
+                String descripcion = descripciones[i];
 
-    private void actualizarStock(HttpServletRequest request, Connection conn) throws SQLException {
-        String[] ids = request.getParameterValues("id[]");
-        String[] cantidades = request.getParameterValues("cantidad[]");
-
-        if (ids != null && cantidades != null) {
-            for (int i = 0; i < ids.length; i++) {
-                int id = Integer.parseInt(ids[i]);
-                int cantidadComprada = Integer.parseInt(cantidades[i]);
-
-                String sql = "UPDATE producto SET stock = stock - ? WHERE id = ?";
-                try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-                    stmt.setInt(1, cantidadComprada);
-                    stmt.setInt(2, id);
-                    stmt.executeUpdate();
-                }
+                // Lógica para guardar en la base de datos
+                System.out.println("Guardando producto: ID=" + idProducto + ", cantidad=" + cantidad + ", descripción=" + descripcion);
             }
+
+            // Redirigir a una página de confirmación
+            response.sendRedirect("Datos.jsp");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al guardar el pedido.");
         }
-    }
-
-    private void agregarAlCarrito(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        List<Map<String, Object>> carrito = (List<Map<String, Object>>) session.getAttribute("carrito");
-
-        if (carrito == null) {
-            carrito = new ArrayList<>();
-        }
-
-        // Obtener datos del producto
-        int id = Integer.parseInt(request.getParameter("id"));
-        String nombre = request.getParameter("nombre");
-        double precio = Double.parseDouble(request.getParameter("precio"));
-        int cantidad = Integer.parseInt(request.getParameter("cantidad"));
-
-        // Verificar si el producto ya está en el carrito
-        boolean existe = false;
-        for (Map<String, Object> item : carrito) {
-            if ((int) item.get("id") == id) {
-                int nuevaCantidad = (int) item.get("cantidad") + cantidad;
-                item.put("cantidad", nuevaCantidad);
-                existe = true;
-                break;
-            }
-        }
-
-        // Si no existe, agregarlo
-        if (!existe) {
-            Map<String, Object> producto = new HashMap<>();
-            producto.put("id", id);
-            producto.put("nombre", nombre);
-            producto.put("precio", precio);
-            producto.put("cantidad", cantidad);
-            carrito.add(producto);
-        }
-
-        session.setAttribute("carrito", carrito);
     }
 
 }

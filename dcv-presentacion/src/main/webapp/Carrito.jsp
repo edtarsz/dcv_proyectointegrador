@@ -38,71 +38,10 @@
                             <div class="col-precio">PRECIO</div>
                             <div class="col-total">TOTAL</div>
                         </div>
-
-                        <!-- Producto 1 -->
-                        <div class="carrito-item">
-                            <div class="col-detalles">
-                                <h3 class="item-title">Tazas</h3>
-                                <p class="item-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                            </div>
-                            <div class="col-cantidad">
-                                <div class="quantity-control">
-                                    <button class="quantity-btn decrement">−</button>
-                                    <input type="text" class="quantity-input" value="2" readonly>
-                                    <button class="quantity-btn increment">+</button>
-                                </div>
-                            </div>
-                            <div class="col-precio">$44.00</div>
-                            <div class="col-total">$88.00</div>
-                            <div class="col-actions">
-                                <button class="btn-delete"><img src="svg/delete.svg" alt="Eliminar"></button>
-                                <button class="btn-edit"><img src="svg/edit.svg" alt="Editar"></button>
-                            </div>
-                        </div>
-
-                        <!-- Producto 2 -->
-                        <div class="carrito-item">
-                            <div class="col-detalles">
-                                <h3 class="item-title">Tazas <span class="tag-navidad">Navidad</span></h3>
-                                <p class="item-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                            </div>
-                            <div class="col-cantidad">
-                                <div class="quantity-control">
-                                    <button class="quantity-btn decrement">−</button>
-                                    <input type="text" class="quantity-input" value="2" readonly>
-                                    <button class="quantity-btn increment">+</button>
-                                </div>
-                            </div>
-                            <div class="col-precio">$44.00</div>
-                            <div class="col-total">$88.00</div>
-                            <div class="col-actions">
-                                <button class="btn-delete"><img src="svg/delete.svg" alt="Eliminar"></button>
-                                <button class="btn-edit"><img src="svg/edit.svg" alt="Editar"></button>
-                            </div>
-                        </div>
-
-                        <!-- Producto 3 -->
-                        <div class="carrito-item">
-                            <div class="col-detalles">
-                                <h3 class="item-title">Tazas</h3>
-                                <p class="item-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                            </div>
-                            <div class="col-cantidad">
-                                <div class="quantity-control">
-                                    <button class="quantity-btn decrement">−</button>
-                                    <input type="text" class="quantity-input" value="2" readonly>
-                                    <button class="quantity-btn increment">+</button>
-                                </div>
-                            </div>
-                            <div class="col-precio">$44.00</div>
-                            <div class="col-total">$88.00</div>
-                            <div class="col-actions">
-                                <button class="btn-delete"><img src="svg/delete.svg" alt="Eliminar"></button>
-                                <button class="btn-edit"><img src="svg/edit.svg" alt="Editar"></button>
-                            </div>
-                        </div>
                     </div>
                 </div>
+
+
 
                 <div class="resumen-pedido">
                     <h2 class="resumen-title">Resúmen del pedido</h2>
@@ -122,34 +61,147 @@
                         </form>
 
                         <script>
-                            document.querySelector(".btn-continuar").addEventListener("click", function (event) {
-                                event.preventDefault();
+                            // Mostrar el carrito en la página
+                            function mostrarCarrito() {
+                                const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+                                const carritoContainer = document.querySelector(".carrito-table");
+                                carritoContainer.innerHTML = ""; // Limpiar contenido previo
 
-                                let productosContainer = document.getElementById("productosContainer");
-                                productosContainer.innerHTML = "";  // Limpiar contenido previo
+                                // Si el carrito está vacío, mostrar un mensaje
+                                if (carrito.length === 0) {
+                                    carritoContainer.innerHTML = `<p class="empty-carrito">Tu carrito está vacío.</p>`;
+                                    return;
+                                }
 
-                                document.querySelectorAll(".carrito-item").forEach(item => {
-                                    let id = item.getAttribute("data-id");
-                                    let cantidad = item.querySelector(".quantity-input").value;
+                                // Crear filas de productos en el carrito
+                                carrito.forEach((item, index) => {
+                                    const total = (item.precio * item.cantidad).toFixed(2);
+                                    carritoContainer.innerHTML += `
+                <div class="carrito-item" data-id="${item.idProducto}">
+                    <div class="col-detalles">
+                        <h3 class="item-title">${item.nombre}</h3>
+                        <p class="item-description">${item.descripcion || "Sin descripción"}</p>
+                    </div>
+                    <div class="col-cantidad">
+                        <div class="quantity-control">
+                            <button class="quantity-btn decrement" onclick="actualizarCantidad(${index}, -1)">−</button>
+                            <input type="text" class="quantity-input" value="${item.cantidad}" readonly>
+                            <button class="quantity-btn increment" onclick="actualizarCantidad(${index}, 1)">+</button>
+                        </div>
+                    </div>
+                    <div class="col-precio">$${item.precio}</div>
+                    <div class="col-total">$${total}</div>
+                    <div class="col-actions">
+                        <button class="btn-delete" onclick="eliminarDelCarrito(${index})"><img src="svg/delete.svg" alt="Eliminar"></button>
+                    </div>
+                </div>
+            `;
+                                });
+                            }
 
-                                    // Crear inputs ocultos
-                                    let inputId = document.createElement("input");
-                                    inputId.type = "hidden";
-                                    inputId.name = "id[]";
-                                    inputId.value = id;
+                            // Actualizar la cantidad de un producto en el carrito
+                            function actualizarCantidad(index, cambio) {
+                                const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+                                carrito[index].cantidad += cambio;
 
-                                    let inputCantidad = document.createElement("input");
-                                    inputCantidad.type = "hidden";
-                                    inputCantidad.name = "cantidad[]";
-                                    inputCantidad.value = cantidad;
+                                // Evitar cantidades menores a 1
+                                if (carrito[index].cantidad <= 0) {
+                                    carrito[index].cantidad = 1;
+                                }
 
-                                    productosContainer.appendChild(inputId);
-                                    productosContainer.appendChild(inputCantidad);
+                                // Guardar el carrito actualizado en localStorage
+                                localStorage.setItem("carrito", JSON.stringify(carrito));
+                                mostrarCarrito(); // Actualizar el DOM
+                            }
+
+                            // Eliminar un producto del carrito
+                            function eliminarDelCarrito(index) {
+                                const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+                                carrito.splice(index, 1); // Eliminar producto por índice
+
+                                // Guardar el carrito actualizado en localStorage
+                                localStorage.setItem("carrito", JSON.stringify(carrito));
+                                mostrarCarrito(); // Actualizar el DOM
+                            }
+
+                            // Confirmar la compra y enviar datos al servidor
+                            function confirmarCompra() {
+                                const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+
+                                if (carrito.length === 0) {
+                                    alert("El carrito está vacío.");
+                                    return;
+                                }
+
+                                // Transformar el carrito en detalles de venta
+                                const detallesVenta = carrito.map(item => ({
+                                        cantidad: item.cantidad,
+                                        esPersonalizado: item.personalizado === 'Sí' ? 1 : 0,
+                                        personalizacion: item.descripcion || "Sin descripción",
+                                        precioUnitario: item.precio,
+                                        subtotal: (item.precio * item.cantidad).toFixed(2),
+                                        producto_id: item.idProducto,
+                                        venta_id: null // Se asignará en el backend
+                                    }));
+
+                                // Crear el objeto de datos de la venta
+                                const ventaData = {
+                                    detallesVenta: detallesVenta,
+                                    cliente: {
+                                        nombre: "Nombre del Cliente", // Aquí puedes reemplazar con datos reales
+                                        telefono: "Teléfono",
+                                        correo: "Correo opcional"
+                                    },
+                                    envio: {
+                                        requiereEnvio: true, // Cambiar según selección del usuario
+                                        direccion: "Dirección de entrega",
+                                        costo: 50.0 // Cambiar por el costo real
+                                    },
+                                    metodoPago: "Efectivo", // Cambiar según método seleccionado
+                                    estado: "En proceso",
+                                    fecha: new Date().toISOString().split('T')[0]
+                                };
+
+                                // Enviar los datos al servidor como JSON
+                                fetch('/api/ventas', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify(ventaData)
+                                })
+                                        .then(response => {
+                                            if (!response.ok) {
+                                                throw new Error("Error en la solicitud");
+                                            }
+                                            return response.json();
+                                        })
+                                        .then(data => {
+                                            console.log("Venta registrada exitosamente:", data);
+
+                                            // Limpiar el carrito y redirigir o mostrar mensaje de éxito
+                                            localStorage.removeItem("carrito");
+                                            mostrarCarrito();
+                                            alert("Compra confirmada exitosamente. ¡Gracias por tu pedido!");
+                                            window.location.href = "/catalogo.jsp"; // Redirigir si es necesario
+                                        })
+                                        .catch(error => {
+                                            console.error("Error al registrar la venta:", error);
+                                            alert("Hubo un problema al confirmar tu compra. Por favor, inténtalo nuevamente.");
+                                        });
+                            }
+
+                            // Asignar evento al botón de continuar compra
+                            document.addEventListener("DOMContentLoaded", function () {
+                                document.querySelector(".btn-continuar").addEventListener("click", function (event) {
+                                    event.preventDefault();
+                                    confirmarCompra();
                                 });
 
-                                document.getElementById("confirmarCompraForm").submit();
+                                mostrarCarrito();
                             });
                         </script>
+
                     </div>
                 </div>
             </div>
