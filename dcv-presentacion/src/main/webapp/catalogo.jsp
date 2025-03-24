@@ -1,5 +1,6 @@
 <%-- Document : catalogo Created on : Mar 22, 2025, 1:43:42 PM Author : Ramos --%>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -74,67 +75,24 @@
                 <section class="contenido-catalogo">
                     <h1 class="titulo-productos">Productos</h1>
                     <section class="grid-productos-catalogo">
-                        <div class="card-producto">
-                            <h4>TAZAS</h4>
-                            <div class="producto-info">
-                                <div class="producto-cantidad">
-                                    <button class="btn-cantidad btn-menos">−</button>
-                                    <input type="text" value="1" class="input-cantidad">
-                                    <button class="btn-cantidad btn-mas">+</button>
-                                </div>
-                                <div class="producto-acciones">
-                                    <button class="btn-personalizar">Personalizar</button>
-                                    <button class="btn-agregar">Agregar al carrito <img src="svg/cart.svg" alt=""></button>
-                                </div>
-                                <div class="producto-precio">$110.99</div>
-                                <div class="producto-opciones">
-                                    <button class="btn-editar"><img src="svg/edit.svg" alt="Editar"></button>
-                                    <button class="btn-eliminar"><img src="svg/delete.svg" alt="Eliminar"></button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="card-producto card-navidad">
-                            <div class="etiqueta-temporada">Navidad</div>
-                            <h4>TAZAS NAVIDEÑAS</h4>
-                            <div class="producto-info">
-                                <div class="producto-cantidad">
-                                    <button class="btn-cantidad btn-menos">−</button>
-                                    <input type="text" value="1" class="input-cantidad">
-                                    <button class="btn-cantidad btn-mas">+</button>
-                                </div>
-                                <div class="producto-acciones">
-                                    <button class="btn-personalizar">Personalizar</button>
-                                    <button class="btn-agregar">Agregar al carrito <img src="svg/cart.svg" alt=""></button>
-                                </div>
-                                <div class="producto-precio">$110.99</div>
-                                <div class="producto-opciones">
-                                    <button class="btn-editar"><img src="svg/edit.svg" alt="Editar"></button>
-                                    <button class="btn-eliminar"><img src="svg/delete.svg" alt="Eliminar"></button>
+                        <%-- Iteración de productos con JSTL --%>
+                        <c:forEach var="producto" items="${productos}">
+                            <div class="card-producto">
+                                <h4>${producto.nombre}</h4>
+                                <div class="producto-info">
+                                    <div class="producto-cantidad">
+                                        <button class="btn-cantidad btn-menos">−</button>
+                                        <input type="text" value="1" class="input-cantidad">
+                                        <button class="btn-cantidad btn-mas">+</button>
+                                    </div>
+                                    <div class="producto-acciones">
+                                        <button class="btn-personalizar">Personalizar</button>
+                                        <button class="btn-agregar">Agregar al carrito <img src="svg/cart.svg" alt=""></button>
+                                    </div>
+                                    <div class="producto-precio">${producto.precio}</div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="card-producto card-halloween">
-                            <div class="etiqueta-temporada">Halloween</div>
-                            <h4>TAZAS HALLOWEEN</h4>
-                            <div class="producto-info">
-                                <div class="producto-cantidad">
-                                    <button class="btn-cantidad btn-menos">−</button>
-                                    <input type="text" value="1" class="input-cantidad">
-                                    <button class="btn-cantidad btn-mas">+</button>
-                                </div>
-                                <div class="producto-acciones">
-                                    <button class="btn-personalizar">Personalizar</button>
-                                    <button class="btn-agregar">Agregar al carrito <img src="svg/cart.svg" alt=""></button>
-                                </div>
-                                <div class="producto-precio">$110.99</div>
-                                <div class="producto-opciones">
-                                    <button class="btn-editar"><img src="svg/edit.svg" alt="Editar"></button>
-                                    <button class="btn-eliminar"><img src="svg/delete.svg" alt="Eliminar"></button>
-                                </div>
-                            </div>
-                        </div>
+                        </c:forEach>
                     </section>
                 </section>
             </div>

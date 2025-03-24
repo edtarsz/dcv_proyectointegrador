@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -29,7 +30,7 @@
                 <div class="carrito-content">
                     <h1 class="carrito-title">Carrito</h1>
                     <p class="productos-count">3 productos</p>
-                    
+
                     <div class="carrito-table">
                         <div class="carrito-header">
                             <div class="col-detalles">DETALLES DEL PRODUCTO</div>
@@ -37,7 +38,7 @@
                             <div class="col-precio">PRECIO</div>
                             <div class="col-total">TOTAL</div>
                         </div>
-                        
+
                         <!-- Producto 1 -->
                         <div class="carrito-item">
                             <div class="col-detalles">
@@ -58,7 +59,7 @@
                                 <button class="btn-edit"><img src="svg/edit.svg" alt="Editar"></button>
                             </div>
                         </div>
-                        
+
                         <!-- Producto 2 -->
                         <div class="carrito-item">
                             <div class="col-detalles">
@@ -79,7 +80,7 @@
                                 <button class="btn-edit"><img src="svg/edit.svg" alt="Editar"></button>
                             </div>
                         </div>
-                        
+
                         <!-- Producto 3 -->
                         <div class="carrito-item">
                             <div class="col-detalles">
@@ -102,7 +103,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="resumen-pedido">
                     <h2 class="resumen-title">Resúmen del pedido</h2>
                     <div class="resumen-content">
@@ -111,7 +112,44 @@
                             <span class="total-value">$110.99</span>
                             <button class="btn-edit-total"><img src="svg/edit.svg" alt="Editar"></button>
                         </div>
-                        <button class="btn-continuar">Continuar</button>
+                        <form id="confirmarCompraForm" action="SVProducto" method="POST">
+                            <input type="hidden" name="action" value="updateStock">
+
+                            <!-- Campos ocultos para los productos -->
+                            <div id="productosContainer"></div>
+
+                            <button type="submit" class="btn-continuar">Confirmar compra</button>
+                        </form>
+
+                        <script>
+                            document.querySelector(".btn-continuar").addEventListener("click", function (event) {
+                                event.preventDefault();
+
+                                let productosContainer = document.getElementById("productosContainer");
+                                productosContainer.innerHTML = "";  // Limpiar contenido previo
+
+                                document.querySelectorAll(".carrito-item").forEach(item => {
+                                    let id = item.getAttribute("data-id");
+                                    let cantidad = item.querySelector(".quantity-input").value;
+
+                                    // Crear inputs ocultos
+                                    let inputId = document.createElement("input");
+                                    inputId.type = "hidden";
+                                    inputId.name = "id[]";
+                                    inputId.value = id;
+
+                                    let inputCantidad = document.createElement("input");
+                                    inputCantidad.type = "hidden";
+                                    inputCantidad.name = "cantidad[]";
+                                    inputCantidad.value = cantidad;
+
+                                    productosContainer.appendChild(inputId);
+                                    productosContainer.appendChild(inputCantidad);
+                                });
+
+                                document.getElementById("confirmarCompraForm").submit();
+                            });
+                        </script>
                     </div>
                 </div>
             </div>

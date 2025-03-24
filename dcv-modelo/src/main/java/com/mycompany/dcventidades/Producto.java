@@ -152,6 +152,12 @@ public class Producto implements Serializable {
         return Objects.equals(this.categorias, other.categorias);
     }
 
+    @Override
+    public String toString() {
+        return "Producto{" + "id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + ", precio=" + precio + ", insumos=" + insumos + ", categorias=" + categorias + '}';
+    }
+    
+
     
 
 }

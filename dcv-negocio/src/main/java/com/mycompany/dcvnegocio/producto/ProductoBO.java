@@ -47,6 +47,7 @@ public class ProductoBO implements IProductoBO {
     @Override
     public List<Producto> obtenerTodosLosProductos() throws ControllerException {
         return productoDAO.obtenerTodosLosProductos();
+        
     }
 
 }
