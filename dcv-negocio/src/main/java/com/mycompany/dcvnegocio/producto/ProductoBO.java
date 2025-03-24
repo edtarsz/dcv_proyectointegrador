@@ -50,4 +50,16 @@ public class ProductoBO implements IProductoBO {
         
     }
 
+    @Override
+    public Producto obtenerProductoPorId(int productoId) {
+        return productoDAO.obtenerProductoPorId(productoId);
+    }
+
+    @Override
+    public double obtenerPrecioProducto(int idProducto) {
+        return productoDAO.obtenerPrecioProducto(idProducto);
+    }
+
+    
+
 }

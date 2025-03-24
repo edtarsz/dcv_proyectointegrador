@@ -102,8 +102,9 @@
                                 <!-- Campos ocultos para los productos -->
                                 <div id="productosContainer">
                                     <c:forEach var="item" items="${carrito}" varStatus="status">
-                                        <input type="hidden" name="producto[${status.index}].id" value="${item.id}">
-                                        <input type="hidden" name="producto[${status.index}].cantidad" value="1">
+                                        <input type="hidden" name="idProducto[]" value="${item.id}">
+                                        <input type="hidden" name="cantidad[]" value="${status.index}">
+                                         <input type="hidden" name="descripcion[]" value="${not empty item.descripcion ? item.descripcion : ''}">
                                     </c:forEach>
                                 </div>
 

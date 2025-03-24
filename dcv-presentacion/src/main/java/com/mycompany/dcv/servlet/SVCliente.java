@@ -4,6 +4,18 @@
  */
 package com.mycompany.dcv.servlet;
 
+import com.mycompany.dcventidades.Cliente;
+import com.mycompany.dcventidades.DetalleVenta;
+import com.mycompany.dcventidades.Envio;
+import com.mycompany.dcventidades.Producto;
+import com.mycompany.dcventidades.Venta;
+import com.mycompany.dcvexceptions.ControllerException;
+import com.mycompany.dcvnegocio.cliente.ClienteBO;
+import com.mycompany.dcvnegocio.cliente.IClienteBO;
+import com.mycompany.dcvnegocio.producto.IProductoBO;
+import com.mycompany.dcvnegocio.producto.ProductoBO;
+import com.mycompany.dcvnegocio.venta.IVentaBO;
+import com.mycompany.dcvnegocio.venta.VentaBO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -11,13 +23,31 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author crist
  */
-@WebServlet(name = "SVUsuario", urlPatterns = {"/SVUsuario"})
-public class SVUsuario extends HttpServlet {
+@WebServlet(name = "SVCliente", urlPatterns = {"/SVCliente"})
+public class SVCliente extends HttpServlet {
+
+    IClienteBO clienteBO;
+    IProductoBO productoBO;
+    IVentaBO ventaBO;
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        clienteBO = new ClienteBO();
+        productoBO = new ProductoBO();
+        ventaBO = new VentaBO();
+    }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -71,16 +101,38 @@ public class SVUsuario extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        // Capturar los datos del cliente
+        String nombre = request.getParameter("nombre");
+        String telefono = request.getParameter("telefono");
+        String correo = request.getParameter("correo");
+
+        if (nombre == null || telefono == null) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Faltan datos del cliente.");
+            return;
+        }
+
+        // Crear el cliente
+        Cliente cliente = new Cliente(nombre, telefono, correo);
+        try {
+            // Guardar el cliente
+            clienteBO.crearCliente(cliente);
+
+            // Al crear el cliente correctamente, redirigir a la página de venta, pasando el clienteId
+            response.sendRedirect("Venta.jsp?clienteId=" + cliente.getId()); // Asegúrate de pasar el clienteId al SVVenta
+        } catch (ControllerException e) {
+            Logger.getLogger(SVCliente.class.getName()).log(Level.SEVERE, null, e);
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al crear el cliente.");
+        }
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
+
+/**
+ * Returns a short description of the servlet.
+ *
+ * @return a String containing servlet description
+ */
+@Override
+public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
 

@@ -5,6 +5,9 @@
 package com.mycompany.dcvdao.venta;
 
 import com.mycompany.dcvconexion.ModelException;
+import com.mycompany.dcventidades.Cliente;
+import com.mycompany.dcventidades.DetalleVenta;
+import com.mycompany.dcventidades.Usuario;
 import com.mycompany.dcventidades.Venta;
 import java.util.List;
 
@@ -18,5 +21,7 @@ public interface IVentaDAO {
     public List<Venta> obtenerTodasLasVentas();
     public Venta actualizarVenta(Venta venta) throws ModelException;
     public Venta eliminarVenta(long id) throws ModelException;
+    Venta guardarVenta(double total, String metodoPago, Cliente clienteId, Usuario usuarioId) throws ModelException;
+    void guardarDetalleVenta(Venta ventaId, DetalleVenta detalle) throws ModelException;
 
 }

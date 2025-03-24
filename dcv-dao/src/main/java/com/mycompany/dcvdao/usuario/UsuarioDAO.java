@@ -48,4 +48,9 @@ public class UsuarioDAO implements IUsuarioDAO {
             throw new ModelException("Error al crear usuario", e);
         }
     }
+    
+    @Override
+    public Usuario obtenerUsuarioPorId(long id) {
+        return entityManager.find(Usuario.class, id);
+    }
 }

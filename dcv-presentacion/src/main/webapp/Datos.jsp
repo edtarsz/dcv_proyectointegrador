@@ -25,7 +25,7 @@
                 <h2>Información del cliente</h2>
             </div>
             <div class="container-catalogo">
-                <form class="form-cliente" action="procesar_datos.jsp" method="POST">
+                <form class="form-cliente" action="SVCliente" method="POST">
                     <div class="form-group">
                         <label for="nombre">Nombre completo</label>
                         <div class="input-container">
@@ -56,11 +56,6 @@
                     </div>
                     <div class="btn-container">
                         <button type="submit" class="btn-continuar">Continuar</button>
-                        <script>
-                       document.querySelector('.btn-continuar').addEventListener('click', function() {
-                           window.location.href = 'Pedidos.jsp';
-                       });
-                        </script>
                     </div>
                 </form>
             </div>

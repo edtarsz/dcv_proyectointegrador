@@ -13,4 +13,5 @@ import com.mycompany.dcvexceptions.ControllerException;
 public interface IUsuarioBO {
 
     public Usuario crearUsuario(Usuario usuario) throws ControllerException;
+    public Usuario obtenerUsuarioPorId(long id);
 }

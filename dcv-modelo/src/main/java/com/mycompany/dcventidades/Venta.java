@@ -81,6 +81,13 @@ public class Venta implements Serializable {
         this.cliente = cliente;
     }
 
+    public Venta(double total, String metodoPago, Cliente cliente, Usuario usuario) {
+        this.total = total;
+        this.metodoPago = metodoPago;
+        this.cliente = cliente;
+        this.usuario = usuario;
+    }
+
     public long getId() {
         return id;
     }

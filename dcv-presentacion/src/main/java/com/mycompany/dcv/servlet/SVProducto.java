@@ -1,5 +1,6 @@
 package com.mycompany.dcv.servlet;
 
+import com.mycompany.dcventidades.DetalleVenta;
 import com.mycompany.dcventidades.Producto;
 import com.mycompany.dcvexceptions.ControllerException;
 import com.mycompany.dcvnegocio.producto.IProductoBO;
@@ -10,6 +11,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(name = "SVProducto", urlPatterns = {"/SVProducto"})
@@ -45,7 +47,7 @@ public class SVProducto extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
+            try {
             String[] idProductos = request.getParameterValues("idProducto[]");
             String[] cantidades = request.getParameterValues("cantidad[]");
             String[] descripciones = request.getParameterValues("descripcion[]");
@@ -67,5 +69,6 @@ public class SVProducto extends HttpServlet {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al guardar el pedido.");
         }
     }
+    
 
 }

@@ -4,6 +4,7 @@
  */
 package com.mycompany.dcv.servlet;
 
+import com.mycompany.dcventidades.DetalleVenta;
 import com.mycompany.dcventidades.Producto;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -73,7 +74,7 @@ public class SVCarrito extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+   protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         // Obtener los datos enviados por fetch

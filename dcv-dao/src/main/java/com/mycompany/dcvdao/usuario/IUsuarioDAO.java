@@ -13,4 +13,5 @@ import com.mycompany.dcventidades.Usuario;
 public interface IUsuarioDAO {
 
     public Usuario crearUsuario(Usuario usuario) throws ModelException;
+   public Usuario obtenerUsuarioPorId(long id);
 }
