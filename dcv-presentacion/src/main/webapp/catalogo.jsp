@@ -75,21 +75,27 @@
                             <h1>Productos</h1>
                             <section class="grid-productos-catalogo">
                                 <div class="card-producto">
-                                    <div class="content-card-producto">
-                                        <div class="group-left-card">
-                                            <h4>TAZAS</h4>
-                                            <div class="categoria-producto">
-                                                Categoria
+                                    <div class="child-card-producto">
+                                        <div class="content-card-producto">
+                                            <div class="group-left-card">
+                                                <h4>TAZAS</h4>
+                                                <div class="categoria-producto">
+                                                    Categoria
+                                                </div>
+                                            </div>
+                                            <div class="group-right-card">
+                                                <div class="counter-container">
+                                                    <button class="counter-btn decrease">−</button>
+                                                    <div class="counter-value">1</div>
+                                                    <button class="counter-btn increase">+</button>
+                                                </div>
+                                                <button
+                                                    class="btn-format-card btn-personalizar-card">Personalizar</button>
+                                                <button class="btn-format-card btn-add-carrito">Agregar al
+                                                    carrito</button>
                                             </div>
                                         </div>
-                                        <div class="group-right-card">
-                                            <button class="btn-format-card btn-personalizar-card">Personalizar</button>
-                                            <button class="btn-format-card btn-add-carrito">Agregar al carrito</button>
-                                            <div class="counter-container">
-                                                <button class="counter-btn decrease">−</button>
-                                                <div class="counter-value">1</div>
-                                                <button class="counter-btn increase">+</button>
-                                            </div>
+                                        <div class="cost-card-producto">
                                             <p>$Costo.00</p>
                                         </div>
                                     </div>
@@ -103,106 +109,30 @@
                                     </div>
                                 </div>
                                 <div class="card-producto">
-                                    <div class="content-card-producto">
-                                        <div class="group-left-card">
-                                            <h4>TAZAS</h4>
-                                            <div class="categoria-producto">
-                                                Categoria
+                                    <div class="border-if-category">
+                                        <div class="child-card-producto">
+                                            <div class="content-card-producto">
+                                                <div class="group-left-card">
+                                                    <h4>TAZAS</h4>
+                                                    <div class="categoria-producto">
+                                                        Categoria
+                                                    </div>
+                                                </div>
+                                                <div class="group-right-card">
+                                                    <div class="counter-container">
+                                                        <button class="counter-btn decrease">−</button>
+                                                        <div class="counter-value">1</div>
+                                                        <button class="counter-btn increase">+</button>
+                                                    </div>
+                                                    <button
+                                                        class="btn-format-card btn-personalizar-card">Personalizar</button>
+                                                    <button class="btn-format-card btn-add-carrito">Agregar al
+                                                        carrito</button>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="group-right-card">
-                                            <button class="btn-format-card btn-personalizar-card">Personalizar</button>
-                                            <button class="btn-format-card btn-add-carrito">Agregar al carrito</button>
-                                            <div class="counter-container">
-                                                <button class="counter-btn decrease">−</button>
-                                                <div class="counter-value">1</div>
-                                                <button class="counter-btn increase">+</button>
+                                            <div class="cost-card-producto">
+                                                <p>$Costo.00</p>
                                             </div>
-                                            <p>$Costo.00</p>
-                                        </div>
-                                    </div>
-                                    <div class="btn-operation-group">
-                                        <a href="">
-                                            <img src="svg/pen.svg" alt="">
-                                        </a>
-                                        <a href="">
-                                            <img src="svg/trash.svg" alt="">
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="card-producto">
-                                    <div class="content-card-producto">
-                                        <div class="group-left-card">
-                                            <h4>TAZAS</h4>
-                                            <div class="categoria-producto">
-                                                Categoria
-                                            </div>
-                                        </div>
-                                        <div class="group-right-card">
-                                            <button class="btn-format-card btn-personalizar-card">Personalizar</button>
-                                            <button class="btn-format-card btn-add-carrito">Agregar al carrito</button>
-                                            <div class="counter-container">
-                                                <button class="counter-btn decrease">−</button>
-                                                <div class="counter-value">1</div>
-                                                <button class="counter-btn increase">+</button>
-                                            </div>
-                                            <p>$Costo.00</p>
-                                        </div>
-                                    </div>
-                                    <div class="btn-operation-group">
-                                        <a href="">
-                                            <img src="svg/pen.svg" alt="">
-                                        </a>
-                                        <a href="">
-                                            <img src="svg/trash.svg" alt="">
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="card-producto">
-                                    <div class="content-card-producto">
-                                        <div class="group-left-card">
-                                            <h4>TAZAS</h4>
-                                            <div class="categoria-producto">
-                                                Categoria
-                                            </div>
-                                        </div>
-                                        <div class="group-right-card">
-                                            <button class="btn-format-card btn-personalizar-card">Personalizar</button>
-                                            <button class="btn-format-card btn-add-carrito">Agregar al carrito</button>
-                                            <div class="counter-container">
-                                                <button class="counter-btn decrease">−</button>
-                                                <div class="counter-value">1</div>
-                                                <button class="counter-btn increase">+</button>
-                                            </div>
-                                            <p>$Costo.00</p>
-                                        </div>
-                                    </div>
-                                    <div class="btn-operation-group">
-                                        <a href="">
-                                            <img src="svg/pen.svg" alt="">
-                                        </a>
-                                        <a href="">
-                                            <img src="svg/trash.svg" alt="">
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="card-producto">
-                                    <div class="content-card-producto">
-                                        <div class="group-left-card">
-                                            <h4>TAZAS</h4>
-                                            <div class="categoria-producto">
-                                                Categoria
-                                            </div>
-                                        </div>
-                                        <div class="group-right-card">
-                                            <button class="btn-format-card btn-personalizar-card">Personalizar</button>
-                                            <button class="btn-format-card btn-add-carrito">Agregar al carrito</button>
-                                            <div class="counter-container">
-                                                <button class="counter-btn decrease">−</button>
-                                                <div class="counter-value">1</div>
-                                                <button class="counter-btn increase">+</button>
-                                            </div>
-                                            <p>$Costo.00</p>
                                         </div>
                                     </div>
                                     <div class="btn-operation-group">

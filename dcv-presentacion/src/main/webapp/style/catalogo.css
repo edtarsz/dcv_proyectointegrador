@@ -83,6 +83,11 @@
     height: 20px;
 }
 
+.btn-operation-group img {
+    width: 30px;
+    height: 30px;
+}
+
 .header-aside {
     display: flex;
     gap: 5%;
@@ -173,13 +178,36 @@
 }
 
 .content-card-producto {
-    border-radius: 0.5rem;
-    padding: 1rem 2rem;
     width: 100%;
-    background-color: var(--secondary-color);
     align-content: center;
     justify-content: space-between;
     display: flex;
+    gap: 1rem;
+    flex-direction: column;
+}
+
+.child-card-producto {
+    border-radius: 0.5rem;
+    width: 100%;
+    padding: 1rem 2rem;
+    display: flex;
+    background-color: var(--light-pink);
+}
+
+.cost-card-producto {
+    font-weight: 700;
+    align-content: center;
+}
+
+.border-if-category {
+    width: 100%;
+    border-radius: 0.5rem;
+}
+
+/* Si tiene categoría se quita el border radius del hijo / facilidad para el if cuando usemos jstl */
+.border-if-category .child-card-producto {
+    border-radius: 0.6rem;
+    border-left: 5px solid var(--fourth-color);
 }
 
 .categoria-producto {
@@ -190,7 +218,6 @@
     align-self: center;
     font-size: 0.8em;
     padding: 0.3rem 1.2rem;
-    width: 100%;
     background-color: var(--third-color);
 }
 
@@ -232,8 +259,8 @@
     max-width: 150px;
     height: 100%;
     border: 1px solid #D27272;
-    border-radius: 20px;
-    background-color: #FFEFEF;
+    border-radius: 5px;
+    background-color: white;
     overflow: hidden;
 }
 
