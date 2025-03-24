@@ -102,6 +102,13 @@ public class SVVenta extends HttpServlet {
         try {
             // Obtener parámetros del formulario
             String metodoPago = request.getParameter("metodoPago");
+
+            if (metodoPago.equals("1")) {
+                metodoPago = "Tarjeta de débito";
+            } else if (metodoPago.equals("2")) {
+                metodoPago = "Efectivo";
+            }
+
             String envioStr = request.getParameter("envio");
             boolean requiereEnvio = "si".equalsIgnoreCase(envioStr) || "s".equalsIgnoreCase(envioStr);
 
@@ -155,7 +162,7 @@ public class SVVenta extends HttpServlet {
             if (requiereEnvio) {
                 double costoEnvio = 50.0; // Costo de envío predeterminado
                 Envio envio = new Envio();
-                envio.setDireccionEntrega( (String) request.getSession().getAttribute("direccion"));
+                envio.setDireccionEntrega((String) request.getSession().getAttribute("direccion"));
                 envio.setCliente(cliente);
                 envio.setCosto(costoEnvio);
                 envio.setVenta(venta);
@@ -165,8 +172,6 @@ public class SVVenta extends HttpServlet {
             } else {
                 venta.setTotal(totalDetalles);
             }
-            
-            
 
             // En un escenario real, aquí guardarías la venta en la base de datos
             // Por ahora, solo imprimimos los detalles
