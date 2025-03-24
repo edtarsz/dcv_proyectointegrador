@@ -19,6 +19,8 @@
         <link
             href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
             rel="stylesheet">
+
+        <script defer src="script/carrito.js"></script>
         <title>Catalogo</title>
     </head>
 
@@ -28,7 +30,8 @@
             <div class="container-catalogo">
                 <header class="header-main">
                     <div class="search-bar-container">
-                        <input type="search" name="search-bar" id="search-bar" placeholder="Buscar producto">
+                        <input type="search" name="search-bar" id="search-bar"
+                               placeholder="Buscar producto">
                         <img src="svg/search.svg" alt="">
                     </div>
                     <div class="nav-catalogo">
@@ -75,29 +78,22 @@
                 <section class="contenido-catalogo">
                     <h1 class="titulo-productos">Productos</h1>
                     <section class="grid-productos-catalogo">
-                        <%-- Iteración de productos con JSTL --%>
                         <c:forEach var="producto" items="${productos}">
                             <div class="card-producto">
                                 <h4>${producto.nombre}</h4>
                                 <div class="producto-info">
                                     <div class="producto-cantidad">
                                         <button class="btn-cantidad btn-menos">−</button>
-                                        <input type="text" value="1" class="input-cantidad">
+                                        <input type="number" value="1" class="input-cantidad">
                                         <button class="btn-cantidad btn-mas">+</button>
                                     </div>
                                     <div class="producto-acciones">
-                                        <button class="btn-personalizar">Personalizar</button>
-                                        <button class="btn-agregar" onclick="agregarAlCarrito(
-                                                ${producto.id},
-                                                        '${producto.nombre}',
-                                                ${producto.precio},
-                                                        document.querySelector(`[data-id='${producto.id}'] .input-personalizar`)?.value || 'No',
-                                                        '${producto.descripcion || 'Sin descripción'}',
-                                                        parseInt(document.querySelector(`[data-id='${producto.id}'] .input-cantidad`)?.value || 1)
-                                                        )">
+                                        <button class="btn-agregar" onclick="agregarAlCarrito(${producto.id},
+                                                        encodeURIComponent('${producto.nombre}').replace(/%20/g, ' '),
+                                                        encodeURIComponent('${producto.descripcion}').replace(/%20/g, ' '),
+                                                ${producto.precio}, this)">
                                             Agregar al carrito <img src="svg/cart.svg" alt="">
                                         </button>
-
                                     </div>
                                     <div class="producto-precio">${producto.precio}</div>
                                 </div>
@@ -112,7 +108,9 @@
                     <button class="btn-categoria">Navidad</button>
                 </header>
                 <section class="description-producto">
-                    <p>Dale un toque especial a tus celebraciones con nuestros vasos decorados con bastones de caramelo. Personalizados con el nombre o mensaje que quieras, ideales para fiestas, regalos y eventos.</p>
+                    <p>Dale un toque especial a tus celebraciones con nuestros vasos decorados con bastones
+                        de caramelo. Personalizados con el nombre o mensaje que quieras, ideales para
+                        fiestas, regalos y eventos.</p>
                 </section>
                 <section class="section-cantidad">
                     <h4>CANTIDAD</h4>
@@ -124,7 +122,8 @@
                 </section>
                 <section class="section-personalizar">
                     <h4>PERSONALIZAR</h4>
-                    <textarea placeholder="Introduzca sus detalles..." class="input-personalizar"></textarea>
+                    <textarea placeholder="Introduzca sus detalles..."
+                              class="input-personalizar"></textarea>
                     <textarea placeholder="Extra..." class="input-extra"></textarea>
                 </section>
                 <section class="section-total">
@@ -135,73 +134,9 @@
                     </div>
                     <div class="total-acciones">
                         <button class="btn-limpiar">Limpiar <img src="svg/brush.svg" alt=""></button>
-                        <button class="btn-agregar-total">Agregar al carrito <img src="svg/cart.svg" alt=""></button>
+                        <button class="btn-agregar-total">Agregar al carrito <img src="svg/cart.svg"
+                                                                                  alt=""></button>
                     </div>
-
-                    <script>
-                        // Estructura para guardar el carrito
-                        let carrito = [];
-
-// Función para agregar un producto al carrito
-                        function agregarAlCarrito(idProducto, nombre, precio, esPersonalizado, personalizacion, cantidad) {
-                            // Validar cantidad mayor a 0
-                            if (cantidad <= 0) {
-                                cantidad = 1;
-                            }
-
-                            // Validar datos del producto
-                            if (!nombre) {
-                                console.error("El nombre del producto no es válido:", nombre);
-                                return;
-                            }
-
-                            if (!personalizacion) {
-                                personalizacion = "Sin descripción";
-                            }
-
-                            // Verificar si el producto ya está en el carrito
-                            const productoExistente = carrito.find(item => item.idProducto === idProducto);
-
-                            if (productoExistente) {
-                                // Si el producto ya existe, aumentar la cantidad
-                                productoExistente.cantidad += cantidad;
-                            } else {
-                                // Si no existe, agregar el producto
-                                carrito.push({
-                                    idProducto: idProducto,
-                                    nombre: nombre,
-                                    precio: precio,
-                                    personalizado: esPersonalizado,
-                                    personalizacion: personalizacion,
-                                    cantidad: cantidad
-                                });
-                            }
-
-                            // Guardar el carrito en localStorage
-                            localStorage.setItem("carrito", JSON.stringify(carrito));
-                            console.log("Carrito actualizado:", carrito);
-                        }
-
-// Función para cargar el carrito desde localStorage
-                        function cargarCarrito() {
-                            const carritoGuardado = localStorage.getItem("carrito");
-                            if (carritoGuardado) {
-                                carrito = JSON.parse(carritoGuardado);
-                                console.log("Carrito cargado:", carrito);
-                            }
-                        }
-
-// Función para limpiar el carrito
-                        function limpiarCarrito() {
-                            carrito = [];
-                            localStorage.removeItem("carrito");
-                            console.log("Carrito vaciado.");
-                        }
-
-// Llamar esta función al inicio para cargar el carrito existente
-                        document.addEventListener("DOMContentLoaded", cargarCarrito);
-
-                    </script>
                 </section>
             </aside>
         </main>

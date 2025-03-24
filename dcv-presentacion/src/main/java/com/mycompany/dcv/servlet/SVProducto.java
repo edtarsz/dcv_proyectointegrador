@@ -1,26 +1,16 @@
-package Servlets;
+package com.mycompany.dcv.servlet;
 
 import com.mycompany.dcventidades.Producto;
 import com.mycompany.dcvexceptions.ControllerException;
 import com.mycompany.dcvnegocio.producto.IProductoBO;
 import com.mycompany.dcvnegocio.producto.ProductoBO;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
 
 @WebServlet(name = "SVProducto", urlPatterns = {"/SVProducto"})
 public class SVProducto extends HttpServlet {
@@ -73,8 +63,7 @@ public class SVProducto extends HttpServlet {
             // Redirigir a una página de confirmación
             response.sendRedirect("Datos.jsp");
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException | NumberFormatException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al guardar el pedido.");
         }
     }

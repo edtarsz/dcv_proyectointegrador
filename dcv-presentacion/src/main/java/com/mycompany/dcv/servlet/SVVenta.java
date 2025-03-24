@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Servlets;
+package com.mycompany.dcv.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -16,8 +16,8 @@ import jakarta.servlet.http.HttpServletResponse;
  *
  * @author crist
  */
-@WebServlet(name = "SVUsuario", urlPatterns = {"/SVUsuario"})
-public class SVUsuario extends HttpServlet {
+@WebServlet(name = "SVVenta", urlPatterns = {"/SVVenta"})
+public class SVVenta extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,10 +36,10 @@ public class SVUsuario extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet SVUsuario</title>");
+            out.println("<title>Servlet SVVenta</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet SVUsuario at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet SVVenta at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }

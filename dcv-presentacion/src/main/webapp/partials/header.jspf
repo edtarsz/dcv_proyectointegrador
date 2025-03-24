@@ -1,28 +1,28 @@
 <%-- any content can be specified here e.g.: --%>
 <%@ page pageEncoding="UTF-8" %>
 <header class="main-header">
-                <img src="img/logo.png" alt="" class="main-logo">
-                <nav class="main-nav">
-                    <ul class="left-nav">
-                        <li><a href="">INICIO</a></li>
-                        <li><a href="catalogo.jsp">CATÁLOGO</a></li>
-                        <li><a href="">REPORTES</a></li>
-                        <li><a href="">INVENTARIO</a></li>
-                        <li><a href="Pedidos.jsp">PEDIDOS</a></li>
-                    </ul>
-                    <ul class="right-nav">
-                        <li>
-                            <a href="Carrito.jsp" class="user-profile">
-                                <img src="svg/cart.svg" alt="">
-                                CARRITO
-                            </a>
-                        </li>
-                        <li>
-                            <a href="" class="user-profile">
-                                <img src="svg/user.svg" alt="">
-                                USUARIO
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-            </header>
+    <img src="img/logo.png" alt="" class="main-logo">
+    <nav class="main-nav">
+        <ul class="left-nav">
+            <li><a href="">INICIO</a></li>
+            <li><a href="catalogo.jsp">CATÁLOGO</a></li>
+            <li><a href="">REPORTES</a></li>
+            <li><a href="">INVENTARIO</a></li>
+            <li><a href="Pedidos.jsp">PEDIDOS</a></li>
+        </ul>
+        <ul class="right-nav">
+            <li>
+                <a href="SVCarrito" class="user-profile">
+                    <img src="svg/cart.svg" alt="">
+                    CARRITO
+                </a>
+            </li>
+            <li>
+                <a href="SVCarrito" class="user-profile">
+                    <img src="svg/user.svg" alt="">
+                    USUARIO
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>

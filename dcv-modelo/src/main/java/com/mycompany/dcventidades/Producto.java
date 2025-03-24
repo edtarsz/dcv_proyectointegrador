@@ -54,6 +54,13 @@ public class Producto implements Serializable {
     public Producto() {
     }
 
+    public Producto(long id, String nombre, String descripcion, Double precio) {
+        this.id = id;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.precio = precio;
+    }
+
     public Producto(String nombre, String descripcion, Double precio, List<Insumo> insumos, List<Categoria> categorias) {
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -156,8 +163,5 @@ public class Producto implements Serializable {
     public String toString() {
         return "Producto{" + "id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + ", precio=" + precio + ", insumos=" + insumos + ", categorias=" + categorias + '}';
     }
-    
-
-    
 
 }
