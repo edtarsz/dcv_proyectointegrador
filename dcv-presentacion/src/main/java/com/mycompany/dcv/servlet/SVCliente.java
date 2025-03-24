@@ -105,6 +105,7 @@ public class SVCliente extends HttpServlet {
         String nombre = request.getParameter("nombre");
         String telefono = request.getParameter("telefono");
         String correo = request.getParameter("correo");
+        String direccion = request.getParameter("direccion");
 
         if (nombre == null || telefono == null) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Faltan datos del cliente.");
@@ -113,26 +114,19 @@ public class SVCliente extends HttpServlet {
 
         // Crear el cliente
         Cliente cliente = new Cliente(nombre, telefono, correo);
-        try {
-            // Guardar el cliente
-            clienteBO.crearCliente(cliente);
-
-            // Al crear el cliente correctamente, redirigir a la página de venta, pasando el clienteId
-            response.sendRedirect("Venta.jsp?clienteId=" + cliente.getId()); // Asegúrate de pasar el clienteId al SVVenta
-        } catch (ControllerException e) {
-            Logger.getLogger(SVCliente.class.getName()).log(Level.SEVERE, null, e);
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al crear el cliente.");
-        }
+        // Al crear el cliente correctamente, redirigir a la página de venta, pasando el clienteId
+        request.getSession().setAttribute("cliente", cliente);
+        request.getSession().setAttribute("direccion", direccion);
+        response.sendRedirect("Venta.jsp");
     }
 
-
-/**
- * Returns a short description of the servlet.
- *
- * @return a String containing servlet description
- */
-@Override
-public String getServletInfo() {
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
 

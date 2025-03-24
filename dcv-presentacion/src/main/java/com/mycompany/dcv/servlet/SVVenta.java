@@ -6,6 +6,7 @@ package com.mycompany.dcv.servlet;
 
 import com.mycompany.dcventidades.Cliente;
 import com.mycompany.dcventidades.DetalleVenta;
+import com.mycompany.dcventidades.Envio;
 import com.mycompany.dcventidades.Producto;
 import com.mycompany.dcventidades.Usuario;
 import com.mycompany.dcventidades.Venta;
@@ -17,6 +18,7 @@ import com.mycompany.dcvnegocio.usuario.IUsuarioBO;
 import com.mycompany.dcvnegocio.usuario.UsuarioBO;
 import com.mycompany.dcvnegocio.venta.IVentaBO;
 import com.mycompany.dcvnegocio.venta.VentaBO;
+import static com.mysql.cj.conf.PropertyKey.logger;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -25,6 +27,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -38,17 +42,9 @@ import java.util.logging.Logger;
 public class SVVenta extends HttpServlet {
 
     private IVentaBO ventaBO;
+    private IProductoBO productoBO;
     private IClienteBO clienteBO;
     private IUsuarioBO usuarioBO;
-
-    @Override
-    public void init() throws ServletException {
-        super.init();
-        ventaBO = new VentaBO();
-        new ProductoBO();
-        clienteBO = new ClienteBO();
-        usuarioBO = new UsuarioBO();
-    }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -92,34 +88,25 @@ public class SVVenta extends HttpServlet {
     }
 
     @Override
+    public void init() throws ServletException {
+        super.init();
+        ventaBO = new VentaBO();
+        productoBO = new ProductoBO();
+        clienteBO = new ClienteBO();
+        usuarioBO = new UsuarioBO();
+    }
+
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Imprimir todos los parámetros de la solicitud
-        request.getParameterMap().forEach((key, value) -> {
-            System.out.println(key + ": " + String.join(", ", value));
-        });
-
-        // Ahora intentar leer el clienteId
-        String clienteIdStr = request.getParameter("clienteId");
-        if (clienteIdStr == null) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "clienteId es requerido.");
-            return;
-        }
-
-        Long clienteId = Long.valueOf(clienteIdStr);
-        System.out.println("clienteId recibido: " + clienteId);
 
         try {
+            // Obtener parámetros del formulario
+            String metodoPago = request.getParameter("metodoPago");
+            String envioStr = request.getParameter("envio");
+            boolean requiereEnvio = "si".equalsIgnoreCase(envioStr) || "s".equalsIgnoreCase(envioStr);
 
-            // Obtener el cliente de la base de datos utilizando clienteId
-            Cliente cliente = clienteBO.obtenerClientePorId(clienteId);
-
-            if (cliente == null) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Cliente no encontrado.");
-                return;
-            }
-
-            // Obtener la sesión del carrito (productos seleccionados)
+            // Obtener la sesión del carrito
             HttpSession session = request.getSession();
             List<Producto> carrito = (List<Producto>) session.getAttribute("carrito");
 
@@ -128,44 +115,79 @@ public class SVVenta extends HttpServlet {
                 return;
             }
 
-            // Convertir los productos a detalles de venta
+            // Crear cliente
+            Cliente cliente = (Cliente) request.getSession().getAttribute("cliente");
+
+            // Crear usuario (simplificado)
+            Usuario usuario = new Usuario("cliente03", "1234", "Admin", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+            usuarioBO.crearUsuario(usuario);
+
+            // Crear venta
+            Venta venta = new Venta();
+
+            // Crear detalles de venta
             List<DetalleVenta> detallesVenta = new ArrayList<>();
+            List<Envio> envios = new ArrayList<>();
+            double totalDetalles = 0;
+
             for (Producto producto : carrito) {
-                DetalleVenta detalle = new DetalleVenta();
-                detalle.setProducto(producto);
-                detalle.setCantidad(1);  // Suponiendo que la cantidad es 1 para cada producto
-                detalle.setSubtotal(producto.getPrecio());  // El subtotal es el precio del producto en este caso
+                DetalleVenta detalle = new DetalleVenta(
+                        1, // ID de detalle (puede ser generado automáticamente)
+                        producto.getPrecio(),
+                        producto.getPrecio(), // Subtotal (asumiendo cantidad 1)
+                        producto,
+                        false, // No personalizado por defecto
+                        "", // Sin personalización
+                        venta
+                );
                 detallesVenta.add(detalle);
+                totalDetalles += detalle.getSubtotal();
             }
 
-            // Obtener método de pago
-            String metodoPago = request.getParameter("metodoPago");
+            // Configurar venta
+            venta.setDetallesVenta(detallesVenta);
+            venta.setFecha(Date.valueOf(LocalDate.now()));
+            venta.setUsuario(usuario);
+            venta.setCliente(cliente);
+            venta.setEstado("En proceso");
+            venta.setMetodoPago(metodoPago);
 
-            // Calcular el total de la venta
-            double total = detallesVenta.stream().mapToDouble(DetalleVenta::getSubtotal).sum();
-
-            // Obtener el usuarioId (por ejemplo, desde la sesión)
-            Long usuarioId = 1L;
-            Usuario usuario = usuarioBO.obtenerUsuarioPorId(usuarioId);
-
-            // Crear la venta
-            Venta venta = ventaBO.guardarVenta(total, metodoPago, cliente, usuario);
-
-            // Guardar los detalles de la venta
-            for (DetalleVenta detalle : detallesVenta) {
-                detalle.setVenta(venta);  // Vincula cada detalle con la venta
-                ventaBO.guardarDetalleVenta(venta, detalle);
+            // Manejar envío si es requerido
+            if (requiereEnvio) {
+                double costoEnvio = 50.0; // Costo de envío predeterminado
+                Envio envio = new Envio();
+                envio.setDireccionEntrega( (String) request.getSession().getAttribute("direccion"));
+                envio.setCliente(cliente);
+                envio.setCosto(costoEnvio);
+                envio.setVenta(venta);
+                envios.add(envio);
+                venta.setEnvios(envios);
+                venta.setTotal(totalDetalles + costoEnvio);
+            } else {
+                venta.setTotal(totalDetalles);
             }
+            
+            
 
-            // Limpiar el carrito de la sesión
+            // En un escenario real, aquí guardarías la venta en la base de datos
+            // Por ahora, solo imprimimos los detalles
+            System.out.println("Venta creada:");
+            ventaBO.crearVenta(venta);
+            System.out.println("Cliente: " + cliente.getNombreCompleto());
+            System.out.println("Total: " + venta.getTotal());
+            System.out.println("Método de Pago: " + metodoPago);
+
+            // Limpiar el carrito
             session.removeAttribute("carrito");
+            session.removeAttribute("cliente");
+            session.removeAttribute("direccion");
 
-            // Redirigir a la página de confirmación
+            // Redirigir a página de confirmación
             response.sendRedirect("Pedidos.jsp?mensaje=VentaRegistrada");
 
         } catch (Exception e) {
             Logger.getLogger(SVVenta.class.getName()).log(Level.SEVERE, "Error al registrar la venta", e);
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al procesar la venta.");
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al procesar la venta: " + e.getMessage());
         }
     }
 
