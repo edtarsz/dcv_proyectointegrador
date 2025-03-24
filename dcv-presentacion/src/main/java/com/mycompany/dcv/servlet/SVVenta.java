@@ -18,7 +18,6 @@ import com.mycompany.dcvnegocio.usuario.IUsuarioBO;
 import com.mycompany.dcvnegocio.usuario.UsuarioBO;
 import com.mycompany.dcvnegocio.venta.IVentaBO;
 import com.mycompany.dcvnegocio.venta.VentaBO;
-import static com.mysql.cj.conf.PropertyKey.logger;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;

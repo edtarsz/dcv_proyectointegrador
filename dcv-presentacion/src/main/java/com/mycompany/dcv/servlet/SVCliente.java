@@ -5,11 +5,6 @@
 package com.mycompany.dcv.servlet;
 
 import com.mycompany.dcventidades.Cliente;
-import com.mycompany.dcventidades.DetalleVenta;
-import com.mycompany.dcventidades.Envio;
-import com.mycompany.dcventidades.Producto;
-import com.mycompany.dcventidades.Venta;
-import com.mycompany.dcvexceptions.ControllerException;
 import com.mycompany.dcvnegocio.cliente.ClienteBO;
 import com.mycompany.dcvnegocio.cliente.IClienteBO;
 import com.mycompany.dcvnegocio.producto.IProductoBO;
@@ -23,12 +18,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.sql.Date;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *

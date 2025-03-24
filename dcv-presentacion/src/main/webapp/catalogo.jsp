@@ -1,9 +1,7 @@
-<%-- Document : catalogo Created on : Mar 22, 2025, 1:43:42 PM Author : Ramos --%>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
-
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -77,16 +75,20 @@
                     <h1 class="titulo-productos">Productos</h1>
                     <section class="grid-productos-catalogo">
                         <c:forEach var="producto" items="${productos}">
-                            <div class="card-producto">
+                            <div class="card-producto" data-producto-id="${producto.id}">
                                 <div class="child-card-producto">
                                     <div class="content-card-producto">
                                         <div class="group-left-card">
                                             <h4>${producto.nombre}</h4>
-                                            <c:if test="${not empty producto.categoria}">
-                                                <div class="categoria-producto">${producto.categoria}</div>
+                                            <c:if test="${not empty producto.categorias}">
+                                                <div class="categoria-producto">
+                                                    <c:forEach var="categoria" items="${producto.categorias}" varStatus="status">
+                                                        ${categoria.nombre}${!status.last ? ', ' : ''}
+                                                    </c:forEach>
+                                                </div>
                                             </c:if>
                                         </div>
-                                        <div class="group-right-card">
+                                        <div class="group-right-card producto-info">
                                             <div class="counter-container">
                                                 <button class="counter-btn decrease">−</button>
                                                 <div class="counter-value">1</div>
@@ -96,22 +98,22 @@
                                                 class="btn-format-card btn-personalizar-card"
                                                 onclick="agregarAlCarrito(
                                                 ${producto.id},
-                                                            encodeURIComponent('${producto.nombre}').replace(/%20/g, ' '),
-                                                            encodeURIComponent('${producto.descripcion}').replace(/%20/g, ' '),
+                                                                '${producto.nombre}',
+                                                                '${producto.descripcion}',
                                                 ${producto.precio},
-                                                            this
-                                                            )">
+                                                                this
+                                                                )">
                                                 Personalizar
                                             </button>
                                             <button 
                                                 class="btn-format-card btn-add-carrito"
                                                 onclick="agregarAlCarrito(
                                                 ${producto.id},
-                                                            encodeURIComponent('${producto.nombre}').replace(/%20/g, ' '),
-                                                            encodeURIComponent('${producto.descripcion}').replace(/%20/g, ' '),
+                                                                '${producto.nombre}',
+                                                                '${producto.descripcion}',
                                                 ${producto.precio},
-                                                            this
-                                                            )">
+                                                                this
+                                                                )">
                                                 Agregar al carrito
                                             </button>
                                         </div>
@@ -166,15 +168,14 @@
                 <section class="btn-aside-group">
                     <button class="btn-format-card btn-limpiar-carrito" onclick="limpiarCarrito()">Limpiar</button>
                     <button class="btn-format-card btn-add-carrito" onclick="agregarAlCarrito(
-                                null,
-                                'PRODUCTO PERSONALIZADO',
-                                document.getElementById('detalles-personalizacion').value + ' ' + document.getElementById('extra-personalizacion').value,
-                                110.99,
-                                this
-                                )">Agregar al carrito</button>
+                                    null,
+                                    'PRODUCTO PERSONALIZADO',
+                                    document.getElementById('detalles-personalizacion').value + ' ' + document.getElementById('extra-personalizacion').value,
+                                    110.99,
+                                    this
+                                    )">Agregar al carrito</button>
                 </section>
             </aside>
         </main>
     </body>
-
 </html>
