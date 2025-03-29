@@ -16,41 +16,9 @@ function seleccionarProducto(id, nombre, descripcion, precio) {
     document.getElementById('detalles-personalizacion').value = '';
     document.getElementById('extra-personalizacion').value = '';
     document.querySelector('.counter-value').textContent = '1';
-
-    // Inicializar los controles de cantidad
-    initializeCounterButtons();
 }
 
-function initializeCounterButtons() {
-    const decreaseBtn = document.querySelector('.decrease');
-    const increaseBtn = document.querySelector('.increase');
-    const counterValue = document.querySelector('.counter-value');
-
-    // Remover listeners anteriores si existen
-    decreaseBtn.replaceWith(decreaseBtn.cloneNode(true));
-    increaseBtn.replaceWith(increaseBtn.cloneNode(true));
-
-    // Obtener las referencias nuevas
-    const newDecreaseBtn = document.querySelector('.decrease');
-    const newIncreaseBtn = document.querySelector('.increase');
-
-    newDecreaseBtn.addEventListener('click', () => {
-        let value = parseInt(counterValue.textContent);
-        if (value > 1) {
-            value--;
-            counterValue.textContent = value;
-            actualizarTotal(value);
-        }
-    });
-
-    newIncreaseBtn.addEventListener('click', () => {
-        let value = parseInt(counterValue.textContent);
-        value++;
-        counterValue.textContent = value;
-        actualizarTotal(value);
-    });
-}
-function agregarAlCarrito() {
+function agregarAlCarrito(btn) {
     if (!productoSeleccionado) {
         alert('Por favor, seleccione un producto primero');
         return;
@@ -65,6 +33,7 @@ function agregarAlCarrito() {
         return;
     }
 
+    // Crear el objeto de datos
     const datos = {
         idProducto: productoSeleccionado.id,
         nombre: productoSeleccionado.nombre,
@@ -75,7 +44,8 @@ function agregarAlCarrito() {
         extra: extra || ''
     };
 
-    fetch('SVCarrito', {
+    // Enviar al servidor
+    fetch('SVCatalogo', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
@@ -86,11 +56,11 @@ function agregarAlCarrito() {
         if (!response.ok) {
             throw new Error('Error en la respuesta del servidor');
         }
-        return response.text();
+        return response.text(); // Primero obtener el texto
     })
     .then(text => {
         try {
-            const data = JSON.parse(text);
+            const data = JSON.parse(text); // Intentar parsear como JSON
             if (data.success) {
                 alert('Producto agregado al carrito exitosamente');
                 limpiarFormulario();
@@ -125,49 +95,18 @@ function limpiarFormulario() {
     document.querySelector('.aside-catalogo').style.display = 'none';
 }
 
-function initializeCartControls() {
-    // Inicializar botones de cantidad
-    const decreaseBtn = document.querySelector('.decrease');
-    const increaseBtn = document.querySelector('.increase');
-    const counterValue = document.querySelector('.counter-value');
-
-    if (decreaseBtn && increaseBtn && counterValue) {
-        decreaseBtn.addEventListener('click', () => {
-            let value = parseInt(counterValue.textContent);
-            if (value > 1) {
-                value--;
-                counterValue.textContent = value;
-                actualizarTotal(value);
-            }
-        });
-
-        increaseBtn.addEventListener('click', () => {
-            let value = parseInt(counterValue.textContent);
-            value++;
-            counterValue.textContent = value;
-            actualizarTotal(value);
-        });
-    }
-}
-
-// Asegúrate de llamar a esta función cuando el documento esté listo
-document.addEventListener('DOMContentLoaded', function() {
-    initializeCartControls();
-});
-
-function actualizarTotal(cantidad) {
-    if (productoSeleccionado) {
-        const totalElement = document.querySelector('.total-aside h4');
-        const nuevoTotal = (productoSeleccionado.precio * cantidad).toFixed(2);
-        totalElement.textContent = `Total: $${nuevoTotal}`;
-    }
-}
-
-// Inicialización cuando el documento está listo
-document.addEventListener('DOMContentLoaded', function() {
-    initializeCartControls();
+// Inicialización
+document.addEventListener('DOMContentLoaded', () => {
+    initializeCounterButtons();
     
+    // Inicialmente ocultar el aside
     if (!productoSeleccionado) {
         document.querySelector('.aside-catalogo').style.display = 'none';
+    }
+
+    // Botón agregar al carrito
+    const btnAgregar = document.querySelector('.btn-add-carrito');
+    if (btnAgregar) {
+        btnAgregar.addEventListener('click', agregarAlCarrito);
     }
 });

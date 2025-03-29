@@ -12,9 +12,10 @@
         </ul>
         <ul class="right-nav">
             <li>
-                <a href="SVCarrito" class="user-profile">
+                <a href="SVCarrito" class="user-profile carrito-link">
                     <img src="svg/cart.svg" alt="">
                     CARRITO
+                    <span class="carrito-count">${not empty sessionScope.carrito ? sessionScope.carrito.size() : 0}</span>
                 </a>
             </li>
             <li>

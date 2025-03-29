@@ -89,32 +89,16 @@
                                             </c:if>
                                         </div>
                                         <div class="group-right-card producto-info">
-                                            <div class="counter-container">
-                                                <button class="counter-btn decrease">−</button>
-                                                <div class="counter-value">1</div>
-                                                <button class="counter-btn increase">+</button>
-                                            </div>
+
                                             <button 
                                                 class="btn-format-card btn-personalizar-card"
-                                                onclick="agregarAlCarrito(
+                                                onclick="seleccionarProducto(
                                                 ${producto.id},
                                                                 '${producto.nombre}',
                                                                 '${producto.descripcion}',
-                                                ${producto.precio},
-                                                                this
-                                                                )">
+                                                ${producto.precio}
+                                                        )">
                                                 Personalizar
-                                            </button>
-                                            <button 
-                                                class="btn-format-card btn-add-carrito"
-                                                onclick="agregarAlCarrito(
-                                                ${producto.id},
-                                                                '${producto.nombre}',
-                                                                '${producto.descripcion}',
-                                                ${producto.precio},
-                                                                this
-                                                                )">
-                                                Agregar al carrito
                                             </button>
                                         </div>
                                     </div>
@@ -122,14 +106,7 @@
                                         <p>$${producto.precio}</p>
                                     </div>
                                 </div>
-                                <div class="btn-operation-group">
-                                    <a href="">
-                                        <img src="svg/pen.svg" alt="">
-                                    </a>
-                                    <a href="">
-                                        <img src="svg/trash.svg" alt="">
-                                    </a>
-                                </div>
+
                             </div>
                         </c:forEach>
                     </section>
@@ -138,7 +115,7 @@
             <aside class="aside-catalogo">
                 <header class="header-aside">
                     <h1>PRODUCTO</h1>
-                    <div>Categoria</div>
+
                 </header>
                 <section class="aside-descripcion">
                     <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Vero accusamus iure minus
@@ -163,17 +140,13 @@
                 </section>
                 <section class="total-aside">
                     <h4>Total: $110.99</h4>
-                    <img src="svg/pen.svg" alt="">
+
                 </section>
                 <section class="btn-aside-group">
-                    <button class="btn-format-card btn-limpiar-carrito" onclick="limpiarCarrito()">Limpiar</button>
-                    <button class="btn-format-card btn-add-carrito" onclick="agregarAlCarrito(
-                                    null,
-                                    'PRODUCTO PERSONALIZADO',
-                                    document.getElementById('detalles-personalizacion').value + ' ' + document.getElementById('extra-personalizacion').value,
-                                    110.99,
-                                    this
-                                    )">Agregar al carrito</button>
+                    <section class="btn-aside-group">
+                        <button class="btn-format-card btn-limpiar-carrito" onclick="limpiarFormulario()">Limpiar</button>
+                        <button class="btn-format-card btn-add-carrito" onclick="agregarAlCarrito()">Agregar al carrito</button>
+                    </section>
                 </section>
             </aside>
         </main>

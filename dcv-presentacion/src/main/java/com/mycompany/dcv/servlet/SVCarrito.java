@@ -4,6 +4,7 @@
  */
 package com.mycompany.dcv.servlet;
 
+import com.firework.gson.JsonObject;
 import com.mycompany.dcventidades.DetalleVenta;
 import com.mycompany.dcventidades.Producto;
 import java.io.IOException;
@@ -23,89 +24,137 @@ import java.util.List;
  */
 @WebServlet(name = "SVCarrito", urlPatterns = {"/SVCarrito"})
 public class SVCarrito extends HttpServlet {
-
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet SVCarrito</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet SVCarrito at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("Carrito.jsp").forward(request, response);
-    }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-   protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-        // Obtener los datos enviados por fetch
-        long id = Long.parseLong(request.getParameter("idProducto"));
-        String nombre = request.getParameter("nombre");
-        String descripcion = request.getParameter("descripcion");
-        double precio = Integer.parseInt(request.getParameter("precio"));
-
-        // Obtener o crear la sesión
-        HttpSession sesion = request.getSession();
-        List<Producto> carrito = (List<Producto>) sesion.getAttribute("carrito");
-
-        if (carrito == null) {
-            carrito = new ArrayList<>();
+        try {
+            HttpSession sesion = request.getSession();
+            List<DetalleVenta> carrito = (List<DetalleVenta>) sesion.getAttribute("carrito");
+            
+            if (carrito == null) {
+                carrito = new ArrayList<>();
+                sesion.setAttribute("carrito", carrito);
+            }
+            
+            request.getRequestDispatcher("Carrito.jsp").forward(request, response);
+        } catch (Exception e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al cargar el carrito");
         }
-
-        // Agregar el producto al carrito
-        carrito.add(new Producto(id, nombre, descripcion, precio));
-        sesion.setAttribute("carrito", carrito);
-
-        // Responder con un mensaje para la UI
-        request.getRequestDispatcher("Carrito.jsp").forward(request, response);
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
+     @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+        JsonObject jsonResponse = new JsonObject();
+
+        try {
+            // Obtener parámetros
+            long idProducto = Long.parseLong(request.getParameter("idProducto"));
+            String nombre = request.getParameter("nombre");
+            String descripcion = request.getParameter("descripcion");
+            double precio = Double.parseDouble(request.getParameter("precio"));
+            int cantidad = Integer.parseInt(request.getParameter("cantidad"));
+            String detalles = request.getParameter("detalles");
+            String extra = request.getParameter("extra");
+
+            // Crear el producto
+            Producto producto = new Producto(idProducto, nombre, descripcion, precio);
+
+            // Crear el detalle de venta
+            DetalleVenta detalleVenta = new DetalleVenta();
+            detalleVenta.setProducto(producto);
+            detalleVenta.setCantidad(cantidad);
+            detalleVenta.setPrecioUnitario(precio);
+            detalleVenta.setSubtotal(cantidad * precio);
+            detalleVenta.setEsPersonalizado(true);
+            detalleVenta.setPersonalizacion(detalles + "\nExtra: " + extra);
+
+            // Obtener o crear el carrito en la sesión
+            HttpSession sesion = request.getSession();
+            List<DetalleVenta> carrito = (List<DetalleVenta>) sesion.getAttribute("carrito");
+            if (carrito == null) {
+                carrito = new ArrayList<>();
+            }
+            
+            carrito.add(detalleVenta);
+            sesion.setAttribute("carrito", carrito);
+
+            jsonResponse.addProperty("success", true);
+            jsonResponse.addProperty("message", "Producto agregado al carrito");
+            jsonResponse.addProperty("carritoSize", carrito.size());
+            
+        } catch (Exception e) {
+            jsonResponse.addProperty("success", false);
+            jsonResponse.addProperty("message", "Error al agregar al carrito: " + e.getMessage());
+        }
+        
+        out.print(jsonResponse.toString());
+        out.flush();
+    }
+
     @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("application/json");
+        PrintWriter out = response.getWriter();
+        JsonObject jsonResponse = new JsonObject();
+        
+        try {
+            long idProducto = Long.parseLong(request.getParameter("idProducto"));
+            HttpSession sesion = request.getSession();
+            List<DetalleVenta> carrito = (List<DetalleVenta>) sesion.getAttribute("carrito");
+
+            if (carrito != null) {
+                carrito.removeIf(detalle -> detalle.getProducto().getId() == idProducto);
+                sesion.setAttribute("carrito", carrito);
+                jsonResponse.addProperty("success", true);
+                jsonResponse.addProperty("message", "Producto eliminado");
+            }
+        } catch (Exception e) {
+            jsonResponse.addProperty("success", false);
+            jsonResponse.addProperty("message", e.getMessage());
+        }
+        
+        out.print(jsonResponse.toString());
+    }
+    
+    @Override
+protected void doPut(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+    response.setContentType("application/json");
+    response.setCharacterEncoding("UTF-8");
+    PrintWriter out = response.getWriter();
+    JsonObject jsonResponse = new JsonObject();
+    
+    try {
+        long idProducto = Long.parseLong(request.getParameter("idProducto"));
+        int nuevaCantidad = Integer.parseInt(request.getParameter("nuevaCantidad"));
+
+        HttpSession sesion = request.getSession();
+        List<DetalleVenta> carrito = (List<DetalleVenta>) sesion.getAttribute("carrito");
+
+        if (carrito != null) {
+            for (DetalleVenta detalle : carrito) {
+                if (detalle.getProducto().getId() == idProducto) {
+                    detalle.setCantidad(nuevaCantidad);
+                    detalle.setSubtotal(nuevaCantidad * detalle.getPrecioUnitario());
+                    break;
+                }
+            }
+            sesion.setAttribute("carrito", carrito);
+            jsonResponse.addProperty("success", true);
+            jsonResponse.addProperty("message", "Cantidad actualizada");
+        }
+    } catch (Exception e) {
+        jsonResponse.addProperty("success", false);
+        jsonResponse.addProperty("message", e.getMessage());
+    }
+    
+    out.print(jsonResponse.toString());
+    out.flush();
+}
 }

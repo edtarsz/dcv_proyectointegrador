@@ -21,6 +21,15 @@
     padding: 0.5rem 0;
 }
 
+.aside-catalogo {
+    display: none; /* Por defecto está oculto */
+    /* Resto de tus estilos... */
+}
+
+.aside-catalogo.visible {
+    display: flex;
+}
+
 #search-bar::placeholder {
     color: var(--main-color);
 }

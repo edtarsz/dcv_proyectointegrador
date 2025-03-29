@@ -23,7 +23,7 @@
             href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
             rel="stylesheet">
         <title>Carrito de compras</title>
-        <script src="script/carrito.js" defer></script>
+        <script src="script/carrito-page.js" defer></script>
     </head>
     <body>
         <%@ include file="/partials/header.jspf" %>
@@ -32,10 +32,8 @@
                 <div class="carrito-content">
                     <h1 class="carrito-title">Carrito</h1>
 
-                    <!-- Obtener carrito de la sesión -->
                     <c:set var="carrito" value="${sessionScope.carrito}" />
 
-                    <!-- Mostrar cantidad de productos -->
                     <c:choose>
                         <c:when test="${empty carrito}">
                             <p class="productos-count">0 productos</p>
@@ -54,29 +52,30 @@
                                     <div class="col-total">TOTAL</div>
                                 </div>
 
-                                <!-- Recorrer productos en el carrito -->
                                 <c:set var="subtotal" value="0" />
                                 <c:forEach var="item" items="${carrito}" varStatus="status">
                                     <!-- Calcular total por producto -->
-                                    <c:set var="total" value="${item.precio}" />
+                                    <c:set var="total" value="${item.precioUnitario * item.cantidad}" />
                                     <c:set var="subtotal" value="${subtotal + total}" />
 
-                                    <div class="carrito-item" data-id="${item.id}">
+                                    <div class="carrito-item" data-id="${item.producto.id}">
                                         <div class="col-detalles">
-                                            <h3 class="item-title">${item.nombre}</h3>
-                                            <p class="item-description">${not empty item.descripcion ? item.descripcion : 'Sin descripción'}</p>
+                                            <h3 class="item-title">${item.producto.nombre}</h3>
+                                            <p class="item-description">
+                                                ${not empty item.personalizacion ? item.personalizacion : 'Sin personalización'}
+                                            </p>
                                         </div>
                                         <div class="col-cantidad">
                                             <div class="quantity-control">
-                                                <button class="quantity-btn decrement" onclick="actualizarCantidad()">−</button>
-                                                <input type="text" class="quantity-input" value="1" readonly>
-                                                <button class="quantity-btn increment" onclick="actualizarCantidad()">+</button>
+                                                <button class="quantity-btn decrement" data-action="decrement">−</button>
+                                                <input type="text" class="quantity-input" value="${item.cantidad}" readonly>
+                                                <button class="quantity-btn increment" data-action="increment">+</button>
                                             </div>
                                         </div>
-                                        <div class="col-precio">$${item.precio}</div>
+                                        <div class="col-precio">$${item.precioUnitario}</div>
                                         <div class="col-total">$${total}</div>
                                         <div class="col-actions">
-                                            <button class="btn-delete" onclick="eliminarDelCarrito(${status.index})">
+                                            <button class="btn-delete">
                                                 <img src="svg/delete.svg" alt="Eliminar">
                                             </button>
                                         </div>
@@ -94,20 +93,19 @@
                             <div class="total-line">
                                 <span class="total-label">Total</span>
                                 <span class="total-value">$${subtotal}</span>
-                                <button class="btn-edit-total"><img src="svg/edit.svg" alt="Editar"></button>
+                                <button class="btn-edit-total">
+                                    <img src="svg/edit.svg" alt="Editar">
+                                </button>
                             </div>
                             <form id="confirmarCompraForm" action="SVProducto" method="POST">
                                 <input type="hidden" name="action" value="updateStock">
-
-                                <!-- Campos ocultos para los productos -->
                                 <div id="productosContainer">
                                     <c:forEach var="item" items="${carrito}" varStatus="status">
-                                        <input type="hidden" name="idProducto[]" value="${item.id}">
-                                        <input type="hidden" name="cantidad[]" value="${status.index}">
-                                         <input type="hidden" name="descripcion[]" value="${not empty item.descripcion ? item.descripcion : ''}">
+                                        <input type="hidden" name="idProducto[]" value="${item.producto.id}">
+                                        <input type="hidden" name="cantidad[]" value="${item.cantidad}">
+                                        <input type="hidden" name="personalizacion[]" value="${item.personalizacion}">
                                     </c:forEach>
                                 </div>
-
                                 <button type="submit" class="btn-continuar">Confirmar compra</button>
                             </form>
                         </div>
