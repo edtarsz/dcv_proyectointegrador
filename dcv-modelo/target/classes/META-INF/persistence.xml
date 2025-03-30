@@ -1,26 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="3.2" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_2.xsd">
-  <persistence-unit name="detallesConVasosPU" transaction-type="RESOURCE_LOCAL">
-    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-    <class>com.mycompany.dcventidades.Envio</class>
-    <class>com.mycompany.dcventidades.Merma</class>
-    <class>com.mycompany.dcventidades.Producto</class>
-    <class>com.mycompany.dcventidades.Categoria</class>
-    <class>com.mycompany.dcventidades.Pedido</class>
-    <class>com.mycompany.dcventidades.CompraInsumo</class>
-    <class>com.mycompany.dcventidades.Venta</class>
-    <class>com.mycompany.dcventidades.DetalleVenta</class>
-    <class>com.mycompany.dcventidades.Insumo</class>
-    <class>com.mycompany.dcventidades.Reembolso</class>
-    <class>com.mycompany.dcventidades.DetalleCompraInsumo</class>
-    <class>com.mycompany.dcventidades.Usuario</class>
-    <class>com.mycompany.dcventidades.Cliente</class>
-    <properties>
-      <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/detallesconvasos?zeroDateTimeBehavior=CONVERT_TO_NULL"/>
-      <property name="jakarta.persistence.jdbc.user" value="root"/>
-      <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
-      <property name="jakarta.persistence.jdbc.password" value="2004"/>
-      <property name="jakarta.persistence.schema-generation.database.action" value="create"/>
-    </properties>
-  </persistence-unit>
+    <persistence-unit name="detallesConVasosPU" transaction-type="RESOURCE_LOCAL">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        <class>com.mycompany.dcventidades.Envio</class>
+        <class>com.mycompany.dcventidades.Merma</class>
+        <class>com.mycompany.dcventidades.Producto</class>
+        <class>com.mycompany.dcventidades.Categoria</class>
+        <class>com.mycompany.dcventidades.Pedido</class>
+        <class>com.mycompany.dcventidades.CompraInsumo</class>
+        <class>com.mycompany.dcventidades.Venta</class>
+        <class>com.mycompany.dcventidades.DetalleVenta</class>
+        <class>com.mycompany.dcventidades.Insumo</class>
+        <class>com.mycompany.dcventidades.Reembolso</class>
+        <class>com.mycompany.dcventidades.DetalleCompraInsumo</class>
+        <class>com.mycompany.dcventidades.Usuario</class>
+        <class>com.mycompany.dcventidades.Cliente</class>
+        <properties>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/detallesconvasos?zeroDateTimeBehavior=CONVERT_TO_NULL"/>
+            <property name="jakarta.persistence.jdbc.user" value="root"/>
+            <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="jakarta.persistence.jdbc.password" value="2004"/>
+        
+            <!-- Cambiar create a update para no recrear la base de datos -->
+            <property name="jakarta.persistence.schema-generation.database.action" value="update"/>
+        
+            <!-- Propiedades adicionales para debugging -->
+            <property name="eclipselink.logging.level" value="FINE"/>
+            <property name="eclipselink.logging.parameters" value="true"/>
+            <property name="eclipselink.logging.level.sql" value="FINE"/>
+            <property name="eclipselink.logging.timestamp" value="true"/>
+            <property name="eclipselink.logging.session" value="true"/>
+            <property name="eclipselink.logging.thread" value="true"/>
+            <property name="eclipselink.logging.exceptions" value="true"/>
+        </properties>
+    </persistence-unit>
 </persistence>

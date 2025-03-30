@@ -1,23 +1,23 @@
 let productoSeleccionado = null;
 
 function seleccionarProducto(id, nombre, descripcion, precio) {
-    productoSeleccionado = { id, nombre, descripcion, precio };
-    
+    productoSeleccionado = {id, nombre, descripcion, precio};
+
     const headerAside = document.querySelector('.header-aside h1');
     const descripcionAside = document.querySelector('.aside-descripcion p');
     const totalAside = document.querySelector('.total-aside h4');
-    
+
     headerAside.textContent = nombre;
     descripcionAside.textContent = descripcion || 'Sin descripción';
     totalAside.textContent = `Total: $${precio.toFixed(2)}`;
-    
+
     document.querySelector('.aside-catalogo').style.display = 'flex';
-    
+
+    // Limpiar campos
     document.getElementById('detalles-personalizacion').value = '';
     document.getElementById('extra-personalizacion').value = '';
     document.querySelector('.counter-value').textContent = '1';
 
-    // Inicializar los controles de cantidad
     initializeCounterButtons();
 }
 
@@ -26,13 +26,15 @@ function initializeCounterButtons() {
     const increaseBtn = document.querySelector('.increase');
     const counterValue = document.querySelector('.counter-value');
 
-    // Remover listeners anteriores si existen
-    decreaseBtn.replaceWith(decreaseBtn.cloneNode(true));
-    increaseBtn.replaceWith(increaseBtn.cloneNode(true));
+    if (!decreaseBtn || !increaseBtn || !counterValue)
+        return;
 
-    // Obtener las referencias nuevas
-    const newDecreaseBtn = document.querySelector('.decrease');
-    const newIncreaseBtn = document.querySelector('.increase');
+    // Remover listeners anteriores
+    const newDecreaseBtn = decreaseBtn.cloneNode(true);
+    const newIncreaseBtn = increaseBtn.cloneNode(true);
+
+    decreaseBtn.parentNode.replaceChild(newDecreaseBtn, decreaseBtn);
+    increaseBtn.parentNode.replaceChild(newIncreaseBtn, increaseBtn);
 
     newDecreaseBtn.addEventListener('click', () => {
         let value = parseInt(counterValue.textContent);
@@ -50,6 +52,7 @@ function initializeCounterButtons() {
         actualizarTotal(value);
     });
 }
+
 function agregarAlCarrito() {
     if (!productoSeleccionado) {
         alert('Por favor, seleccione un producto primero');
@@ -66,6 +69,7 @@ function agregarAlCarrito() {
     }
 
     const datos = {
+        action: 'addToCart',
         idProducto: productoSeleccionado.id,
         nombre: productoSeleccionado.nombre,
         descripcion: productoSeleccionado.descripcion,
@@ -75,99 +79,93 @@ function agregarAlCarrito() {
         extra: extra || ''
     };
 
-    fetch('SVCarrito', {
+    console.log('Enviando datos:', datos);
+
+    fetch('SVCatalogo', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
         },
         body: new URLSearchParams(datos).toString()
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Error en la respuesta del servidor');
-        }
-        return response.text();
-    })
-    .then(text => {
-        try {
-            const data = JSON.parse(text);
-            if (data.success) {
-                alert('Producto agregado al carrito exitosamente');
-                limpiarFormulario();
-            } else {
-                throw new Error(data.message || 'Error al agregar al carrito');
-            }
-        } catch (e) {
-            console.error('Respuesta del servidor:', text);
-            throw new Error('Error al procesar la respuesta del servidor');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert(error.message);
-    });
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Error HTTP: ${response.status}`);
+                }
+                return response.text();
+            })
+            .then(text => {
+                console.log('Respuesta del servidor:', text);
+                try {
+                    const data = JSON.parse(text);
+                    if (data.success) {
+                        alert('Producto agregado al carrito exitosamente');
+                        limpiarFormulario();
+                        actualizarContadorCarrito(data.carritoSize);
+                    } else {
+                        throw new Error(data.message || 'Error al agregar al carrito');
+                    }
+                } catch (e) {
+                    console.error('Error al procesar respuesta:', text);
+                    throw new Error('Error al procesar la respuesta del servidor');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al agregar al carrito: ' + error.message);
+            });
+}
+
+function actualizarContadorCarrito(cantidad) {
+    const contadorCarrito = document.querySelector('.carrito-count');
+    if (contadorCarrito) {
+        contadorCarrito.textContent = cantidad;
+    }
 }
 
 function limpiarFormulario() {
     productoSeleccionado = null;
-    document.getElementById('detalles-personalizacion').value = '';
-    document.getElementById('extra-personalizacion').value = '';
-    document.querySelector('.counter-value').textContent = '1';
-    
-    const headerAside = document.querySelector('.header-aside h1');
-    const descripcionAside = document.querySelector('.aside-descripcion p');
-    const totalAside = document.querySelector('.total-aside h4');
-    
-    headerAside.textContent = 'PRODUCTO';
-    descripcionAside.textContent = '';
-    totalAside.textContent = 'Total: $0.00';
-    
-    document.querySelector('.aside-catalogo').style.display = 'none';
+
+    const elementos = {
+        detalles: document.getElementById('detalles-personalizacion'),
+        extra: document.getElementById('extra-personalizacion'),
+        contador: document.querySelector('.counter-value'),
+        titulo: document.querySelector('.header-aside h1'),
+        descripcion: document.querySelector('.aside-descripcion p'),
+        total: document.querySelector('.total-aside h4'),
+        aside: document.querySelector('.aside-catalogo')
+    };
+
+    if (elementos.detalles)
+        elementos.detalles.value = '';
+    if (elementos.extra)
+        elementos.extra.value = '';
+    if (elementos.contador)
+        elementos.contador.textContent = '1';
+    if (elementos.titulo)
+        elementos.titulo.textContent = 'PRODUCTO';
+    if (elementos.descripcion)
+        elementos.descripcion.textContent = '';
+    if (elementos.total)
+        elementos.total.textContent = 'Total: $0.00';
+    if (elementos.aside)
+        elementos.aside.style.display = 'none';
 }
-
-function initializeCartControls() {
-    // Inicializar botones de cantidad
-    const decreaseBtn = document.querySelector('.decrease');
-    const increaseBtn = document.querySelector('.increase');
-    const counterValue = document.querySelector('.counter-value');
-
-    if (decreaseBtn && increaseBtn && counterValue) {
-        decreaseBtn.addEventListener('click', () => {
-            let value = parseInt(counterValue.textContent);
-            if (value > 1) {
-                value--;
-                counterValue.textContent = value;
-                actualizarTotal(value);
-            }
-        });
-
-        increaseBtn.addEventListener('click', () => {
-            let value = parseInt(counterValue.textContent);
-            value++;
-            counterValue.textContent = value;
-            actualizarTotal(value);
-        });
-    }
-}
-
-// Asegúrate de llamar a esta función cuando el documento esté listo
-document.addEventListener('DOMContentLoaded', function() {
-    initializeCartControls();
-});
 
 function actualizarTotal(cantidad) {
     if (productoSeleccionado) {
         const totalElement = document.querySelector('.total-aside h4');
-        const nuevoTotal = (productoSeleccionado.precio * cantidad).toFixed(2);
-        totalElement.textContent = `Total: $${nuevoTotal}`;
+        if (totalElement) {
+            const nuevoTotal = (productoSeleccionado.precio * cantidad).toFixed(2);
+            totalElement.textContent = `Total: $${nuevoTotal}`;
+        }
     }
 }
 
 // Inicialización cuando el documento está listo
-document.addEventListener('DOMContentLoaded', function() {
-    initializeCartControls();
-    
-    if (!productoSeleccionado) {
-        document.querySelector('.aside-catalogo').style.display = 'none';
+document.addEventListener('DOMContentLoaded', function () {
+    const asideCatalogo = document.querySelector('.aside-catalogo');
+    if (asideCatalogo) {
+        asideCatalogo.style.display = 'none';
     }
 });

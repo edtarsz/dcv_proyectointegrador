@@ -1,10 +1,6 @@
-<%-- 
-    Document   : Datos
-    Created on : 23 mar 2025, 1:43:39 p.m.
-    Author     : esmeraldamolinaestrada
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html lang="es">
     <head>
@@ -18,6 +14,12 @@
         <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap" rel="stylesheet">
         <title>Información del Cliente</title>
     </head>
+    <c:if test="${not empty requestScope.error}">
+        <div class="error-message">
+            ${requestScope.error}
+        </div>
+    </c:if>
+    <script src="script/datos.js" defer></script>
     <body>
         <%@ include file="/partials/header.jspf" %>
         <main class="main-catalogo">
@@ -25,35 +27,38 @@
                 <h2>Información del cliente</h2>
             </div>
             <div class="container-catalogo">
-                <form class="form-cliente" action="SVCliente" method="POST">
+                <form class="form-cliente" action="SVDatos" method="POST">
+                    <input type="hidden" name="action" value="procesarDatos">
+
                     <div class="form-group">
                         <label for="nombre">Nombre completo</label>
                         <div class="input-container">
                             <img src="svg/user.svg" alt="Usuario" class="input-icon">
-                            <input type="text" id="nombre" name="nombre" required>
+                            <input type="text" id="nombre" name="nombre" required 
+                                   value="${param.nombre}" pattern=".{3,}" 
+                                   title="El nombre debe tener al menos 3 caracteres">
                         </div>
                     </div>
+
                     <div class="form-group">
                         <label for="telefono">Teléfono celular</label>
                         <div class="input-container">
                             <img src="svg/phone.svg" alt="Teléfono" class="input-icon">
-                            <input type="tel" id="telefono" name="telefono" required>
+                            <input type="tel" id="telefono" name="telefono" required 
+                                   value="${param.telefono}" pattern="[0-9]{10}" 
+                                   title="Ingrese un número de 10 dígitos">
                         </div>
                     </div>
+
                     <div class="form-group">
                         <label for="correo">Correo electrónico</label>
                         <div class="input-container">
                             <img src="svg/email.svg" alt="Correo" class="input-icon">
-                            <input type="email" id="correo" name="correo" required>
+                            <input type="email" id="correo" name="correo" required 
+                                   value="${param.correo}">
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="direccion">Dirección</label>
-                        <div class="input-container">
-                            <img src="svg/location.svg" alt="Ubicación" class="input-icon">
-                            <input type="text" id="direccion" name="direccion" required>
-                        </div>
-                    </div>
+
                     <div class="btn-container">
                         <button type="submit" class="btn-continuar">Continuar</button>
                     </div>

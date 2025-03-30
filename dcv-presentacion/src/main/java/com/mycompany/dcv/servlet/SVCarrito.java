@@ -24,26 +24,26 @@ import java.util.List;
  */
 @WebServlet(name = "SVCarrito", urlPatterns = {"/SVCarrito"})
 public class SVCarrito extends HttpServlet {
-    
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
             HttpSession sesion = request.getSession();
             List<DetalleVenta> carrito = (List<DetalleVenta>) sesion.getAttribute("carrito");
-            
+
             if (carrito == null) {
                 carrito = new ArrayList<>();
                 sesion.setAttribute("carrito", carrito);
             }
-            
+
             request.getRequestDispatcher("Carrito.jsp").forward(request, response);
         } catch (Exception e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al cargar el carrito");
         }
     }
 
-     @Override
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("application/json");
@@ -52,109 +52,89 @@ public class SVCarrito extends HttpServlet {
         JsonObject jsonResponse = new JsonObject();
 
         try {
-            // Obtener parámetros
-            long idProducto = Long.parseLong(request.getParameter("idProducto"));
-            String nombre = request.getParameter("nombre");
-            String descripcion = request.getParameter("descripcion");
-            double precio = Double.parseDouble(request.getParameter("precio"));
-            int cantidad = Integer.parseInt(request.getParameter("cantidad"));
-            String detalles = request.getParameter("detalles");
-            String extra = request.getParameter("extra");
-
-            // Crear el producto
-            Producto producto = new Producto(idProducto, nombre, descripcion, precio);
-
-            // Crear el detalle de venta
-            DetalleVenta detalleVenta = new DetalleVenta();
-            detalleVenta.setProducto(producto);
-            detalleVenta.setCantidad(cantidad);
-            detalleVenta.setPrecioUnitario(precio);
-            detalleVenta.setSubtotal(cantidad * precio);
-            detalleVenta.setEsPersonalizado(true);
-            detalleVenta.setPersonalizacion(detalles + "\nExtra: " + extra);
-
-            // Obtener o crear el carrito en la sesión
+            String action = request.getParameter("action");
             HttpSession sesion = request.getSession();
             List<DetalleVenta> carrito = (List<DetalleVenta>) sesion.getAttribute("carrito");
+
             if (carrito == null) {
-                carrito = new ArrayList<>();
+                throw new Exception("Carrito no encontrado");
             }
-            
-            carrito.add(detalleVenta);
+
+            switch (action) {
+                case "deleteItem":
+                    handleDeleteItem(carrito, request, jsonResponse);
+                    break;
+                case "updateQuantity":
+                    handleUpdateQuantity(carrito, request, jsonResponse);
+                    break;
+                default:
+                    jsonResponse.addProperty("success", false);
+                    jsonResponse.addProperty("message", "Acción no válida");
+            }
+
             sesion.setAttribute("carrito", carrito);
 
-            jsonResponse.addProperty("success", true);
-            jsonResponse.addProperty("message", "Producto agregado al carrito");
-            jsonResponse.addProperty("carritoSize", carrito.size());
-            
         } catch (Exception e) {
             jsonResponse.addProperty("success", false);
-            jsonResponse.addProperty("message", "Error al agregar al carrito: " + e.getMessage());
+            jsonResponse.addProperty("message", "Error: " + e.getMessage());
+            e.printStackTrace();
         }
-        
+
         out.print(jsonResponse.toString());
         out.flush();
     }
 
-    @Override
-    protected void doDelete(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("application/json");
-        PrintWriter out = response.getWriter();
-        JsonObject jsonResponse = new JsonObject();
-        
+    private void handleDeleteItem(List<DetalleVenta> carrito, HttpServletRequest request, JsonObject jsonResponse) {
         try {
             long idProducto = Long.parseLong(request.getParameter("idProducto"));
-            HttpSession sesion = request.getSession();
-            List<DetalleVenta> carrito = (List<DetalleVenta>) sesion.getAttribute("carrito");
+            boolean removed = carrito.removeIf(detalle -> detalle.getProducto().getId() == idProducto);
 
-            if (carrito != null) {
-                carrito.removeIf(detalle -> detalle.getProducto().getId() == idProducto);
-                sesion.setAttribute("carrito", carrito);
+            if (removed) {
                 jsonResponse.addProperty("success", true);
                 jsonResponse.addProperty("message", "Producto eliminado");
+                jsonResponse.addProperty("carritoSize", carrito.size());
+            } else {
+                jsonResponse.addProperty("success", false);
+                jsonResponse.addProperty("message", "Producto no encontrado");
             }
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             jsonResponse.addProperty("success", false);
-            jsonResponse.addProperty("message", e.getMessage());
+            jsonResponse.addProperty("message", "ID de producto inválido");
         }
-        
-        out.print(jsonResponse.toString());
     }
-    
-    @Override
-protected void doPut(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-    response.setContentType("application/json");
-    response.setCharacterEncoding("UTF-8");
-    PrintWriter out = response.getWriter();
-    JsonObject jsonResponse = new JsonObject();
-    
-    try {
-        long idProducto = Long.parseLong(request.getParameter("idProducto"));
-        int nuevaCantidad = Integer.parseInt(request.getParameter("nuevaCantidad"));
 
-        HttpSession sesion = request.getSession();
-        List<DetalleVenta> carrito = (List<DetalleVenta>) sesion.getAttribute("carrito");
+    private void handleUpdateQuantity(List<DetalleVenta> carrito, HttpServletRequest request, JsonObject jsonResponse) {
+        try {
+            long idProducto = Long.parseLong(request.getParameter("idProducto"));
+            int nuevaCantidad = Integer.parseInt(request.getParameter("nuevaCantidad"));
 
-        if (carrito != null) {
+            if (nuevaCantidad < 1) {
+                throw new IllegalArgumentException("La cantidad debe ser mayor a 0");
+            }
+
+            boolean updated = false;
             for (DetalleVenta detalle : carrito) {
                 if (detalle.getProducto().getId() == idProducto) {
                     detalle.setCantidad(nuevaCantidad);
                     detalle.setSubtotal(nuevaCantidad * detalle.getPrecioUnitario());
+                    updated = true;
                     break;
                 }
             }
-            sesion.setAttribute("carrito", carrito);
-            jsonResponse.addProperty("success", true);
-            jsonResponse.addProperty("message", "Cantidad actualizada");
+
+            if (updated) {
+                jsonResponse.addProperty("success", true);
+                jsonResponse.addProperty("message", "Cantidad actualizada");
+            } else {
+                jsonResponse.addProperty("success", false);
+                jsonResponse.addProperty("message", "Producto no encontrado");
+            }
+        } catch (NumberFormatException e) {
+            jsonResponse.addProperty("success", false);
+            jsonResponse.addProperty("message", "Valores numéricos inválidos");
+        } catch (IllegalArgumentException e) {
+            jsonResponse.addProperty("success", false);
+            jsonResponse.addProperty("message", e.getMessage());
         }
-    } catch (Exception e) {
-        jsonResponse.addProperty("success", false);
-        jsonResponse.addProperty("message", e.getMessage());
     }
-    
-    out.print(jsonResponse.toString());
-    out.flush();
-}
 }

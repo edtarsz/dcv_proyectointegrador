@@ -2,7 +2,32 @@
     Created on : 22 mar 2025, 4:32:43 p.m.
     Author     : esmeraldamolinaestrada
 */
+.mensajes-error {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #ff4444;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 4px;
+    z-index: 1000;
+}
 
+.quantity-control {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.quantity-btn {
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.quantity-input {
+    width: 50px;
+    text-align: center;
+}
 
 .main-carrito {
     max-width: 1200px;
@@ -12,10 +37,10 @@
 }
 
 .item-title {
-    color: #C26E6E; 
-    font-size: 16px; 
+    color: #C26E6E;
+    font-size: 16px;
     font-weight: 500;
-    font-family: 'Ubuntu', sans-serif; 
+    font-family: 'Ubuntu', sans-serif;
 }
 
 .item-description {

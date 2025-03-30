@@ -33,10 +33,10 @@ public class Envio implements Serializable {
 
     @Column(name = "fechaEnvio")
     private Date fechaEnvio;
-    
+
     @Column(name = "fechaEntrega")
     private Date fechaEntrega;
-    
+
     @Column(name = "direccionEntrega", nullable = false)
     private String direccionEntrega;
 
@@ -46,7 +46,7 @@ public class Envio implements Serializable {
     @ManyToOne
     @JoinColumn(name = "venta_id")
     private Venta venta;
-    
+
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
@@ -64,8 +64,6 @@ public class Envio implements Serializable {
         this.cliente = cliente;
     }
 
-    
-
     public long getId() {
         return id;
     }
@@ -81,7 +79,6 @@ public class Envio implements Serializable {
     public void setFechaEnvio(Date fechaEnvio) {
         this.fechaEnvio = fechaEnvio;
     }
-
 
     public String getDireccionEntrega() {
         return direccionEntrega;
@@ -125,15 +122,12 @@ public class Envio implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 59 * hash + (int) (this.id ^ (this.id >>> 32));
-        hash = 59 * hash + Objects.hashCode(this.fechaEnvio);
-        hash = 59 * hash + Objects.hashCode(this.fechaEntrega);
-        hash = 59 * hash + Objects.hashCode(this.direccionEntrega);
-        hash = 59 * hash + (int) (Double.doubleToLongBits(this.costo) ^ (Double.doubleToLongBits(this.costo) >>> 32));
-        hash = 59 * hash + Objects.hashCode(this.venta);
-        hash = 59 * hash + Objects.hashCode(this.cliente);
-        return hash;
+        return Objects.hash(
+                id,
+                direccionEntrega,
+                costo
+        // No incluir referencias bidireccionales
+        );
     }
 
     @Override
@@ -141,34 +135,13 @@ public class Envio implements Serializable {
         if (this == obj) {
             return true;
         }
-        if (obj == null) {
+        if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Envio other = (Envio) obj;
-        if (this.id != other.id) {
-            return false;
-        }
-        if (Double.doubleToLongBits(this.costo) != Double.doubleToLongBits(other.costo)) {
-            return false;
-        }
-        if (!Objects.equals(this.direccionEntrega, other.direccionEntrega)) {
-            return false;
-        }
-        if (!Objects.equals(this.fechaEnvio, other.fechaEnvio)) {
-            return false;
-        }
-        if (!Objects.equals(this.fechaEntrega, other.fechaEntrega)) {
-            return false;
-        }
-        if (!Objects.equals(this.venta, other.venta)) {
-            return false;
-        }
-        return Objects.equals(this.cliente, other.cliente);
+        Envio other = (Envio) obj;
+        return id == other.id
+                && Objects.equals(direccionEntrega, other.direccionEntrega)
+                && Double.compare(costo, other.costo) == 0;
     }
-
-    
 
 }

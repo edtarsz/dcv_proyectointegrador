@@ -14,6 +14,16 @@
     --border-radius: 8px;
 }
 
+.pedido-estado.en-proceso {
+    background-color: #ffd700;
+}
+.pedido-estado.completado {
+    background-color: #90ee90;
+}
+.pedido-estado.cancelado {
+    background-color: #ff6b6b;
+}
+
 body {
     font-family: 'Ubuntu', sans-serif;
 }

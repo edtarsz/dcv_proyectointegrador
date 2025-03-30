@@ -4,10 +4,30 @@
         <servlet-name>SVCatalogo</servlet-name>
         <servlet-class>com.mycompany.dcv.servlet.SVCatalogo</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SVDatos</servlet-name>
+        <servlet-class>com.mycompany.dcv.servlet.SVDatos</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SVPedidos</servlet-name>
+        <servlet-class>com.mycompany.dcv.servlet.SVPedidos</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SVCatalogo</servlet-name>
         <url-pattern>/SVCatalogo</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SVDatos</servlet-name>
+        <url-pattern>/SVDatos</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SVPedidos</servlet-name>
+        <url-pattern>/SVPedidos</url-pattern>
+    </servlet-mapping>
+    <error-page>
+        <exception-type>java.lang.Exception</exception-type>
+        <location>/error.jsp</location>
+    </error-page>
     <session-config>
         <session-timeout>
             30
