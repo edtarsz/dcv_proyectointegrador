@@ -90,5 +90,4 @@ public class SVCatalogo extends HttpServlet {
         out.flush();
     }
 
-    // ... otros métodos del servlet ...
 }

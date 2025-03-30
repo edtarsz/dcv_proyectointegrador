@@ -67,6 +67,9 @@ public class SVCarrito extends HttpServlet {
                 case "updateQuantity":
                     handleUpdateQuantity(carrito, request, jsonResponse);
                     break;
+                case "updatePersonalizacion":
+                    handleUpdatePersonalizacion(carrito, request, jsonResponse);
+                    break;
                 default:
                     jsonResponse.addProperty("success", false);
                     jsonResponse.addProperty("message", "Acción no válida");
@@ -82,6 +85,44 @@ public class SVCarrito extends HttpServlet {
 
         out.print(jsonResponse.toString());
         out.flush();
+    }
+
+    private void handleUpdatePersonalizacion(List<DetalleVenta> carrito, HttpServletRequest request, JsonObject jsonResponse) {
+        try {
+            long idProducto = Long.parseLong(request.getParameter("idProducto"));
+            String nuevaPersonalizacion = request.getParameter("personalizacion");
+
+            boolean updated = false;
+            for (DetalleVenta detalle : carrito) {
+                if (detalle.getProducto().getId() == idProducto) {
+                    // Preservar la parte "Extra:" si existe
+                    String personalizacionActual = detalle.getPersonalizacion();
+                    String extra = "";
+
+                    if (personalizacionActual.contains("Extra:")) {
+                        extra = personalizacionActual.substring(personalizacionActual.indexOf("Extra:"));
+                    }
+
+                    detalle.setPersonalizacion(nuevaPersonalizacion + (extra.isEmpty() ? "" : "\n" + extra));
+                    updated = true;
+                    break;
+                }
+            }
+
+            if (updated) {
+                jsonResponse.addProperty("success", true);
+                jsonResponse.addProperty("message", "Personalización actualizada");
+            } else {
+                jsonResponse.addProperty("success", false);
+                jsonResponse.addProperty("message", "Producto no encontrado");
+            }
+        } catch (NumberFormatException e) {
+            jsonResponse.addProperty("success", false);
+            jsonResponse.addProperty("message", "ID de producto inválido");
+        } catch (Exception e) {
+            jsonResponse.addProperty("success", false);
+            jsonResponse.addProperty("message", "Error: " + e.getMessage());
+        }
     }
 
     private void handleDeleteItem(List<DetalleVenta> carrito, HttpServletRequest request, JsonObject jsonResponse) {

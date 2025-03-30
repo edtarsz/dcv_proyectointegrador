@@ -78,45 +78,72 @@
                                         <div class="col-total">$${String.format("%.2f", total)}</div>
                                         <div class="col-actions">
                                             <button type="button" 
+                                                    class="btn-edit" 
+                                                    data-id="${item.producto.id}"
+                                                    data-personalizacion="${item.personalizacion}"
+                                                    title="Editar personalización">
+                                                <img src="svg/edit.svg" alt="Editar">
+                                            </button>
+                                            <button type="button" 
                                                     class="btn-delete" 
                                                     data-id="${item.producto.id}"
                                                     title="Eliminar producto">
                                                 <img src="svg/delete.svg" alt="Eliminar">
                                             </button>
                                         </div>
-                                    </div>
-                                </c:forEach>
-                            </div>
-                        </c:otherwise>
-                    </c:choose>
-                </div>
 
-                <c:if test="${not empty carrito}">
-                    <div class="resumen-pedido">
-                        <h2 class="resumen-title">Resumen del pedido</h2>
-                        <div class="resumen-content">
-                            <div class="total-line">
-                                <span class="total-label">Total</span>
-                                <span class="total-value">$${String.format("%.2f", subtotal)}</span>
-                            </div>
-                            <form id="confirmarCompraForm" action="Datos.jsp" method="POST">
-                                <input type="hidden" name="action" value="procederCompra">
-                                <div id="productosContainer">
-                                    <c:forEach var="item" items="${carrito}" varStatus="status">
-                                        <input type="hidden" name="idProducto[]" value="${item.producto.id}">
-                                        <input type="hidden" name="cantidad[]" value="${item.cantidad}">
-                                        <input type="hidden" name="personalizacion[]" value="${item.personalizacion}">
-                                        <input type="hidden" name="precioUnitario[]" value="${item.precioUnitario}">
-                                        <input type="hidden" name="subtotal[]" value="${item.subtotal}">
                                     </c:forEach>
-                                    <input type="hidden" name="totalPedido" value="${subtotal}">
+
                                 </div>
-                                <button type="submit" class="btn-continuar">Confirmar compra</button>
-                            </form>
-                        </div>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
-                </c:if>
-            </div>
+
+                    <c:if test="${not empty carrito}">
+                        <div class="resumen-pedido">
+                            <h2 class="resumen-title">Resumen del pedido</h2>
+                            <div class="resumen-content">
+                                <div class="total-line">
+                                    <span class="total-label">Total</span>
+                                    <span class="total-value">$${String.format("%.2f", subtotal)}</span>
+                                </div>
+                                <form id="confirmarCompraForm" action="Datos.jsp" method="POST">
+                                    <input type="hidden" name="action" value="procederCompra">
+                                    <div id="productosContainer">
+                                        <c:forEach var="item" items="${carrito}" varStatus="status">
+                                            <input type="hidden" name="idProducto[]" value="${item.producto.id}">
+                                            <input type="hidden" name="cantidad[]" value="${item.cantidad}">
+                                            <input type="hidden" name="personalizacion[]" value="${item.personalizacion}">
+                                            <input type="hidden" name="precioUnitario[]" value="${item.precioUnitario}">
+                                            <input type="hidden" name="subtotal[]" value="${item.subtotal}">
+                                        </c:forEach>
+                                        <input type="hidden" name="totalPedido" value="${subtotal}">
+                                    </div>
+                                    <button type="submit" class="btn-continuar">Confirmar compra</button>
+                                </form>
+                            </div>
+                        </div>
+                    </c:if>
+                </div>
         </main>
+
+        <!-- Modal para editar personalización -->
+        <div id="editarModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Editar Personalización</h2>
+                <form id="editarPersonalizacionForm">
+                    <input type="hidden" id="editProductoId" name="idProducto">
+                    <div class="form-group">
+                        <label for="editPersonalizacion">Detalles de personalización:</label>
+                        <textarea id="editPersonalizacion" name="personalizacion" rows="5" class="form-control"></textarea>
+                    </div>
+                    <div class="form-buttons">
+                        <button type="button" id="cancelarEdicion" class="btn-format-card">Cancelar</button>
+                        <button type="submit" class="btn-format-card btn-personalizar-card">Guardar cambios</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </body>
 </html>

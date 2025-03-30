@@ -35,6 +35,37 @@ function setupCartControls() {
             }
         });
     });
+
+    document.querySelectorAll('.btn-edit').forEach(button => {
+        button.addEventListener('click', function () {
+            const id = this.getAttribute('data-id');
+            let personalizacion = this.getAttribute('data-personalizacion');
+            // Si contiene "Extra:", separarlo para mostrar solo la personalización principal
+            if (personalizacion.includes('Extra:')) {
+                personalizacion = personalizacion.split('Extra:')[0].trim();
+            }
+
+            editProductoId.value = id;
+            editPersonalizacion.value = personalizacion;
+            modal.style.display = 'flex';
+        });
+    });
+    
+    // Cerrar modal
+    span.onclick = function () {
+        modal.style.display = 'none';
+    }
+
+    cancelarBtn.onclick = function () {
+        modal.style.display = 'none';
+    }
+
+// Cerrar si se hace clic fuera del modal
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    }
 }
 
 function updateQuantity(carritoItem, newQuantity) {
@@ -181,9 +212,9 @@ function parseCurrency(value) {
 }
 
 // Manejar el envío del formulario de confirmación
-document.getElementById('confirmarCompraForm').addEventListener('submit', function(e) {
+document.getElementById('confirmarCompraForm').addEventListener('submit', function (e) {
     e.preventDefault();
-    
+
     // Verificar si hay productos en el carrito
     const itemsEnCarrito = document.querySelectorAll('.carrito-item').length;
     if (itemsEnCarrito === 0) {
@@ -193,4 +224,100 @@ document.getElementById('confirmarCompraForm').addEventListener('submit', functi
 
     // Si todo está bien, enviar el formulario
     this.submit();
+});
+
+// Inicialización cuando el documento está listo
+document.addEventListener('DOMContentLoaded', function () {
+    const asideCatalogo = document.querySelector('.aside-catalogo');
+    if (asideCatalogo) {
+        asideCatalogo.style.display = 'none';
+    }
+
+    const modal = document.getElementById('editarModal');
+    const span = document.querySelector('.close');
+    const cancelarBtn = document.getElementById('cancelarEdicion');
+    const editarForm = document.getElementById('editarPersonalizacionForm');
+    const editProductoId = document.getElementById('editProductoId');
+    const editPersonalizacion = document.getElementById('editPersonalizacion');
+    document.querySelectorAll('.btn-edit').forEach(button => {
+        button.addEventListener('click', function () {
+            const id = this.getAttribute('data-id');
+            let personalizacion = this.getAttribute('data-personalizacion');
+            // Si contiene "Extra:", separarlo para mostrar solo la personalización principal
+            if (personalizacion.includes('Extra:')) {
+                personalizacion = personalizacion.split('Extra:')[0].trim();
+            }
+
+            editProductoId.value = id;
+            editPersonalizacion.value = personalizacion;
+            modal.style.display = 'flex';
+        });
+    });
+    span.onclick = function () {
+        modal.style.display = 'none';
+    }
+
+    cancelarBtn.onclick = function () {
+        modal.style.display = 'none';
+    }
+
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    }
+
+// Manejar el envío del formulario de edición
+    editarForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const idProducto = editProductoId.value;
+        const nuevaPersonalizacion = editPersonalizacion.value;
+        // Enviar la actualización al servidor
+        fetch('SVCarrito', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                'action': 'updatePersonalizacion',
+                'idProducto': idProducto,
+                'personalizacion': nuevaPersonalizacion
+            })
+        })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Actualizar la personalización en la UI
+                        const item = document.querySelector(`.carrito-item[data-id="${idProducto}"]`);
+                        const descripcion = item.querySelector('.item-description');
+                        descripcion.textContent = nuevaPersonalizacion;
+                        // Actualizar el atributo data-personalizacion del botón
+                        const editBtn = item.querySelector('.btn-edit');
+                        editBtn.setAttribute('data-personalizacion', nuevaPersonalizacion);
+                        // Mostrar mensaje de éxito
+                        mostrarMensaje(data.message, 'success');
+                    } else {
+                        mostrarMensaje(data.message, 'error');
+                    }
+
+                    // Cerrar el modal
+                    modal.style.display = 'none';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    mostrarMensaje('Error al actualizar la personalización', 'error');
+                    modal.style.display = 'none';
+                });
+        // Función para mostrar mensajes
+        function mostrarMensaje(mensaje, tipo) {
+            const mensajesDiv = document.getElementById('mensajes-error');
+            mensajesDiv.innerHTML = `<div class="mensaje ${tipo}">${mensaje}</div>`;
+            mensajesDiv.style.display = 'block';
+            // Ocultar después de 3 segundos
+            setTimeout(() => {
+                mensajesDiv.style.display = 'none';
+            }, 3000);
+        }
+
+    });
 });
