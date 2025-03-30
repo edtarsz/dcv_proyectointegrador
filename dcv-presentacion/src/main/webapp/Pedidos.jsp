@@ -1,220 +1,181 @@
-<%-- 
-    Document   : Pedidos
-    Created on : 22 mar 2025, 4:25:51 p.m.
-    Author     : esmeraldamolinaestrada
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-        
+
         <%-- Estilos --%>
         <link rel="stylesheet" href="style/style.css">
         <link rel="stylesheet" href="style/header.css">
         <link rel="stylesheet" href="style/pedidos.css">
+
         <%-- Fonts --%>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link
-            href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
-            rel="stylesheet">
-        <title>Pedidos</title>
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap" rel="stylesheet">
-             
+
+        <style>
+            .no-pedidos {
+                text-align: center;
+                padding: 20px;
+                color: #666;
+                font-style: italic;
+            }
+
+            .error-message {
+                color: #dc3545;
+                padding: 10px;
+                margin: 10px 0;
+                border: 1px solid #dc3545;
+                border-radius: 4px;
+                background-color: #f8d7da;
+                display: none;
+            }
+
+            .no-detalles {
+                text-align: center;
+                padding: 20px;
+                color: #666;
+                font-style: italic;
+            }
+
+            .pedido-estado.en-proceso {
+                background-color: #ffd700;
+            }
+            .pedido-estado.completado {
+                background-color: #90ee90;
+            }
+            .pedido-estado.esperando {
+                background-color: #ff9800;
+            }
+        </style>
+
+        <title>Pedidos</title>
     </head>
+    <script src="script/pedidos.js" defer></script>
     <body>
         <%@ include file="/partials/header.jspf" %>
+
+        <div id="mensajes-error" class="error-message"></div>
+
         <main class="main-pedidos">
             <div class="pedidos-container">
                 <div class="pedidos-izquierda">
                     <h1 class="pedidos-title">Pedidos</h1>
-                    
+
                     <div class="search-filter-container">
                         <div class="search-bar-container">
                             <input type="search" name="search-bar" id="search-bar" placeholder="Buscar por nombre">
-                            <button class="search-button">
+                            <button class="search-button" id="btnBuscar">
                                 <img src="svg/search.svg" alt="Buscar">
                             </button>
                         </div>
-                        
+
                         <div class="filtros-container">
-                            <div class="filtro">
+                            <div class="filtro" data-filtro="fecha">
                                 <span>Fecha</span>
                                 <img src="svg/arrow-down.svg" alt="Desplegable">
                             </div>
-                            <div class="filtro">
+                            <div class="filtro" data-filtro="producto">
                                 <span>Producto</span>
                                 <img src="svg/arrow-down.svg" alt="Desplegable">
                             </div>
-                            <div class="filtro">
+                            <div class="filtro" data-filtro="costo">
                                 <span>Costo</span>
                                 <img src="svg/arrow-down.svg" alt="Desplegable">
                             </div>
-                            <div class="filtro">
+                            <div class="filtro" data-filtro="estado">
                                 <span>Estado</span>
                                 <img src="svg/arrow-down.svg" alt="Desplegable">
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="pedidos-lista">
-                        <div class="pedido-item selected" onclick="mostrarDetalle('01')">
-                            <div class="pedido-numero">#01</div>
-                            <div class="pedido-cliente">Ana Cristina Castro</div>
-                            <div class="pedido-fecha">18/02/2025</div>
-                            <div class="pedido-estado completado">
-                                <span>COMPLETADO</span>
-                                <img src="svg/arrow-down.svg" alt="Desplegable">
-                            </div>
-                        </div>
-                        
-                        <div class="pedido-item" onclick="mostrarDetalle('02')">
-                            <div class="pedido-numero">#02</div>
-                            <div class="pedido-cliente">Esmeralda Molina Estrada</div>
-                            <div class="pedido-fecha">18/02/2025</div>
-                            <div class="pedido-estado en-proceso">
-                                <span>EN PROCESO</span>
-                                <img src="svg/arrow-down.svg" alt="Desplegable">
-                            </div>
-                        </div>
-                        
-                        <div class="pedido-item" onclick="mostrarDetalle('03')">
-                            <div class="pedido-numero">#03</div>
-                            <div class="pedido-cliente">Eduardo Talavera Ramos</div>
-                            <div class="pedido-fecha">18/02/2025</div>
-                            <div class="pedido-estado esperando">
-                                <span>ESPERANDO ADELANTO</span>
-                                <img src="svg/arrow-down.svg" alt="Desplegable">
-                            </div>
-                        </div>
-                        
-                        <div class="pedido-item" onclick="mostrarDetalle('04')">
-                            <div class="pedido-numero">#04</div>
-                            <div class="pedido-cliente">Diego Alcantar</div>
-                            <div class="pedido-fecha">18/02/2025</div>
-                            <div class="pedido-estado completado">
-                                <span>COMPLETADO</span>
-                                <img src="svg/arrow-down.svg" alt="Desplegable">
-                            </div>
-                        </div>
+                        <c:choose>
+                            <c:when test="${empty ventas}">
+                                <div class="no-pedidos">
+                                    <p>No hay pedidos disponibles</p>
+                                </div>
+                            </c:when>
+                            <c:otherwise>
+                                <c:forEach var="venta" items="${ventas}">
+                                    <div class="pedido-item ${venta.id == ventaSeleccionada.id ? 'selected' : ''}" 
+                                         data-id="${venta.id}">
+                                        <div class="pedido-numero">#${venta.id}</div>
+                                        <div class="pedido-cliente">${venta.cliente.nombreCompleto}</div>
+                                        <div class="pedido-fecha">
+                                            <fmt:formatDate value="${venta.fecha}" pattern="dd/MM/yyyy"/>
+                                        </div>
+                                        <div class="pedido-estado ${fn:toLowerCase(venta.estado)}">
+                                            <span>${venta.estado}</span>
+                                            <img src="svg/arrow-down.svg" alt="Desplegable">
+                                        </div>
+                                    </div>
+                                </c:forEach>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
                 </div>
-                
+
                 <div class="pedidos-derecha">
                     <h2 class="detalles-title">DETALLES</h2>
-                    
-                    <div class="detalles-header">
-                        <div class="detalles-cliente">Ana Cristina Castro</div>
-                        <div class="detalles-fecha">18/02/2025</div>
-                    </div>
-                    
-                    <div class="detalles-items">
-                        <div class="detalle-item">
-                            <div class="item-info">
-                                <div class="item-title">TAZAS</div>
-                                <div class="item-descripcion">
-                                    Fotografía proporcionada por el cliente (adjunta al pedido)
-                                    Texto: "El mejor café es contigo" en fuente cursiva, color negro
-                                    Embalaje: Caja protectora individual para cada taza
-                                    Instrucciones adicionales: Entrega antes del 5 de abril, con verificación previa del diseño final antes de la impresión.
+
+                    <c:choose>
+                        <c:when test="${empty ventaSeleccionada}">
+                            <div class="no-detalles">
+                                <p>Seleccione un pedido para ver sus detalles</p>
+                            </div>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="detalles-header">
+                                <div class="detalles-cliente">${ventaSeleccionada.cliente.nombreCompleto}</div>
+                                <div class="detalles-fecha">
+                                    <fmt:formatDate value="${ventaSeleccionada.fecha}" pattern="dd/MM/yyyy"/>
                                 </div>
                             </div>
-                            <div class="item-acciones">
-                                <div class="item-precio">$110.99</div>
-                                <button class="item-editar">
-                                    <img src="svg/delete.svg" alt="Editar">
-                                </button>
-                                 <button class="item-editar">
-                                    <img src="svg/edit.svg" alt="Editar">
-                                </button>
+
+                            <div class="detalles-items">
+                                <c:forEach var="detalle" items="${ventaSeleccionada.detallesVenta}">
+                                    <div class="detalle-item">
+                                        <div class="item-info">
+                                            <div class="item-title">${detalle.producto.nombre}</div>
+                                            <div class="item-descripcion">${detalle.personalizacion}</div>
+                                        </div>
+                                        <div class="item-acciones">
+                                            <div class="item-precio">$${detalle.subtotal}</div>
+                                            <button class="item-editar" data-id="${detalle.id}">
+                                                <img src="svg/edit.svg" alt="Editar">
+                                            </button>
+                                        </div>
+                                    </div>
+                                </c:forEach>
                             </div>
-                        </div>
-                        
-                        <div class="detalle-item">
-                            <div class="item-info">
-                                <div class="item-title">TAZAS</div>
-                                <div class="item-descripcion">
-                                    Fotografía proporcionada por el cliente (adjunta al pedido)
-                                    Texto: "El mejor café es contigo" en fuente cursiva, color negro
-                                    Embalaje: Caja protectora individual para cada taza
-                                    Instrucciones adicionales: Entrega antes del 5 de abril, con verificación previa del diseño final antes de la impresión.
-                                </div>
+
+                            <div class="total-container">
+                                <div class="total-label">TOTAL</div>
+                                <div class="total-valor">$${ventaSeleccionada.total}</div>
                             </div>
-                            <div class="item-acciones">
-                                <div class="item-precio">$110.99</div>
-                                <button class="item-editar">
-                                    <img src="svg/delete.svg" alt="Editar">
-                                </button>
-                                 <button class="item-editar">
-                                    <img src="svg/edit.svg" alt="Editar">
-                                </button>
-                            
-                            </div>
-                        </div>
-                        
-                        <div class="detalle-item">
-                            <div class="item-info">
-                                <div class="item-title">TAZAS</div>
-                                <div class="item-descripcion">
-                                    Fotografía proporcionada por el cliente (adjunta al pedido)
-                                    Texto: "El mejor café es contigo" en fuente cursiva, color negro
-                                </div>
-                            </div>
-                            <div class="item-acciones">
-                                <div class="item-precio">$110.99</div>
-                                <button class="item-editar">
-                                    <img src="svg/delete.svg" alt="Editar">
-                                </button>
-                                 <button class="item-editar">
-                                    <img src="svg/edit.svg" alt="Editar">
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <div class="detalle-item">
-                            <div class="item-info">
-                                <div class="item-title">TAZAS</div>
-                                <div class="item-descripcion">
-                                    Fotografía proporcionada por el cliente (adjunta al pedido)
-                                    Texto: "El mejor café es contigo" en fuente cursiva, color negro
-                                </div>
-                            </div>
-                            <div class="item-acciones">
-                                <div class="item-precio">$110.99</div>
-                                <button class="item-editar">
-                                    <img src="svg/delete.svg" alt="Editar">
-                                </button>
-                                 <button class="item-editar">
-                                    <img src="svg/edit.svg" alt="Editar">
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="total-container">
-                        <div class="total-label">TOTAL</div>
-                        <div class="total-valor">$443.96</div>
-                    </div>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
             </div>
         </main>
-        
-        <script>
-            function mostrarDetalle(id) {
-                const pedidos = document.querySelectorAll('.pedido-item');
-                pedidos.forEach(pedido => {
-                    pedido.classList.remove('selected');
-                });
-                
-                event.currentTarget.classList.add('selected');
-                
-            
-            }
-        </script>
     </body>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log('Pedidos.jsp cargado');
+            console.log('Ventas disponibles:', ${not empty ventas});
+            if (${not empty ventas}) {
+                console.log('Número de ventas:', ${ventas.size()});
+            }
+            if (${not empty error}) {
+                console.log('Error:', '${error}');
+            }
+        });
+    </script>
 </html>

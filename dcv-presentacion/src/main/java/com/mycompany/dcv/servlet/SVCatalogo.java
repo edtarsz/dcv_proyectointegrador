@@ -26,68 +26,69 @@ import java.util.List;
 public class SVCatalogo extends HttpServlet {
     
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+        JsonObject jsonResponse = new JsonObject();
+
         try {
-            // Aquí obtienes los productos de la base de datos
-//            List<Producto> productos = obtenerProductos(); // Implementa este método
-//            request.setAttribute("productos", productos);
-//            request.getRequestDispatcher("catalogo.jsp").forward(request, response);
+            String action = request.getParameter("action");
+            
+            if ("addToCart".equals(action)) {
+                // Obtener parámetros
+                long idProducto = Long.parseLong(request.getParameter("idProducto"));
+                String nombre = request.getParameter("nombre");
+                String descripcion = request.getParameter("descripcion");
+                double precio = Double.parseDouble(request.getParameter("precio"));
+                int cantidad = Integer.parseInt(request.getParameter("cantidad"));
+                String detalles = request.getParameter("detalles");
+                String extra = request.getParameter("extra");
+
+                // Crear producto
+                Producto producto = new Producto(idProducto, nombre, descripcion, precio);
+
+                // Crear detalle de venta (sin Venta asociada aún)
+                DetalleVenta detalleVenta = new DetalleVenta();
+                detalleVenta.setProducto(producto);
+                detalleVenta.setCantidad(cantidad);
+                detalleVenta.setPrecioUnitario(precio);
+                detalleVenta.setSubtotal(cantidad * precio);
+                detalleVenta.setEsPersonalizado(true);
+                detalleVenta.setPersonalizacion(detalles + (extra != null && !extra.isEmpty() ? "\nExtra: " + extra : ""));
+
+                // Obtener o crear el carrito en la sesión
+                HttpSession sesion = request.getSession();
+                List<DetalleVenta> carrito = (List<DetalleVenta>) sesion.getAttribute("carrito");
+                if (carrito == null) {
+                    carrito = new ArrayList<>();
+                }
+
+                carrito.add(detalleVenta);
+                sesion.setAttribute("carrito", carrito);
+
+                jsonResponse.addProperty("success", true);
+                jsonResponse.addProperty("message", "Producto agregado al carrito");
+                jsonResponse.addProperty("carritoSize", carrito.size());
+            } else {
+                jsonResponse.addProperty("success", false);
+                jsonResponse.addProperty("message", "Acción no reconocida");
+            }
+
+        } catch (NumberFormatException e) {
+            jsonResponse.addProperty("success", false);
+            jsonResponse.addProperty("message", "Error en el formato de los datos");
+            e.printStackTrace();
         } catch (Exception e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al cargar el catálogo");
+            jsonResponse.addProperty("success", false);
+            jsonResponse.addProperty("message", "Error al procesar la solicitud: " + e.getMessage());
+            e.printStackTrace();
         }
+
+        out.print(jsonResponse.toString());
+        out.flush();
     }
 
-    @Override
-protected void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-    response.setContentType("application/json");
-    response.setCharacterEncoding("UTF-8");
-    PrintWriter out = response.getWriter();
-    JsonObject jsonResponse = new JsonObject();
-
-    try {
-        // Obtener parámetros
-        long idProducto = Long.parseLong(request.getParameter("idProducto"));
-        String nombre = request.getParameter("nombre");
-        String descripcion = request.getParameter("descripcion");
-        double precio = Double.parseDouble(request.getParameter("precio"));
-        int cantidad = Integer.parseInt(request.getParameter("cantidad"));
-        String detalles = request.getParameter("detalles");
-        String extra = request.getParameter("extra");
-
-        // Crear el producto
-        Producto producto = new Producto(idProducto, nombre, descripcion, precio);
-
-        // Crear el detalle de venta
-        DetalleVenta detalleVenta = new DetalleVenta();
-        detalleVenta.setProducto(producto);
-        detalleVenta.setCantidad(cantidad);
-        detalleVenta.setPrecioUnitario(precio);
-        detalleVenta.setSubtotal(cantidad * precio);
-        detalleVenta.setEsPersonalizado(true);
-        detalleVenta.setPersonalizacion(detalles + "\nExtra: " + extra);
-
-        // Obtener o crear el carrito en la sesión
-        HttpSession sesion = request.getSession();
-        List<DetalleVenta> carrito = (List<DetalleVenta>) sesion.getAttribute("carrito");
-        if (carrito == null) {
-            carrito = new ArrayList<>();
-        }
-        
-        carrito.add(detalleVenta);
-        sesion.setAttribute("carrito", carrito);
-
-        jsonResponse.addProperty("success", true);
-        jsonResponse.addProperty("message", "Producto agregado al carrito");
-        jsonResponse.addProperty("carritoSize", carrito.size());
-        
-    } catch (Exception e) {
-        jsonResponse.addProperty("success", false);
-        jsonResponse.addProperty("message", "Error al agregar al carrito: " + e.getMessage());
-    }
-    
-    out.print(jsonResponse.toString());
-    out.flush();
-}
+    // ... otros métodos del servlet ...
 }

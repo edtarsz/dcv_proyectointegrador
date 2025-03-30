@@ -1,9 +1,3 @@
-<%-- 
-    Document   : Carrito
-    Created on : 23 mar 2025, 1:20:40 a.m.
-    Author     : esmeraldamolinaestrada
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
@@ -19,9 +13,7 @@
         <%-- Fonts --%>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link
-            href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
-            rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
         <title>Carrito de compras</title>
         <script src="script/carrito-page.js" defer></script>
     </head>
@@ -29,6 +21,9 @@
         <%@ include file="/partials/header.jspf" %>
         <main class="main-carrito">
             <div class="container-carrito">
+                <!-- Contenedor de mensajes de error -->
+                <div id="mensajes-error" class="mensajes-error" style="display: none;"></div>
+
                 <div class="carrito-content">
                     <h1 class="carrito-title">Carrito</h1>
 
@@ -43,22 +38,25 @@
                             </div>
                         </c:when>
                         <c:otherwise>
-                            <p class="productos-count">${carrito.size()} productos</p>
-                            <div class="carrito-table">
-                                <div class="carrito-header">
-                                    <div class="col-detalles">DETALLES DEL PRODUCTO</div>
-                                    <div class="col-cantidad">CANTIDAD</div>
-                                    <div class="col-precio">PRECIO</div>
-                                    <div class="col-total">TOTAL</div>
-                                </div>
+                            <p class="productos-count">${carrito.size()} producto<c:if test="${carrito.size() != 1}">s</c:if></p>
+                                <div class="carrito-table">
+                                    <div class="carrito-header">
+                                        <div class="col-detalles">DETALLES DEL PRODUCTO</div>
+                                        <div class="col-cantidad">CANTIDAD</div>
+                                        <div class="col-precio">PRECIO</div>
+                                        <div class="col-total">TOTAL</div>
+                                        <div class="col-actions">ACCIONES</div>
+                                    </div>
 
                                 <c:set var="subtotal" value="0" />
                                 <c:forEach var="item" items="${carrito}" varStatus="status">
-                                    <!-- Calcular total por producto -->
                                     <c:set var="total" value="${item.precioUnitario * item.cantidad}" />
                                     <c:set var="subtotal" value="${subtotal + total}" />
 
-                                    <div class="carrito-item" data-id="${item.producto.id}">
+                                    <div class="carrito-item" 
+                                         data-id="${item.producto.id}" 
+                                         data-precio="${item.precioUnitario}"
+                                         data-nombre="${item.producto.nombre}">
                                         <div class="col-detalles">
                                             <h3 class="item-title">${item.producto.nombre}</h3>
                                             <p class="item-description">
@@ -67,15 +65,22 @@
                                         </div>
                                         <div class="col-cantidad">
                                             <div class="quantity-control">
-                                                <button class="quantity-btn decrement" data-action="decrement">−</button>
-                                                <input type="text" class="quantity-input" value="${item.cantidad}" readonly>
-                                                <button class="quantity-btn increment" data-action="increment">+</button>
+                                                <button type="button" class="quantity-btn decrement" title="Disminuir cantidad">−</button>
+                                                <input type="number" 
+                                                       class="quantity-input" 
+                                                       value="${item.cantidad}" 
+                                                       min="1" 
+                                                       readonly>
+                                                <button type="button" class="quantity-btn increment" title="Aumentar cantidad">+</button>
                                             </div>
                                         </div>
-                                        <div class="col-precio">$${item.precioUnitario}</div>
-                                        <div class="col-total">$${total}</div>
+                                        <div class="col-precio">$${String.format("%.2f", item.precioUnitario)}</div>
+                                        <div class="col-total">$${String.format("%.2f", total)}</div>
                                         <div class="col-actions">
-                                            <button class="btn-delete">
+                                            <button type="button" 
+                                                    class="btn-delete" 
+                                                    data-id="${item.producto.id}"
+                                                    title="Eliminar producto">
                                                 <img src="svg/delete.svg" alt="Eliminar">
                                             </button>
                                         </div>
@@ -88,23 +93,23 @@
 
                 <c:if test="${not empty carrito}">
                     <div class="resumen-pedido">
-                        <h2 class="resumen-title">Resúmen del pedido</h2>
+                        <h2 class="resumen-title">Resumen del pedido</h2>
                         <div class="resumen-content">
                             <div class="total-line">
                                 <span class="total-label">Total</span>
-                                <span class="total-value">$${subtotal}</span>
-                                <button class="btn-edit-total">
-                                    <img src="svg/edit.svg" alt="Editar">
-                                </button>
+                                <span class="total-value">$${String.format("%.2f", subtotal)}</span>
                             </div>
-                            <form id="confirmarCompraForm" action="SVProducto" method="POST">
-                                <input type="hidden" name="action" value="updateStock">
+                            <form id="confirmarCompraForm" action="Datos.jsp" method="POST">
+                                <input type="hidden" name="action" value="procederCompra">
                                 <div id="productosContainer">
                                     <c:forEach var="item" items="${carrito}" varStatus="status">
                                         <input type="hidden" name="idProducto[]" value="${item.producto.id}">
                                         <input type="hidden" name="cantidad[]" value="${item.cantidad}">
                                         <input type="hidden" name="personalizacion[]" value="${item.personalizacion}">
+                                        <input type="hidden" name="precioUnitario[]" value="${item.precioUnitario}">
+                                        <input type="hidden" name="subtotal[]" value="${item.subtotal}">
                                     </c:forEach>
+                                    <input type="hidden" name="totalPedido" value="${subtotal}">
                                 </div>
                                 <button type="submit" class="btn-continuar">Confirmar compra</button>
                             </form>

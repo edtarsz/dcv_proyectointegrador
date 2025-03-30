@@ -168,62 +168,28 @@ public class Venta implements Serializable {
         this.cliente = cliente;
     }
 
-    @Override
+      @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 43 * hash + (int) (this.id ^ (this.id >>> 32));
-        hash = 43 * hash + Objects.hashCode(this.fecha);
-        hash = 43 * hash + (int) (Double.doubleToLongBits(this.total) ^ (Double.doubleToLongBits(this.total) >>> 32));
-        hash = 43 * hash + Objects.hashCode(this.metodoPago);
-        hash = 43 * hash + Objects.hashCode(this.estado);
-        hash = 43 * hash + Objects.hashCode(this.usuario);
-        hash = 43 * hash + Objects.hashCode(this.reembolso);
-        hash = 43 * hash + Objects.hashCode(this.envios);
-        hash = 43 * hash + Objects.hashCode(this.detallesVenta);
-        hash = 43 * hash + Objects.hashCode(this.cliente);
-        return hash;
+        return Objects.hash(
+            id, 
+            fecha, 
+            total, 
+            metodoPago, 
+            estado
+            // No incluir colecciones ni referencias bidireccionales
+        );
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Venta other = (Venta) obj;
-        if (this.id != other.id) {
-            return false;
-        }
-        if (Double.doubleToLongBits(this.total) != Double.doubleToLongBits(other.total)) {
-            return false;
-        }
-        if (!Objects.equals(this.metodoPago, other.metodoPago)) {
-            return false;
-        }
-        if (!Objects.equals(this.estado, other.estado)) {
-            return false;
-        }
-        if (!Objects.equals(this.fecha, other.fecha)) {
-            return false;
-        }
-        if (!Objects.equals(this.usuario, other.usuario)) {
-            return false;
-        }
-        if (!Objects.equals(this.reembolso, other.reembolso)) {
-            return false;
-        }
-        if (!Objects.equals(this.envios, other.envios)) {
-            return false;
-        }
-        if (!Objects.equals(this.detallesVenta, other.detallesVenta)) {
-            return false;
-        }
-        return Objects.equals(this.cliente, other.cliente);
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Venta other = (Venta) obj;
+        return id == other.id &&
+               Objects.equals(fecha, other.fecha) &&
+               Double.compare(total, other.total) == 0 &&
+               Objects.equals(metodoPago, other.metodoPago) &&
+               Objects.equals(estado, other.estado);
     }
 
 }
