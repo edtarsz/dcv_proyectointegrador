@@ -119,10 +119,9 @@ public class SVVenta extends HttpServlet {
             // Limpiar sesión
             session.removeAttribute("carrito");
             session.removeAttribute("cliente");
-
             // Redirigir a confirmación
-            response.sendRedirect("Pedidos.jsp?mensaje=VentaRegistrada");
-
+            response.sendRedirect("SVPedidos?mensaje=VentaRegistrada");
+            
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", "Error al procesar la venta: " + e.getMessage());

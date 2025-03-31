@@ -226,7 +226,6 @@ document.getElementById('confirmarCompraForm').addEventListener('submit', functi
     this.submit();
 });
 
-// Inicialización cuando el documento está listo
 document.addEventListener('DOMContentLoaded', function () {
     const asideCatalogo = document.querySelector('.aside-catalogo');
     if (asideCatalogo) {
@@ -267,12 +266,10 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-// Manejar el envío del formulario de edición
     editarForm.addEventListener('submit', function (e) {
         e.preventDefault();
         const idProducto = editProductoId.value;
         const nuevaPersonalizacion = editPersonalizacion.value;
-        // Enviar la actualización al servidor
         fetch('SVCarrito', {
             method: 'POST',
             headers: {
@@ -287,20 +284,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // Actualizar la personalización en la UI
                         const item = document.querySelector(`.carrito-item[data-id="${idProducto}"]`);
                         const descripcion = item.querySelector('.item-description');
                         descripcion.textContent = nuevaPersonalizacion;
-                        // Actualizar el atributo data-personalizacion del botón
                         const editBtn = item.querySelector('.btn-edit');
                         editBtn.setAttribute('data-personalizacion', nuevaPersonalizacion);
-                        // Mostrar mensaje de éxito
                         mostrarMensaje(data.message, 'success');
                     } else {
                         mostrarMensaje(data.message, 'error');
                     }
 
-                    // Cerrar el modal
                     modal.style.display = 'none';
                 })
                 .catch(error => {
@@ -308,12 +301,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     mostrarMensaje('Error al actualizar la personalización', 'error');
                     modal.style.display = 'none';
                 });
-        // Función para mostrar mensajes
         function mostrarMensaje(mensaje, tipo) {
             const mensajesDiv = document.getElementById('mensajes-error');
             mensajesDiv.innerHTML = `<div class="mensaje ${tipo}">${mensaje}</div>`;
             mensajesDiv.style.display = 'block';
-            // Ocultar después de 3 segundos
             setTimeout(() => {
                 mensajesDiv.style.display = 'none';
             }, 3000);

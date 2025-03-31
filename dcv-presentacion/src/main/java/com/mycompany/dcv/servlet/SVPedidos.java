@@ -47,6 +47,28 @@ public class SVPedidos extends HttpServlet {
             throws ServletException, IOException {
         System.out.println("\n=== Iniciando procesamiento de pedidos ===");
         try {
+            // Verificar la acción solicitada
+            String action = request.getParameter("action");
+
+            // Si es una solicitud AJAX para obtener detalles
+            if ("getDetalle".equals(action)) {
+                obtenerDetalleVenta(request, response);
+                return;
+            }
+
+            // Si es una solicitud AJAX de búsqueda
+            if ("buscar".equals(action)) {
+                buscarVentas(request, response);
+                return;
+            }
+
+            // Si es una solicitud AJAX de filtrado
+            if ("filtrar".equals(action)) {
+                filtrarVentas(request, response);
+                return;
+            }
+
+            // Si no hay acción, cargar la vista principal
             // Verificar si ventaBO está inicializado
             if (ventaBO == null) {
                 throw new ServletException("VentaBO no está inicializado");
@@ -54,19 +76,11 @@ public class SVPedidos extends HttpServlet {
 
             System.out.println("SVPedidos: Intentando obtener ventas...");
             List<Venta> ventas = ventaBO.obtenerTodasLasVentas();
-
             System.out.println("SVPedidos: Ventas obtenidas: " + (ventas != null ? ventas.size() : "null"));
 
             if (ventas == null) {
                 ventas = new ArrayList<>();
                 System.out.println("SVPedidos: Se creó una lista vacía porque el resultado era null");
-            }
-
-            // Verificar el contenido de las ventas
-            for (Venta venta : ventas) {
-                System.out.println("Venta ID: " + venta.getId()
-                        + ", Cliente: " + (venta.getCliente() != null ? venta.getCliente().getNombreCompleto() : "null")
-                        + ", Detalles: " + (venta.getDetallesVenta() != null ? venta.getDetallesVenta().size() : "null"));
             }
 
             request.setAttribute("ventas", ventas);
@@ -83,11 +97,22 @@ public class SVPedidos extends HttpServlet {
             System.err.println("SVPedidos: Error en doGet(): " + e.getMessage());
             e.printStackTrace();
 
-            // Asegurar que siempre haya una lista vacía
+            // Si es una solicitud AJAX, devolver error en formato JSON
+            if ("getDetalle".equals(request.getParameter("action"))
+                    || "buscar".equals(request.getParameter("action"))
+                    || "filtrar".equals(request.getParameter("action"))) {
+
+                response.setContentType("application/json");
+                JsonObject jsonResponse = new JsonObject();
+                jsonResponse.addProperty("success", false);
+                jsonResponse.addProperty("message", "Error: " + e.getMessage());
+                response.getWriter().write(jsonResponse.toString());
+                return;
+            }
+
+            // Si no es AJAX, mostrar página de error
             request.setAttribute("ventas", new ArrayList<>());
             request.setAttribute("error", "Error al cargar los pedidos: " + e.getMessage());
-
-            System.out.println("SVPedidos: Redirigiendo a Pedidos.jsp con error");
             request.getRequestDispatcher("/Pedidos.jsp").forward(request, response);
         }
         System.out.println("=== Fin del procesamiento de pedidos ===\n");
@@ -116,26 +141,33 @@ public class SVPedidos extends HttpServlet {
     private void obtenerDetalleVenta(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
         response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
         JsonObject jsonResponse = new JsonObject();
 
         try {
             Long id = Long.parseLong(request.getParameter("id"));
+            System.out.println("Obteniendo detalles para la venta ID: " + id);
             Venta venta = ventaBO.obtenerVentaPorId(id);
 
             if (venta != null) {
                 jsonResponse.addProperty("success", true);
                 jsonResponse.add("venta", convertirVentaAJson(venta));
+                System.out.println("Detalles de venta obtenidos correctamente");
             } else {
                 jsonResponse.addProperty("success", false);
                 jsonResponse.addProperty("message", "Venta no encontrada");
+                System.out.println("Venta no encontrada con ID: " + id);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             jsonResponse.addProperty("success", false);
             jsonResponse.addProperty("message", "Error al obtener detalles: " + e.getMessage());
+            System.err.println("Error al obtener detalles de venta: " + e.getMessage());
         }
 
         out.print(jsonResponse.toString());
+        out.flush();
     }
 
     private void buscarVentas(HttpServletRequest request, HttpServletResponse response)
@@ -242,6 +274,7 @@ public class SVPedidos extends HttpServlet {
             detalleJson.addProperty("id", detalle.getId());
             detalleJson.addProperty("subtotal", detalle.getSubtotal());
             detalleJson.addProperty("personalizacion", detalle.getPersonalizacion());
+            detalleJson.addProperty("cantidad", detalle.getCantidad());
 
             JsonObject productoJson = new JsonObject();
             productoJson.addProperty("nombre", detalle.getProducto().getNombre());

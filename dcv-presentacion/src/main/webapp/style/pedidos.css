@@ -280,3 +280,9 @@ body {
     color: var(--text-color);
     font-size: 18px;
 }
+
+.item-cantidad {
+    font-size: 0.9em;
+    color: #666;
+    margin-top: 4px;
+}

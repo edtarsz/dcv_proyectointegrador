@@ -1,11 +1,11 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     initializePedidos();
 });
 
 function initializePedidos() {
     // Configurar eventos de pedidos
     document.querySelectorAll('.pedido-item').forEach(item => {
-        item.addEventListener('click', function() {
+        item.addEventListener('click', function () {
             const id = this.dataset.id;
             mostrarDetalle(id);
         });
@@ -39,7 +39,7 @@ function initializePedidos() {
 
     // Configurar filtros
     document.querySelectorAll('.filtro').forEach(filtro => {
-        filtro.addEventListener('click', function() {
+        filtro.addEventListener('click', function () {
             const tipoFiltro = this.dataset.filtro;
             aplicarFiltro(tipoFiltro);
         });
@@ -47,6 +47,8 @@ function initializePedidos() {
 }
 
 function mostrarDetalle(id) {
+    console.log('Solicitando detalles para el pedido ID:', id);
+
     // Actualizar selección visual
     document.querySelectorAll('.pedido-item').forEach(pedido => {
         pedido.classList.remove('selected');
@@ -62,26 +64,52 @@ function mostrarDetalle(id) {
     params.append('id', id);
 
     fetch('SVPedidos?' + params.toString())
-        .then(response => {
-            if (!response.ok) throw new Error('Error en la respuesta del servidor');
-            return response.json();
-        })
-        .then(data => {
-            if (data.success) {
-                actualizarDetallesPedido(data.venta);
-            } else {
-                throw new Error(data.message || 'Error al cargar los detalles');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            mostrarError(error.message);
-        });
+            .then(response => {
+                if (!response.ok)
+                    throw new Error('Error en la respuesta del servidor');
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    actualizarDetallesPedido(data.venta);
+                } else {
+                    throw new Error(data.message || 'Error al cargar los detalles');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                mostrarError(error.message);
+            });
+
+    fetch('SVPedidos?' + params.toString())
+            .then(response => {
+                console.log('Respuesta recibida, status:', response.status);
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        console.error('Respuesta de error:', text);
+                        throw new Error('Error en la respuesta del servidor: ' + response.status);
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Datos recibidos:', data);
+                if (data.success) {
+                    actualizarDetallesPedido(data.venta);
+                } else {
+                    throw new Error(data.message || 'Error al cargar los detalles');
+                }
+            })
+            .catch(error => {
+                console.error('Error en la solicitud:', error);
+                mostrarError(error.message);
+            });
 }
 
 function actualizarDetallesPedido(venta) {
     const detallesContainer = document.querySelector('.pedidos-derecha');
-    if (!detallesContainer) return;
+    if (!detallesContainer)
+        return;
 
     // Limpiar contenido anterior
     const detallesContent = `
@@ -96,6 +124,7 @@ function actualizarDetallesPedido(venta) {
                     <div class="item-info">
                         <div class="item-title">${detalle.producto.nombre}</div>
                         <div class="item-descripcion">${detalle.personalizacion}</div>
+                        <div class="item-cantidad">Cantidad: ${detalle.cantidad}</div>
                     </div>
                     <div class="item-acciones">
                         <div class="item-precio">$${Number(detalle.subtotal).toFixed(2)}</div>
@@ -116,7 +145,7 @@ function actualizarDetallesPedido(venta) {
 
     // Configurar eventos de edición
     detallesContainer.querySelectorAll('.item-editar').forEach(btn => {
-        btn.addEventListener('click', function() {
+        btn.addEventListener('click', function () {
             editarDetalle(this.dataset.id);
         });
     });
@@ -128,26 +157,28 @@ function buscarPedidos(termino) {
     params.append('termino', termino);
 
     fetch('SVPedidos?' + params.toString())
-        .then(response => {
-            if (!response.ok) throw new Error('Error en la respuesta del servidor');
-            return response.json();
-        })
-        .then(data => {
-            if (data.success) {
-                actualizarListaPedidos(data.ventas);
-            } else {
-                throw new Error(data.message || 'Error en la búsqueda');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            mostrarError(error.message);
-        });
+            .then(response => {
+                if (!response.ok)
+                    throw new Error('Error en la respuesta del servidor');
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    actualizarListaPedidos(data.ventas);
+                } else {
+                    throw new Error(data.message || 'Error en la búsqueda');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                mostrarError(error.message);
+            });
 }
 
 function actualizarListaPedidos(ventas) {
     const listaPedidos = document.querySelector('.pedidos-lista');
-    if (!listaPedidos) return;
+    if (!listaPedidos)
+        return;
 
     if (ventas.length === 0) {
         listaPedidos.innerHTML = `
@@ -180,21 +211,22 @@ function aplicarFiltro(tipo) {
     params.append('tipo', tipo);
 
     fetch('SVPedidos?' + params.toString())
-        .then(response => {
-            if (!response.ok) throw new Error('Error en la respuesta del servidor');
-            return response.json();
-        })
-        .then(data => {
-            if (data.success) {
-                actualizarListaPedidos(data.ventas);
-            } else {
-                throw new Error(data.message || 'Error al aplicar el filtro');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            mostrarError(error.message);
-        });
+            .then(response => {
+                if (!response.ok)
+                    throw new Error('Error en la respuesta del servidor');
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    actualizarListaPedidos(data.ventas);
+                } else {
+                    throw new Error(data.message || 'Error al aplicar el filtro');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                mostrarError(error.message);
+            });
 }
 
 function mostrarError(mensaje) {

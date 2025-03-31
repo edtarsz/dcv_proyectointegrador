@@ -145,6 +145,7 @@
                                         <div class="item-info">
                                             <div class="item-title">${detalle.producto.nombre}</div>
                                             <div class="item-descripcion">${detalle.personalizacion}</div>
+                                            <div class="item-cantidad">Cantidad: ${detalle.cantidad}</div>
                                         </div>
                                         <div class="item-acciones">
                                             <div class="item-precio">$${detalle.subtotal}</div>
