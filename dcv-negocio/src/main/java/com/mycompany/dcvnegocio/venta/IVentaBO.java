@@ -26,5 +26,6 @@ public interface IVentaBO {
     List<Venta> filtrarVentas(Date fechaInicio, Date fechaFin, String estado, Double precioMin, Double precioMax) throws ControllerException;
     Venta obtenerVentaPorId(Long id) throws ControllerException;
     void actualizarEstadoVenta(Long ventaId, String nuevoEstado) throws ControllerException;
+    
 
 }

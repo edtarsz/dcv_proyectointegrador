@@ -30,4 +30,6 @@ public interface IVentaDAO {
     Venta obtenerVentaPorId(Long id) throws ModelException;
     void actualizarEstadoVenta(Long ventaId, String nuevoEstado) throws ModelException;
 
+    public void actualizarPersonalizacionDetalle(Long detalleId, String nuevaPersonalizacion);
+
 }

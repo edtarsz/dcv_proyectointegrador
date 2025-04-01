@@ -2,7 +2,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <!DOCTYPE html>
+
 <html>
     <head>
         <meta charset="UTF-8">
@@ -11,6 +13,7 @@
         <%-- Estilos --%>
         <link rel="stylesheet" href="style/style.css">
         <link rel="stylesheet" href="style/header.css">
+        <link rel="stylesheet" href="style/carrito.css">
         <link rel="stylesheet" href="style/pedidos.css">
 
         <%-- Fonts --%>
@@ -144,13 +147,19 @@
                                     <div class="detalle-item">
                                         <div class="item-info">
                                             <div class="item-title">${detalle.producto.nombre}</div>
-                                            <div class="item-descripcion">${detalle.personalizacion}</div>
+                                            <div class="item-descripcion">Editar Pedido: ${detalle.personalizacion}</div>
                                             <div class="item-cantidad">Cantidad: ${detalle.cantidad}</div>
                                         </div>
                                         <div class="item-acciones">
                                             <div class="item-precio">$${detalle.subtotal}</div>
                                             <button class="item-editar" data-id="${detalle.id}">
                                                 <img src="svg/edit.svg" alt="Editar">
+                                            </button>
+                                            <button type="button" 
+                                                    class="btn-delete" 
+                                                    data-id="${detalle.producto.id}"  <!-- Se corrigió 'item' por 'detalle' -->
+                                                    title="Eliminar producto">
+                                                    <img src="svg/delete.svg" alt="Eliminar">
                                             </button>
                                         </div>
                                     </div>
@@ -166,6 +175,24 @@
                 </div>
             </div>
         </main>
+        <div id="editarModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Editar Personalización</h2>
+                <form id="editarPersonalizacionForm">
+                    <input type="hidden" id="editProductoId" name="idProducto">
+                    <div class="form-group">
+                        <label for="editPersonalizacion">Detalles del pedido:</label>
+                        <textarea id="editPersonalizacion" name="personalizacion" rows="5" class="form-control"></textarea>
+                    </div>
+                    <div class="form-buttons">
+                        <button type="button" id="cancelarEdicion" class="btn-format-card">Cancelar</button>
+                        <button type="submit" class="btn-format-card btn-personalizar-card">Guardar cambios</button>
+                    </div>
+                </form>
+                
+            </div>
+        </div>
     </body>
     <script>
         document.addEventListener('DOMContentLoaded', function () {

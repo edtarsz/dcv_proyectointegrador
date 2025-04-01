@@ -318,4 +318,9 @@ public class VentaDAO implements IVentaDAO {
             throw new ModelException("Error en la transacción", e);
         }
     }
+
+    @Override
+    public void actualizarPersonalizacionDetalle(Long detalleId, String nuevaPersonalizacion) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

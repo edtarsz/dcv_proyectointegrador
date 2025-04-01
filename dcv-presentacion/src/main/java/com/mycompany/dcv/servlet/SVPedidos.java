@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package com.mycompany.dcv.servlet;
 
 import com.firework.gson.JsonArray;
@@ -19,10 +15,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author haloa
- */
 @WebServlet(name = "SVPedidos", urlPatterns = {"/SVPedidos"})
 public class SVPedidos extends HttpServlet {
 
@@ -69,29 +61,7 @@ public class SVPedidos extends HttpServlet {
             }
 
             // Si no hay acción, cargar la vista principal
-            // Verificar si ventaBO está inicializado
-            if (ventaBO == null) {
-                throw new ServletException("VentaBO no está inicializado");
-            }
-
-            System.out.println("SVPedidos: Intentando obtener ventas...");
-            List<Venta> ventas = ventaBO.obtenerTodasLasVentas();
-            System.out.println("SVPedidos: Ventas obtenidas: " + (ventas != null ? ventas.size() : "null"));
-
-            if (ventas == null) {
-                ventas = new ArrayList<>();
-                System.out.println("SVPedidos: Se creó una lista vacía porque el resultado era null");
-            }
-
-            request.setAttribute("ventas", ventas);
-
-            if (!ventas.isEmpty()) {
-                request.setAttribute("ventaSeleccionada", ventas.get(0));
-                System.out.println("SVPedidos: Primera venta seleccionada, ID: " + ventas.get(0).getId());
-            }
-
-            System.out.println("SVPedidos: Redirigiendo a Pedidos.jsp");
-            request.getRequestDispatcher("/Pedidos.jsp").forward(request, response);
+            cargarVistaPrincipal(request, response);
 
         } catch (Exception e) {
             System.err.println("SVPedidos: Error en doGet(): " + e.getMessage());
@@ -297,4 +267,5 @@ public class SVPedidos extends HttpServlet {
         response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         response.getWriter().write(jsonResponse.toString());
     }
+    
 }
