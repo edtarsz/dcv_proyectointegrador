@@ -33,13 +33,15 @@ function setupPedidoItemsListeners() {
                 return;
             }
             
-            // Eliminar selección actual
+            // Eliminar selección actual y restablecer color de fondo
             document.querySelectorAll('.pedido-item.selected').forEach(el => {
                 el.classList.remove('selected');
+                el.style.backgroundColor = ''; // Restablecer color de fondo
             });
             
-            // Añadir selección al item actual
+            // Añadir selección al item actual y cambiar el color de fondo a blanco
             this.classList.add('selected');
+            this.style.setProperty('background-color', 'white', 'important'); // Establecer fondo blanco con prioridad
             
             // Cargar detalles del pedido
             cargarDetallesPedido(id);
@@ -358,30 +360,30 @@ function setupEditModal() {
     const closeButton = modal.querySelector('.close');
     const cancelButton = document.getElementById('cancelarEdicion');
     const form = document.getElementById('editarPersonalizacionForm');
-    
+
     // Cerrar modal
-    closeButton.addEventListener('click', function() {
+    closeButton.addEventListener('click', function () {
         modal.style.display = 'none';
     });
-    
-    cancelButton.addEventListener('click', function() {
+
+    cancelButton.addEventListener('click', function () {
         modal.style.display = 'none';
     });
-    
+
     // Cerrar al hacer clic fuera del modal
-    window.addEventListener('click', function(event) {
+    window.addEventListener('click', function (event) {
         if (event.target === modal) {
             modal.style.display = 'none';
         }
     });
-    
+
     // Manejar envío del formulario
-    form.addEventListener('submit', function(e) {
+    form.addEventListener('submit', function (e) {
         e.preventDefault();
-        
+
         const detalleId = document.getElementById('editDetalleId').value;
         const personalizacion = document.getElementById('editPersonalizacion').value;
-        
+
         guardarPersonalizacion(detalleId, personalizacion);
     });
 }
@@ -389,14 +391,14 @@ function setupEditModal() {
 // Configurar botones de edición
 function setupEditButtons() {
     document.querySelectorAll('.item-editar').forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function () {
             const detalleId = this.getAttribute('data-id');
             const personalizacion = this.closest('.detalle-item').querySelector('.item-descripcion').textContent.replace('Editar Pedido: ', '');
-            
+
             // Llenar el formulario
             document.getElementById('editDetalleId').value = detalleId;
             document.getElementById('editPersonalizacion').value = personalizacion;
-            
+
             // Mostrar modal
             document.getElementById('editarModal').style.display = 'block';
         });
@@ -406,62 +408,49 @@ function setupEditButtons() {
 // Guardar cambios en personalizacion
 function guardarPersonalizacion(detalleId, personalizacion) {
     console.log(`Guardando personalización para detalle ID: ${detalleId}`);
-    
+
     const formData = new FormData();
     formData.append('action', 'editarPersonalizacion');
     formData.append('idDetalle', detalleId);
     formData.append('personalizacion', personalizacion);
-    
+
     fetch('SVPedidos', {
         method: 'POST',
         body: formData
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`Error HTTP: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.success) {
-            // Ocultar modal
-            document.getElementById('editarModal').style.display = 'none';
-            
-            // Actualizar UI
-            const detalleItem = document.querySelector(`.item-editar[data-id="${detalleId}"]`).closest('.detalle-item');
-            detalleItem.querySelector('.item-descripcion').textContent = `Editar Pedido: ${personalizacion}`;
-            
-            console.log('Personalización actualizada correctamente');
-        } else {
-            mostrarError(`Error al guardar: ${data.message}`);
-        }
-    })
-    .catch(error => {
-        console.error('Error al guardar personalización:', error);
-        mostrarError(`Error de conexión: ${error.message}`);
-    });
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Error HTTP: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    // Ocultar modal
+                    document.getElementById('editarModal').style.display = 'none';
+
+                    // Actualizar UI
+                    const detalleItem = document.querySelector(`.item-editar[data-id="${detalleId}"]`).closest('.detalle-item');
+                    detalleItem.querySelector('.item-descripcion').textContent = `Editar Pedido: ${personalizacion}`;
+
+                    console.log('Personalización actualizada correctamente');
+                } else {
+                    mostrarError(`Error al guardar: ${data.message}`);
+                }
+            })
+            .catch(error => {
+                console.error('Error al guardar personalización:', error);
+                mostrarError(`Error de conexión: ${error.message}`);
+            });
 }
 
-// Mostrar mensaje de error
+// Mostrar mensajes de error
 function mostrarError(mensaje) {
     const errorContainer = document.getElementById('mensajes-error');
     errorContainer.textContent = mensaje;
     errorContainer.style.display = 'block';
-    
-    // Ocultar después de 5 segundos
+
     setTimeout(() => {
         errorContainer.style.display = 'none';
     }, 5000);
-}
-
-// Revisar si hay errores HTTP en la página
-function checkForHttpErrors() {
-    const errorMessages = document.querySelectorAll('.error-message, [class*="error"]');
-    errorMessages.forEach(el => {
-        const text = el.textContent.trim();
-        if (text.includes('HTTP 400') || text.includes('Error HTTP')) {
-            console.error('Detectado error HTTP en la página:', text);
-            mostrarError('Se ha detectado un error en la página. Intente recargar o contacte al administrador.');
-        }
-    });
 }
