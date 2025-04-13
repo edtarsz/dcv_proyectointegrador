@@ -91,19 +91,31 @@ public class SVCarrito extends HttpServlet {
         try {
             long idProducto = Long.parseLong(request.getParameter("idProducto"));
             String nuevaPersonalizacion = request.getParameter("personalizacion");
+            String extraStr = request.getParameter("costoExtra");
+
+            double extra = 0.0;
+            if (extraStr != null && !extraStr.isEmpty()) {
+                try {
+                    extra = Double.parseDouble(extraStr);
+                } catch (NumberFormatException e) {
+                    extra = 0.0;
+                }
+            }
 
             boolean updated = false;
             for (DetalleVenta detalle : carrito) {
                 if (detalle.getProducto().getId() == idProducto) {
-                    // Preservar la parte "Extra:" si existe
-                    String personalizacionActual = detalle.getPersonalizacion();
-                    String extra = "";
 
-                    if (personalizacionActual.contains("Extra:")) {
-                        extra = personalizacionActual.substring(personalizacionActual.indexOf("Extra:"));
-                    }
+                    // Establecer nueva personalización con extra
+                    String personalizacionFinal = nuevaPersonalizacion + (extra > 0 ? "\nExtra: $" + extra : "");
+                    detalle.setPersonalizacion(personalizacionFinal);
 
-                    detalle.setPersonalizacion(nuevaPersonalizacion + (extra.isEmpty() ? "" : "\n" + extra));
+                    // Calcular nuevo precio unitario y subtotal
+                    double precioBase = detalle.getProducto().getPrecio();
+                    double nuevoPrecio = precioBase + extra;
+                    detalle.setPrecioUnitario(nuevoPrecio);
+                    detalle.setSubtotal(nuevoPrecio * detalle.getCantidad());
+
                     updated = true;
                     break;
                 }
@@ -111,14 +123,14 @@ public class SVCarrito extends HttpServlet {
 
             if (updated) {
                 jsonResponse.addProperty("success", true);
-                jsonResponse.addProperty("message", "Personalización actualizada");
+                jsonResponse.addProperty("message", "Personalización y costo extra actualizados");
             } else {
                 jsonResponse.addProperty("success", false);
                 jsonResponse.addProperty("message", "Producto no encontrado");
             }
         } catch (NumberFormatException e) {
             jsonResponse.addProperty("success", false);
-            jsonResponse.addProperty("message", "ID de producto inválido");
+            jsonResponse.addProperty("message", "ID de producto o costo extra inválido");
         } catch (Exception e) {
             jsonResponse.addProperty("success", false);
             jsonResponse.addProperty("message", "Error: " + e.getMessage());

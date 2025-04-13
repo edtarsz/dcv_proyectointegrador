@@ -57,6 +57,7 @@
                                          data-id="${item.producto.id}" 
                                          data-precio="${item.precioUnitario}"
                                          data-nombre="${item.producto.nombre}">
+
                                         <div class="col-detalles">
                                             <h3 class="item-title">${item.producto.nombre}</h3>
                                             <p class="item-description">
@@ -91,40 +92,39 @@
                                                 <img src="svg/delete.svg" alt="Eliminar">
                                             </button>
                                         </div>
-
-                                    </c:forEach>
-
-                                </div>
-                            </c:otherwise>
-                        </c:choose>
-                    </div>
-
-                    <c:if test="${not empty carrito}">
-                        <div class="resumen-pedido">
-                            <h2 class="resumen-title">Resumen del pedido</h2>
-                            <div class="resumen-content">
-                                <div class="total-line">
-                                    <span class="total-label">Total</span>
-                                    <span class="total-value">$${String.format("%.2f", subtotal)}</span>
-                                </div>
-                                <form id="confirmarCompraForm" action="Datos.jsp" method="POST">
-                                    <input type="hidden" name="action" value="procederCompra">
-                                    <div id="productosContainer">
-                                        <c:forEach var="item" items="${carrito}" varStatus="status">
-                                            <input type="hidden" name="idProducto[]" value="${item.producto.id}">
-                                            <input type="hidden" name="cantidad[]" value="${item.cantidad}">
-                                            <input type="hidden" name="personalizacion[]" value="${item.personalizacion}">
-                                            <input type="hidden" name="precioUnitario[]" value="${item.precioUnitario}">
-                                            <input type="hidden" name="subtotal[]" value="${item.subtotal}">
-                                        </c:forEach>
-                                        <input type="hidden" name="totalPedido" value="${subtotal}">
                                     </div>
-                                    <button type="submit" class="btn-continuar">Confirmar compra</button>
-                                </form>
+                                </c:forEach>
                             </div>
-                        </div>
-                    </c:if>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
+
+                <c:if test="${not empty carrito}">
+                    <div class="resumen-pedido">
+                        <h2 class="resumen-title">Resumen del pedido</h2>
+                        <div class="resumen-content">
+                            <div class="total-line">
+                                <span class="total-label">Total</span>
+                                <span class="total-value">$${String.format("%.2f", subtotal)}</span>
+                            </div>
+                            <form id="confirmarCompraForm" action="Datos.jsp" method="POST">
+                                <input type="hidden" name="action" value="procederCompra">
+                                <div id="productosContainer">
+                                    <c:forEach var="item" items="${carrito}" varStatus="status">
+                                        <input type="hidden" name="idProducto[]" value="${item.producto.id}">
+                                        <input type="hidden" name="cantidad[]" value="${item.cantidad}">
+                                        <input type="hidden" name="personalizacion[]" value="${item.personalizacion}">
+                                        <input type="hidden" name="precioUnitario[]" value="${item.precioUnitario}">
+                                        <input type="hidden" name="subtotal[]" value="${item.subtotal}">
+                                    </c:forEach>
+                                    <input type="hidden" name="totalPedido" value="${subtotal}">
+                                </div>
+                                <button type="submit" class="btn-continuar">Confirmar compra</button>
+                            </form>
+                        </div>
+                    </div>
+                </c:if>
+            </div>
         </main>
 
         <!-- Modal para editar personalización -->
@@ -134,10 +134,18 @@
                 <h2>Editar Personalización</h2>
                 <form id="editarPersonalizacionForm">
                     <input type="hidden" id="editProductoId" name="idProducto">
+
                     <div class="form-group">
                         <label for="editPersonalizacion">Detalles de personalización:</label>
                         <textarea id="editPersonalizacion" name="personalizacion" rows="5" class="form-control"></textarea>
                     </div>
+
+                    <div class="form-group">
+                        <label for="editCostoExtra">Costo extra:</label>
+                        <input type="number" id="editCostoExtra" name="costoExtra" class="form-control"
+                               placeholder="Ej. 15.50" min="0" step="any">
+                    </div>
+
                     <div class="form-buttons">
                         <button type="button" id="cancelarEdicion" class="btn-format-card">Cancelar</button>
                         <button type="submit" class="btn-format-card btn-personalizar-card">Guardar cambios</button>
@@ -145,5 +153,6 @@
                 </form>
             </div>
         </div>
+
     </body>
 </html>

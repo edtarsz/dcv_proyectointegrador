@@ -24,7 +24,7 @@ import java.util.List;
  */
 @WebServlet(name = "SVCatalogo", urlPatterns = {"/SVCatalogo"})
 public class SVCatalogo extends HttpServlet {
-    
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -35,30 +35,44 @@ public class SVCatalogo extends HttpServlet {
 
         try {
             String action = request.getParameter("action");
-            
+
             if ("addToCart".equals(action)) {
                 // Obtener parámetros
                 long idProducto = Long.parseLong(request.getParameter("idProducto"));
                 String nombre = request.getParameter("nombre");
                 String descripcion = request.getParameter("descripcion");
-                double precio = Double.parseDouble(request.getParameter("precio"));
+                double precioBase = Double.parseDouble(request.getParameter("precio"));
                 int cantidad = Integer.parseInt(request.getParameter("cantidad"));
                 String detalles = request.getParameter("detalles");
-                String extra = request.getParameter("extra");
+                String extraStr = request.getParameter("extra");
+
+                // Procesar costo extra
+                double costoExtra = 0.0;
+                try {
+                    if (extraStr != null && !extraStr.trim().isEmpty()) {
+                        costoExtra = Double.parseDouble(extraStr.trim());
+                    }
+                } catch (NumberFormatException e) {
+                    costoExtra = 0.0; // Ignorar si el extra no es numérico
+                }
+
+                // Precio final con extra
+                double precioFinal = precioBase + costoExtra;
+                double subtotal = precioFinal * cantidad;
 
                 // Crear producto
-                Producto producto = new Producto(idProducto, nombre, descripcion, precio);
+                Producto producto = new Producto(idProducto, nombre, descripcion, precioBase); // Guardas el precio base original
 
-                // Crear detalle de venta (sin Venta asociada aún)
+                // Crear detalle de venta
                 DetalleVenta detalleVenta = new DetalleVenta();
                 detalleVenta.setProducto(producto);
                 detalleVenta.setCantidad(cantidad);
-                detalleVenta.setPrecioUnitario(precio);
-                detalleVenta.setSubtotal(cantidad * precio);
+                detalleVenta.setPrecioUnitario(precioFinal);
+                detalleVenta.setSubtotal(subtotal);
                 detalleVenta.setEsPersonalizado(true);
-                detalleVenta.setPersonalizacion(detalles + (extra != null && !extra.isEmpty() ? "\nExtra: " + extra : ""));
+                detalleVenta.setPersonalizacion(detalles + (costoExtra > 0 ? "\nExtra: $" + costoExtra : ""));
 
-                // Obtener o crear el carrito en la sesión
+                // Obtener o crear carrito
                 HttpSession sesion = request.getSession();
                 List<DetalleVenta> carrito = (List<DetalleVenta>) sesion.getAttribute("carrito");
                 if (carrito == null) {

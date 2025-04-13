@@ -61,7 +61,18 @@ function agregarAlCarrito() {
 
     const cantidad = parseInt(document.querySelector('.counter-value').textContent);
     const detalles = document.getElementById('detalles-personalizacion').value.trim();
-    const extra = document.getElementById('extra-personalizacion').value.trim();
+    const extraInput = document.getElementById('extra-personalizacion');
+    const extraStr = extraInput.value.trim();
+    let costoExtra = 0;
+
+    if (extraStr) {
+        if (isNaN(extraStr) || Number(extraStr) < 0) {
+            alert('Por favor ingrese un número válido en el campo "Extra"');
+            extraInput.focus();
+            return;
+        }
+        costoExtra = parseFloat(extraStr);
+    }
 
     if (!detalles) {
         alert('Por favor, ingrese los detalles de personalización');
@@ -76,7 +87,7 @@ function agregarAlCarrito() {
         precio: productoSeleccionado.precio,
         cantidad: cantidad,
         detalles: detalles,
-        extra: extra || ''
+        extra: costoExtra.toString()
     };
 
     console.log('Enviando datos:', datos);
