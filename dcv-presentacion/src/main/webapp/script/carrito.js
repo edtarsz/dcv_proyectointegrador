@@ -173,10 +173,33 @@ function actualizarTotal(cantidad) {
     }
 }
 
-// Inicialización cuando el documento está listo
+
 document.addEventListener('DOMContentLoaded', function () {
     const asideCatalogo = document.querySelector('.aside-catalogo');
     if (asideCatalogo) {
         asideCatalogo.style.display = 'none';
+    }
+
+    const detallesInput = document.getElementById('detalles-personalizacion');
+    const avisoDetalles = document.getElementById('detalles-aviso');
+    const LIMITE = 100;
+
+    if (detallesInput && avisoDetalles) {
+        const validarLongitud = () => {
+            const texto = detallesInput.value;
+            if (texto.length >= LIMITE) {
+                avisoDetalles.style.display = 'block';
+                avisoDetalles.textContent = 'Has alcanzado el límite de 100 caracteres.';
+                // Cortar de forma segura, por si pega más de 100
+                detallesInput.value = texto.substring(0, LIMITE);
+            } else {
+                avisoDetalles.style.display = 'none';
+            }
+        };
+
+        detallesInput.addEventListener('input', validarLongitud);
+        detallesInput.addEventListener('paste', () => {
+            setTimeout(validarLongitud, 10);
+        });
     }
 });

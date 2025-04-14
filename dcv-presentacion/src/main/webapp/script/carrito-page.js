@@ -101,11 +101,14 @@ function setupCartControls() {
 
         if (decrementBtn && incrementBtn && input && carritoItem) {
             decrementBtn.addEventListener('click', () => {
-                const currentValue = parseInt(input.value);
+                const currentValue = Math.floor(parseFloat(input.value));
                 if (currentValue > 1) {
                     updateQuantity(carritoItem, currentValue - 1);
+                } else {
+                    showError('La cantidad no puede ser menor a 1');
                 }
             });
+
 
             incrementBtn.addEventListener('click', () => {
                 const currentValue = parseInt(input.value);
@@ -218,17 +221,24 @@ function updateProductCount() {
 }
 
 function showError(message) {
-    const errorDiv = document.getElementById('mensajes-error');
-    if (errorDiv) {
-        errorDiv.textContent = message;
-        errorDiv.style.display = 'block';
-        setTimeout(() => {
-            errorDiv.style.display = 'none';
-        }, 3000);
-    } else {
-        alert(message);
+    let errorDiv = document.getElementById('mensajes-error');
+    if (!errorDiv) {
+        errorDiv = document.createElement('div');
+        errorDiv.id = 'mensajes-error';
+        errorDiv.className = 'mensajes-error';
+        document.body.appendChild(errorDiv);
     }
+
+    errorDiv.textContent = message;
+    errorDiv.style.display = 'block';
+
+    clearTimeout(window._mensajeErrorTimeout);
+    window._mensajeErrorTimeout = setTimeout(() => {
+        errorDiv.style.display = 'none';
+        errorDiv.textContent = '';
+    }, 3000);
 }
+
 
 document.getElementById('confirmarCompraForm').addEventListener('submit', function (e) {
     e.preventDefault();

@@ -133,7 +133,13 @@
                     <h4>PERSONALIZAR</h4>
                 </section>
                 <section class="aside-personalizar">
-                    <textarea name="" id="detalles-personalizacion" placeholder="Introduzca los detalles..." rows="8"></textarea>
+                    <textarea 
+                        id="detalles-personalizacion" 
+                        placeholder="Introduzca los detalles..." 
+                        rows="8"
+                        maxlength="100"
+                        ></textarea>
+                    <small id="detalles-aviso" style="color: red; display: none; margin-top: 0.4rem;"></small>
                 </section>
                 <section class="aside-personalizar">
                     <textarea name="" id="extra-personalizacion" placeholder="Extra..." rows="5"></textarea>
@@ -152,3 +158,4 @@
         </main>
     </body>
 </html>
+

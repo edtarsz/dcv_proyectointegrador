@@ -34,9 +34,14 @@
                         <label for="nombre">Nombre completo</label>
                         <div class="input-container">
                             <img src="svg/user.svg" alt="Usuario" class="input-icon">
-                            <input type="text" id="nombre" name="nombre" required 
-                                   value="${param.nombre}" pattern=".{3,}" 
-                                   title="El nombre debe tener al menos 3 caracteres">
+                            <input type="text" id="nombre" name="nombre" required
+                                   value="${param.nombre}" maxlength="100"
+                                   pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ ]{3,100}$"
+                                   title="Solo se permiten letras (mínimo 3, máximo 100 caracteres)">
+                            <small id="nombre-aviso" style="display: none; color: red;"></small>
+
+
+
                         </div>
                     </div>
 
@@ -54,8 +59,12 @@
                         <label for="correo">Correo electrónico</label>
                         <div class="input-container">
                             <img src="svg/email.svg" alt="Correo" class="input-icon">
-                            <input type="email" id="correo" name="correo" required 
-                                   value="${param.correo}">
+                            <input type="email" id="correo" name="correo" required
+                                   value="${param.correo}" maxlength="100"
+                                   pattern="^[^@\s]{1,64}@[^\s@]+\.[^\s@]+$"
+                                   title="Ingresa un correo válido (máximo 100 caracteres)">
+                            <small id="correo-aviso" style="display: none; color: red;">El correo ingresado no es válido o excede los 100 caracteres.</small>
+
                         </div>
                     </div>
 

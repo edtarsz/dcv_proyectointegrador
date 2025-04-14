@@ -386,3 +386,10 @@
 .btn-aside-group .btn-limpiar-carrito {
     width: 50%;
 }
+
+#detalles-aviso {
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-top: 0.3rem;
+    color: red;
+}
