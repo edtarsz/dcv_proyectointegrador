@@ -42,6 +42,8 @@ function initializeCounterButtons() {
             value--;
             counterValue.textContent = value;
             actualizarTotal(value);
+        } else {
+            alert('Cantidad no válida');
         }
     });
 
