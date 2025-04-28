@@ -128,7 +128,10 @@
                         <div class="counter-value">1</div>
                         <button class="counter-btn increase">+</button>
                     </div>
+                    <p class="stock-message" style="color: red; display: none;"></p>
                 </section>
+
+
                 <section>
                     <h4>PERSONALIZAR</h4>
                 </section>

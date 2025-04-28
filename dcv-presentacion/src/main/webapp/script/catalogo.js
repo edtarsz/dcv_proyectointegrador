@@ -1,7 +1,7 @@
 let productoSeleccionado = null;
 
-function seleccionarProducto(id, nombre, descripcion, precio) {
-    productoSeleccionado = { id, nombre, descripcion, precio };
+function seleccionarProducto(id, nombre, descripcion, precio, stock) {
+    productoSeleccionado = { id, nombre, descripcion, precio, stock }; 
     
     const headerAside = document.querySelector('.header-aside h1');
     const descripcionAside = document.querySelector('.aside-descripcion p');
@@ -16,6 +16,8 @@ function seleccionarProducto(id, nombre, descripcion, precio) {
     document.getElementById('detalles-personalizacion').value = '';
     document.getElementById('extra-personalizacion').value = '';
     document.querySelector('.counter-value').textContent = '1';
+
+    document.querySelector('.stock-message').style.display = 'none';
 }
 
 function agregarAlCarrito(btn) {
@@ -27,13 +29,21 @@ function agregarAlCarrito(btn) {
     const cantidad = parseInt(document.querySelector('.counter-value').textContent);
     const detalles = document.getElementById('detalles-personalizacion').value.trim();
     const extra = document.getElementById('extra-personalizacion').value.trim();
+    
+    if (cantidad > productoSeleccionado.stock) {
+        const stockMessage = document.querySelector('.stock-message');
+        stockMessage.textContent = `No hay suficiente stock. Solo hay ${productoSeleccionado.stock} unidades disponibles.`;
+        stockMessage.style.display = 'block';
+        return; 
+    }
+
+    document.querySelector('.stock-message').style.display = 'none';
 
     if (!detalles) {
         alert('Por favor, ingrese los detalles de personalización');
         return;
     }
 
-    // Crear el objeto de datos
     const datos = {
         idProducto: productoSeleccionado.id,
         nombre: productoSeleccionado.nombre,
@@ -44,7 +54,6 @@ function agregarAlCarrito(btn) {
         extra: extra || ''
     };
 
-    // Enviar al servidor
     fetch('SVCatalogo', {
         method: 'POST',
         headers: {
@@ -56,11 +65,11 @@ function agregarAlCarrito(btn) {
         if (!response.ok) {
             throw new Error('Error en la respuesta del servidor');
         }
-        return response.text(); // Primero obtener el texto
+        return response.text(); 
     })
     .then(text => {
         try {
-            const data = JSON.parse(text); // Intentar parsear como JSON
+            const data = JSON.parse(text); 
             if (data.success) {
                 alert('Producto agregado al carrito exitosamente');
                 limpiarFormulario();
@@ -95,16 +104,13 @@ function limpiarFormulario() {
     document.querySelector('.aside-catalogo').style.display = 'none';
 }
 
-// Inicialización
 document.addEventListener('DOMContentLoaded', () => {
     initializeCounterButtons();
     
-    // Inicialmente ocultar el aside
     if (!productoSeleccionado) {
         document.querySelector('.aside-catalogo').style.display = 'none';
     }
 
-    // Botón agregar al carrito
     const btnAgregar = document.querySelector('.btn-add-carrito');
     if (btnAgregar) {
         btnAgregar.addEventListener('click', agregarAlCarrito);
