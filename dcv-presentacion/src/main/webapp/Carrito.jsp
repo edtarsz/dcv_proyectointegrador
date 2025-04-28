@@ -137,7 +137,7 @@
 
                     <div class="form-group">
                         <label for="editPersonalizacion">Detalles de personalización:</label>
-                        <textarea id="editPersonalizacion" name="personalizacion" rows="5" class="form-control"></textarea>
+                        <textarea id="editPersonalizacion" name="personalizacion" rows="5" class="form-control" maxlength="100"></textarea>
                     </div>
 
                     <div class="form-group">

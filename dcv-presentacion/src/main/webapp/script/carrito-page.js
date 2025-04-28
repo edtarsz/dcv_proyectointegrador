@@ -14,6 +14,35 @@ document.addEventListener('DOMContentLoaded', function () {
     const editPersonalizacion = document.getElementById('editPersonalizacion');
     const editCostoExtra = document.getElementById('editCostoExtra');
 
+    // Evento para controlar el límite de caracteres
+    if (editPersonalizacion) {
+        editPersonalizacion.addEventListener('input', function (e) {
+            const maxLength = 100;
+            const currentLength = this.value.length;
+
+            if (currentLength > maxLength) {
+                // Cortar el texto al máximo permitido
+                this.value = this.value.substring(0, maxLength);
+
+                // Mostrar alert cuando se intenta exceder el límite
+                alert('El texto de personalización no puede superar los 100 caracteres');
+            }
+        });
+
+        // Prevenir pegar texto que exceda el límite
+        editPersonalizacion.addEventListener('paste', function (e) {
+            const maxLength = 100;
+            const clipboardData = e.clipboardData || window.clipboardData;
+            const pastedText = clipboardData.getData('text');
+
+            // Verificar si el texto pegado excedería el límite
+            if (this.value.length + pastedText.length > maxLength) {
+                e.preventDefault();
+                alert('El texto pegado excede el límite de 100 caracteres');
+            }
+        });
+    }
+
     document.querySelectorAll('.btn-edit').forEach(button => {
         button.addEventListener('click', function () {
             const id = this.getAttribute('data-id');
@@ -53,6 +82,12 @@ document.addEventListener('DOMContentLoaded', function () {
         const idProducto = editProductoId.value;
         const nuevaPersonalizacion = editPersonalizacion.value.trim();
         const costoExtra = editCostoExtra.value.trim() || "0";
+
+        // Verificar una vez más al enviar
+        if (nuevaPersonalizacion.length > 100) {
+            alert('El texto de personalización no puede superar los 100 caracteres');
+            return;
+        }
 
         fetch('SVCarrito', {
             method: 'POST',
