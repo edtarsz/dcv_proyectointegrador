@@ -130,7 +130,8 @@
                 renderCategories(filteredCategories);
             });
 
-            // Abrir modal para agregar categoría
+           
+           
             function openAddModal() {
                 document.getElementById('modalTitle').textContent = 'Agregar Nueva Categoría';
                 document.getElementById('categoryForm').reset();
@@ -150,13 +151,11 @@
                 }
             }
 
-            // Eliminar categoría
             function deleteCategory(id) {
                 deletingId = id;
                 document.getElementById('confirmModal').style.display = 'block';
             }
 
-            // Confirmar eliminación
             function confirmDelete() {
                 if (deletingId) {
                     categories = categories.filter(c => c.id !== deletingId);
@@ -166,12 +165,11 @@
                 }
             }
 
-            // Ver productos (placeholder)
             function viewProducts(id) {
                 alert(`Ver productos de la categoría con ID: ${id}`);
             }
 
-            // Cerrar modales
+   
             function closeModal() {
                 document.getElementById('categoryModal').style.display = 'none';
             }
@@ -180,7 +178,6 @@
                 document.getElementById('confirmModal').style.display = 'none';
             }
 
-            // Manejar formulario
             document.getElementById('categoryForm').addEventListener('submit', function (e) {
                 e.preventDefault();
 
@@ -213,7 +210,7 @@
                 closeModal();
             });
 
-            // Cerrar modales al hacer clic fuera
+            
             window.addEventListener('click', function (e) {
                 const categoryModal = document.getElementById('categoryModal');
                 const confirmModal = document.getElementById('confirmModal');
@@ -226,7 +223,7 @@
                 }
             });
 
-            // Renderizar categorías iniciales
+           
             renderCategories();
         </script>
     </body>
