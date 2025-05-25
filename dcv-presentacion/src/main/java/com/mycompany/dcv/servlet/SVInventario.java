@@ -60,12 +60,17 @@ public class SVInventario extends HttpServlet {
             System.out.println("Cantidad de insumos: " + insumos.size());
             request.setAttribute("insumos", insumos);
             Map<Long, Double> preciosUnitarios = new HashMap<>();
+            Map<Long, String> motivos = new HashMap<>();
             for (Insumo insumo : insumos) {
                 DetalleCompraInsumo detalle = detalleBO.obtenerUltimoDetallePorInsumo(insumo.getId());
                 if (detalle != null) {
                     preciosUnitarios.put(insumo.getId(), detalle.getPrecioUnitario());
+                    if (detalle != null && detalle.getCompraInsumo() != null) {
+                        motivos.put(insumo.getId(), detalle.getCompraInsumo().getMotivo());
+                    }
                 }
             }
+            request.setAttribute("motivos", motivos);
             request.setAttribute("precios", preciosUnitarios);
 
             request.getRequestDispatcher("Inventario.jsp").forward(request, response);
@@ -80,9 +85,42 @@ public class SVInventario extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String accion = request.getParameter("accion");
+        String idParam = request.getParameter("id");
+System.out.println("⚙️ Acción: " + accion);
+System.out.println("🆔 ID recibido: " + idParam);
+
 
         try {
-            if ("crear".equals(accion)) {
+             if ("editar".equals(accion)) {
+                long insumoId = Long.parseLong(request.getParameter("id"));
+                Insumo editado = insumoBO.obtenerInsumoPorId(insumoId); // Asegúrate que este método exista
+
+                // Actualizar campos del insumo
+                editado.setNombre(request.getParameter("nombre"));
+                editado.setDescripcion(request.getParameter("descripcion"));
+                editado.setStock(Integer.parseInt(request.getParameter("stock")));
+                editado.setUnidadMedida(request.getParameter("unidadMedida"));
+                insumoBO.actualizarInsumo(editado);
+
+                // Actualizar detalle
+                DetalleCompraInsumo detalle = detalleBO.obtenerUltimoDetallePorInsumo(insumoId);
+                if (detalle != null) {
+                    double nuevoPrecio = Double.parseDouble(request.getParameter("precioUnitario"));
+                    detalle.setPrecioUnitario(nuevoPrecio);
+                    detalle.setSubtotal(nuevoPrecio * editado.getStock());
+                    detalle.setCantidad(editado.getStock());
+                    detalleBO.actualizarDetalleCompraInsumo(detalle);
+
+                    // Actualizar motivo (compra)
+                    CompraInsumo compra = detalle.getCompraInsumo();
+                    if (compra != null) {
+                        compra.setMotivo(request.getParameter("motivo"));
+                        compraInsumoBO.actualizarCompraInsumo(compra);
+                    }
+                }
+
+
+            } else if ("crear".equals(accion)) {
                 // 1. Crear Insumo
                 Insumo insumo = new Insumo();
                 insumo.setNombre(request.getParameter("nombre"));
@@ -99,7 +137,6 @@ public class SVInventario extends HttpServlet {
                 Usuario usuario = usuarioBO.obtenerUsuarioPorId(1L);
                 compra.setUsuario(usuario);
 
-
                 CompraInsumo compraGuardada = compraInsumoBO.crearCompraInsumo(compra);
 
                 // 3. Crear Detalle de Compra
@@ -114,15 +151,6 @@ public class SVInventario extends HttpServlet {
                 detalle.setSubtotal(cantidad * precioUnitario);
 
                 detalleBO.crearDetalleCompraInsumo(detalle);
-
-            } else if ("editar".equals(accion)) {
-                Insumo editado = new Insumo();
-                editado.setId(Long.parseLong(request.getParameter("id")));
-                editado.setNombre(request.getParameter("nombre"));
-                editado.setDescripcion(request.getParameter("descripcion"));
-                editado.setStock(Integer.parseInt(request.getParameter("stock")));
-                editado.setUnidadMedida(request.getParameter("unidadMedida"));
-                insumoBO.actualizarInsumo(editado);
 
             } else if ("eliminar".equals(accion)) {
                 long id = Long.parseLong(request.getParameter("id"));

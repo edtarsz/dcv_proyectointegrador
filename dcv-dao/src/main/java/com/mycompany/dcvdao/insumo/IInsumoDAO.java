@@ -17,4 +17,6 @@ public interface IInsumoDAO {
     Insumo actualizarInsumo(Insumo insumo) throws ModelException;
     void eliminarInsumo(long id) throws ModelException;
     List<Insumo> obtenerTodosLosInsumos() throws ModelException;
+    Insumo obtenerPorId(long id) throws ModelException;
+
 }

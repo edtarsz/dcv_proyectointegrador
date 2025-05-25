@@ -68,5 +68,15 @@ public class InsumoBO implements IInsumoBO {
             throw new ControllerException("Error al obtener insumos", e);
         }
     }
+ 
+    @Override
+    public Insumo obtenerInsumoPorId(long id) throws ControllerException {
+        try {
+            return insumoDAO.obtenerPorId(id);
+        } catch (ModelException e) {
+            throw new ControllerException("Error al obtener insumo por ID", e);
+        }
+    }
+
 }
 

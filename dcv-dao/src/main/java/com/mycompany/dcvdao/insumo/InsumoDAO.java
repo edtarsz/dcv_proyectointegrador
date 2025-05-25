@@ -82,5 +82,15 @@ public class InsumoDAO implements IInsumoDAO {
             throw new ModelException("Error al obtener insumos", e);
         }
     }
+   
+    @Override
+    public Insumo obtenerPorId(long id) throws ModelException {
+        try {
+            return entityManager.find(Insumo.class, id);
+        } catch (Exception e) {
+            throw new ModelException("Error al buscar el insumo con ID: " + id, e);
+        }
+    }
+
 }
 

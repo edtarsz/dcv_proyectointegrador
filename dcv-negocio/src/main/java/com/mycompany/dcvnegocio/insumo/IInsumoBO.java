@@ -19,4 +19,6 @@ Insumo crearInsumo(Insumo insumo) throws ControllerException;
     Insumo actualizarInsumo(Insumo insumo) throws ControllerException;
     void eliminarInsumo(long id) throws ControllerException;
     List<Insumo> obtenerTodosLosInsumos() throws ControllerException;
+    Insumo obtenerInsumoPorId(long id) throws ControllerException;
+
 }
