@@ -32,6 +32,7 @@
                     </div>
                     <div class="nav-catalogo">
                         <ul class="nav-catalogo-list">
+                            <%-- Idealmente, estas categorías también se generarían dinámicamente desde el backend --%>
                             <li>
                                 <a href="" class="items-catalogo">
                                     Tazas
@@ -74,7 +75,7 @@
                 <section class="contenido-catalogo">
                     <h1 class="titulo-productos">Productos</h1>
                     <section class="grid-productos-catalogo">
-                        <c:forEach var="producto" items="${productos}">
+                        <c:forEach var="producto" items="${productos}"> <%-- Asumiendo que ${productos} es la lista de productos pasada por el servlet --%>
                             <div class="card-producto" data-producto-id="${producto.id}">
                                 <div class="child-card-producto">
                                     <div class="content-card-producto">
@@ -82,20 +83,27 @@
                                             <h4>${producto.nombre}</h4>
                                             <c:if test="${not empty producto.categorias}">
                                                 <div class="categoria-producto">
-                                                    ${producto.categoria.nombre}
+                                                    <%-- CAMBIO AQUÍ para iterar la lista de categorías --%>
+                                                    <c:forEach var="cat" items="${producto.categorias}" varStatus="loop">
+                                                        <span>${cat.nombre}</span><c:if test="${not loop.last}">, </c:if>
+                                                    </c:forEach>
+                                                </div>
+                                            </c:if>
+                                            <c:if test="${empty producto.categorias}">
+                                                <div class="categoria-producto">
+                                                    <span>Sin categoría</span>
                                                 </div>
                                             </c:if>
                                         </div>
                                         <div class="group-right-card producto-info">
-
                                             <button 
                                                 class="btn-format-card btn-personalizar-card"
                                                 onclick="seleccionarProducto(
-                                                ${producto.id},
-                                                                '${producto.nombre}',
-                                                                '${producto.descripcion}',
-                                                ${producto.precio}
-                                                        )">
+                                                    ${producto.id},
+                                                    '${producto.nombre}',
+                                                    '${producto.descripcion}',
+                                                    ${producto.precio}
+                                                )">
                                                 Personalizar
                                             </button>
                                         </div>
@@ -104,7 +112,6 @@
                                         <p>$${producto.precio}</p>
                                     </div>
                                 </div>
-
                             </div>
                         </c:forEach>
                     </section>
@@ -113,7 +120,6 @@
             <aside class="aside-catalogo">
                 <header class="header-aside">
                     <h1>PRODUCTO</h1>
-
                 </header>
                 <section class="aside-descripcion">
                     <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Vero accusamus iure minus
@@ -128,8 +134,6 @@
                     </div>
                     <p class="stock-message" style="color: red; display: none;"></p>
                 </section>
-
-
                 <section>
                     <h4>PERSONALIZAR</h4>
                 </section>
@@ -147,7 +151,6 @@
                 </section>
                 <section class="total-aside">
                     <h4>Total: $110.99</h4>
-
                 </section>
                 <section class="btn-aside-group">
                     <section class="btn-aside-group">
@@ -159,4 +162,3 @@
         </main>
     </body>
 </html>
-

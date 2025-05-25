@@ -62,6 +62,7 @@ public class SVAdministrarProductos extends HttpServlet {
                 nuevo.setNombre(request.getParameter("nombre"));
                 nuevo.setDescripcion(request.getParameter("descripcion"));
                 nuevo.setPrecio(Double.parseDouble(request.getParameter("precio")));
+                nuevo.setInsumos(new ArrayList<>());
                 String categoriaIdStr = request.getParameter("categoriaId");
                 if (categoriaIdStr != null && !categoriaIdStr.isEmpty()) {
                     long categoriaId = Long.parseLong(categoriaIdStr);

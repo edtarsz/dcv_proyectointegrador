@@ -85,12 +85,7 @@ public class Categoria implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 43 * hash + (int) (this.id ^ (this.id >>> 32));
-        hash = 43 * hash + Objects.hashCode(this.nombre);
-        hash = 43 * hash + Objects.hashCode(this.descripcion);
-        hash = 43 * hash + Objects.hashCode(this.productos);
-        return hash;
+        return Objects.hash(id);
     }
 
     @Override
@@ -98,23 +93,14 @@ public class Categoria implements Serializable {
         if (this == obj) {
             return true;
         }
-        if (obj == null) {
+        if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
+        Categoria categoria = (Categoria) obj;
+        if (id == 0) {
             return false;
         }
-        final Categoria other = (Categoria) obj;
-        if (this.id != other.id) {
-            return false;
-        }
-        if (!Objects.equals(this.nombre, other.nombre)) {
-            return false;
-        }
-        if (!Objects.equals(this.descripcion, other.descripcion)) {
-            return false;
-        }
-        return Objects.equals(this.productos, other.productos);
+        return id == categoria.id;
     }
 
 }

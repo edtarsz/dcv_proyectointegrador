@@ -56,10 +56,8 @@ public class Producto implements Serializable {
     )
     private List<Categoria> categorias;
 
-    
     @Column(name = "activo")
     private boolean activo = true;
-
 
     public Producto() {
     }
@@ -79,8 +77,6 @@ public class Producto implements Serializable {
         this.categorias = categorias;
         this.activo = true;
     }
-    
-    
 
     public boolean isActivo() {
         return activo;
@@ -89,8 +85,7 @@ public class Producto implements Serializable {
     public void setActivo(boolean activo) {
         this.activo = activo;
     }
-  
-    
+
     public long getId() {
         return id;
     }
@@ -141,14 +136,7 @@ public class Producto implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 79 * hash + (int) (this.id ^ (this.id >>> 32));
-        hash = 79 * hash + Objects.hashCode(this.nombre);
-        hash = 79 * hash + Objects.hashCode(this.descripcion);
-        hash = 79 * hash + Objects.hashCode(this.precio);
-        hash = 79 * hash + Objects.hashCode(this.insumos);
-        hash = 79 * hash + Objects.hashCode(this.categorias);
-        return hash;
+        return Objects.hash(id);
     }
 
     @Override
@@ -156,29 +144,14 @@ public class Producto implements Serializable {
         if (this == obj) {
             return true;
         }
-        if (obj == null) {
+        if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
+        Producto producto = (Producto) obj;
+        if (id == 0) {
             return false;
         }
-        final Producto other = (Producto) obj;
-        if (this.id != other.id) {
-            return false;
-        }
-        if (!Objects.equals(this.nombre, other.nombre)) {
-            return false;
-        }
-        if (!Objects.equals(this.descripcion, other.descripcion)) {
-            return false;
-        }
-        if (!Objects.equals(this.precio, other.precio)) {
-            return false;
-        }
-        if (!Objects.equals(this.insumos, other.insumos)) {
-            return false;
-        }
-        return Objects.equals(this.categorias, other.categorias);
+        return id == producto.id;
     }
 
     @Override
