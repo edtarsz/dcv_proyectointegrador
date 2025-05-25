@@ -5,7 +5,10 @@
 package com.mycompany.dcvdao.categoria;
 
 import com.mycompany.dcvconexion.IConexion;
+import com.mycompany.dcvconexion.ModelException;
+import com.mycompany.dcventidades.Categoria;
 import jakarta.persistence.EntityManager;
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -26,5 +29,11 @@ public class CategoriaDAO implements ICategoriaDAO {
     public CategoriaDAO(IConexion conexion) {
         this.entityManager = conexion.crearConexion();
         logger.info("PostDAO initialized with a new EntityManager.");
+    }
+    
+     public List<Categoria> obtenerTodas()  {
+        
+            return entityManager.createQuery("SELECT c FROM Categoria c", Categoria.class)
+                     .getResultList();
     }
 }

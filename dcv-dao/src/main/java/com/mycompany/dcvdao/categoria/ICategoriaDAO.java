@@ -4,10 +4,15 @@
  */
 package com.mycompany.dcvdao.categoria;
 
+import com.mycompany.dcventidades.Categoria;
+import java.util.List;
+import com.mycompany.dcvconexion.ModelException;
+
 /**
  *
  * @author Ramos
  */
 public interface ICategoriaDAO {
+    public List<Categoria> obtenerTodas();
     
 }

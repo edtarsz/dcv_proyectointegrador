@@ -97,7 +97,7 @@ public class ProductoDAO implements IProductoDAO {
     }
 
     @Override
-    public double obtenerPrecioProducto(int idProducto) {
+    public double obtenerPrecioProducto(long idProducto) {
         // Usamos un query para seleccionar el precio del producto por ID
         String query = "SELECT p.precio FROM Producto p WHERE p.idProducto = :idProducto";
         try {

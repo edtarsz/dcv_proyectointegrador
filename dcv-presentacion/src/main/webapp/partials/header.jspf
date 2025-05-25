@@ -4,7 +4,7 @@
     <img src="img/logo.png" alt="" class="main-logo">
     <nav class="main-nav">
         <ul class="left-nav">
-            <li><a href="">INICIO</a></li>
+            <li><a href="SVAdministrarProductos">PRODUCTOS</a></li>
             <li><a href="SVProducto">CATÁLOGO</a></li>
             <li><a href="Reporte.jsp">REPORTES</a></li>
             <li><a href="SVInventario">INVENTARIO</a></li>

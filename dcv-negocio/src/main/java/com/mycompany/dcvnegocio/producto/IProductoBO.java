@@ -15,8 +15,10 @@ public interface IProductoBO {
 
     public Producto crearProducto(Producto producto) throws ControllerException;
     public List<Producto> obtenerTodosLosProductos() throws ControllerException;
-    public Producto obtenerProductoPorId(int productoId);
+    public Producto obtenerProductoPorId(long productoId);
 
-    public double obtenerPrecioProducto(int idProducto);
+    public Producto actualizarProducto(Producto producto) throws ControllerException;
+    public Producto eliminarProducto(long id) throws ControllerException;
+    public double obtenerPrecioProducto(long idProducto);
 
 }

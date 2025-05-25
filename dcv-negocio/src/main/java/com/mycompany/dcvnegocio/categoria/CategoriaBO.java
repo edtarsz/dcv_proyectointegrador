@@ -10,9 +10,12 @@ import com.mycompany.dcvconexion.IConexion;
 import com.mycompany.dcvconexion.ModelException;
 import com.mycompany.dcvdao.DAOFactory;
 import com.mycompany.dcvdao.categoria.ICategoriaDAO;
+import com.mycompany.dcventidades.Categoria;
+import com.mycompany.dcvexceptions.ControllerException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jakarta.persistence.Persistence;
+import java.util.List;
 
 /**
  * @author
@@ -29,5 +32,11 @@ public class CategoriaBO implements ICategoriaBO {
         } catch (ModelException ex) {
             Logger.getLogger(UsuarioBO.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @Override
+    public List<Categoria> obtenerTodas() {
+       
+            return categoriaDAO.obtenerTodas();
     }
 }

@@ -82,9 +82,7 @@
                                             <h4>${producto.nombre}</h4>
                                             <c:if test="${not empty producto.categorias}">
                                                 <div class="categoria-producto">
-                                                    <c:forEach var="categoria" items="${producto.categorias}" varStatus="status">
-                                                        ${categoria.nombre}${!status.last ? ', ' : ''}
-                                                    </c:forEach>
+                                                    ${producto.categoria.nombre}
                                                 </div>
                                             </c:if>
                                         </div>

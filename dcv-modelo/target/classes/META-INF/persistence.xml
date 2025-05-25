@@ -22,7 +22,8 @@
             <property name="jakarta.persistence.jdbc.password" value="78357Cas"/>
         
             <!-- Cambiar create a update para no recrear la base de datos -->
-            <property name="jakarta.persistence.schema-generation.database.action" value="update"/>
+            <property name="eclipselink.ddl-generation" value="update"/>
+
         
             <!-- Propiedades adicionales para debugging -->
             <property name="eclipselink.logging.level" value="FINE"/>

@@ -4,9 +4,13 @@
  */
 package com.mycompany.dcvnegocio.categoria;
 
+import com.mycompany.dcventidades.Categoria;
+import com.mycompany.dcvexceptions.ControllerException;
+import java.util.List;
+
 /**
  * @author
  */
 public interface ICategoriaBO {
-
+  public List<Categoria> obtenerTodas() ;
 }

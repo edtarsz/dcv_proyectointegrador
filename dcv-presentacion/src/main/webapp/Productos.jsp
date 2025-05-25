@@ -1,12 +1,12 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
-<%@ page import="com.mycompany.dcventidades.Insumo" %>
+<%@ page import="com.mycompany.dcventidades.Producto" %>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inventario</title>
+    <title>Productos</title>
     <link rel="stylesheet" href="style/style.css">
     <link rel="stylesheet" href="style/header.css">
     <link rel="stylesheet" href="style/catalogo.css">
@@ -33,51 +33,40 @@
                 <th>ID del producto</th>
                 <th>Nombre</th>
                 <th>Descripción</th>
-                <th>Cantidad</th>
-                <th>Unidad Medida</th>
-                <th>Precio Unitario</th>
+                <th>Precio</th>
                 <th>Acciones</th>
                 <th>Selec.</th>
             </tr>
             </thead>
-            <tbody id="inventoryBody">
-            <% List<Insumo> insumos = (List<Insumo>) request.getAttribute("insumos");
-               Map<Long, Double> precios = (Map<Long, Double>) request.getAttribute("precios");
-               Map<Long, String> motivos = (Map<Long, String>) request.getAttribute("motivos");
-               if (insumos != null && !insumos.isEmpty()) {
-                   for (Insumo ins : insumos) { %>
-                <tr>
-                    <td><%= ins.getId() %></td>
-                    <td><%= ins.getNombre() %></td>
-                    <td><%= ins.getDescripcion() %></td>
-                    <td><%= ins.getStock() %></td>
-                    <td><%= ins.getUnidadMedida() %></td>
-                    <td><%= precios.getOrDefault(ins.getId(), 0.0) %></td>
-                    <td class="action-cell">
-                        <button type="button" class="btn btn-secondary btn-sm"
-                                onclick="editarInsumo(
-        '<%= ins.getId()%>',
-        '<%= ins.getNombre().replace("'", "\\'")%>',
-        '<%= ins.getDescripcion().replace("'", "\\'")%>',
-        '<%= ins.getStock()%>',
-        '<%= ins.getUnidadMedida().replace("'", "\\'")%>',
-        '<%= precios.getOrDefault(ins.getId(), 0.0)%>',
-        '<%= motivos.getOrDefault(ins.getId(), "")%>'
-    )">
-                            Editar
-                        </button>
+            <% List<Producto> productos = (List<Producto>) request.getAttribute("productos"); %>
 
-                        <form action="SVInventario" method="post" style="display:inline;" onsubmit="return confirm('¿Eliminar este insumo?');">
+            <tbody>
+                <% if (productos != null) {
+        for (Producto p : productos) {%>
+                <tr>
+                    <td><%= p.getId()%></td>
+                    <td><%= p.getNombre()%></td>
+                    <td><%= p.getDescripcion()%></td>
+                    <td>$<%= p.getPrecio()%></td>
+                    <td>${producto.categoria.nombre}</td>
+                    <td>
+                        <button type="button" class="btn btn-secondary btn-sm"
+                                onclick="editarProducto(
+                        '<%= p.getId()%>',
+                        '<%= p.getNombre().replace("'", "\\'")%>',
+                        '<%= p.getDescripcion().replace("'", "\\'")%>',
+                        '<%= p.getPrecio()%>'
+                    )">Editar</button>
+
+                        <form action="SVAdministrarProductos" method="post" style="display:inline;">
                             <input type="hidden" name="accion" value="eliminar">
-                            <input type="hidden" name="id" value="<%= ins.getId() %>">
+                            <input type="hidden" name="id" value="<%= p.getId()%>">
                             <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
                         </form>
                     </td>
-                    <td><input type="checkbox" name="seleccionado" value="<%= ins.getId() %>" class="checkbox"></td>
                 </tr>
-            <% }} else { %>
-                <tr><td colspan="8" style="text-align:center;">No hay insumos registrados</td></tr>
-            <% } %>
+                <% }
+    }%>
             </tbody>
         </table>
     </div>
@@ -90,7 +79,7 @@
             <h2 class="modal-title" id="modalTitle">Agregar Producto</h2>
             <button class="close-btn" onclick="closeModal()">&times;</button>
         </div>
-        <form id="productForm" action="SVInventario" method="post">
+        <form id="productForm" action="SVAdministrarProductos" method="post">
             <input type="hidden" id="accion" name="accion" value="crear">
             <input type="hidden" id="insumoId" name="id">
             <input type="hidden" name="usuario_id" value="1">
@@ -106,24 +95,27 @@
             </div>
 
             <div class="form-group">
-                <label class="form-label" for="stock">Cantidad</label>
+                <label class="form-label" for="stock">Precio</label>
                 <input type="number" class="form-input" name="stock" id="stock" required min="1">
             </div>
 
             <div class="form-group">
-                <label class="form-label" for="unidadMedida">Unidad Medida</label>
-                <input type="text" class="form-input" name="unidadMedida" id="unidadMedida" required>
+                <label class="form-label" for="categoria">Categoría</label>
+                <div id="categoria-container">
+                    <%-- Suponiendo que tienes cargadas las categorías como atributo "categorias" --%>
+                    <% List<Categoria> categorias = (List<Categoria>) request.getAttribute("categorias");
+                        if (categorias != null) {
+                            for (Categoria cat : categorias) {
+                    %>
+                    <label>
+                        <input type="radio" name="categoriaId" value="<%= cat.getId()%>">
+                        <%= cat.getNombre()%>
+                    </label><br>
+                    <%   }
+            }%>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label class="form-label" for="precioUnitario">Precio Unitario</label>
-                <input type="number" class="form-input" name="precioUnitario" id="precioUnitario" required>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label" for="motivo">Motivo</label>
-                <input type="text" class="form-input" name="motivo" id="motivo">
-            </div>
 
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" onclick="closeModal()">Cancelar</button>
@@ -173,24 +165,17 @@
                 document.getElementById('productModal').style.display = 'block';
             }
 
-          function editarInsumo(id, nombre, descripcion, stock, unidadMedida, precioUnitario, motivo) {
+         function editarProducto(id, nombre, descripcion, precio) {
     document.getElementById("productModal").style.display = 'block';
-
     setTimeout(() => {
         document.getElementById("accion").value = "editar";
-        document.getElementById("insumoId").value = id; // ? corregido
+        document.getElementById("productoId").value = id;
         document.getElementById("nombre").value = nombre;
         document.getElementById("descripcion").value = descripcion;
-        document.getElementById("stock").value = stock;
-        document.getElementById("unidadMedida").value = unidadMedida;
-
-        const precioInput = document.getElementById("precioUnitario");
-        if (precioInput) precioInput.value = precioUnitario;
-
-        const motivoInput = document.getElementById("motivo");
-        if (motivoInput) motivoInput.value = motivo;
+        document.getElementById("precio").value = precio;
     }, 10);
 }
+
 
 
 

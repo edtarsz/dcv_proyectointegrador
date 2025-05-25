@@ -51,13 +51,33 @@ public class ProductoBO implements IProductoBO {
     }
 
     @Override
-    public Producto obtenerProductoPorId(int productoId) {
+    public Producto obtenerProductoPorId(long productoId) {
         return productoDAO.obtenerProductoPorId(productoId);
     }
 
     @Override
-    public double obtenerPrecioProducto(int idProducto) {
+    public double obtenerPrecioProducto(long idProducto) {
         return productoDAO.obtenerPrecioProducto(idProducto);
+    }
+
+    @Override
+    public Producto actualizarProducto(Producto producto) throws ControllerException {
+        try {
+            return productoDAO.actualizarProducto(producto);
+        } catch (ModelException ex) {
+            Logger.getLogger(ProductoBO.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ControllerException("Error creating comment", ex);
+        }
+    }
+
+    @Override
+    public Producto eliminarProducto(long id) throws ControllerException {
+       try {
+            return productoDAO.eliminarProducto(id);
+        } catch (ModelException ex) {
+            Logger.getLogger(ProductoBO.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ControllerException("Error creating comment", ex);
+        }
     }
 
     

@@ -20,7 +20,7 @@ public interface IProductoDAO {
     public Producto actualizarProducto(Producto producto) throws ModelException;
     public Producto eliminarProducto(long id) throws ModelException;
 
-    public double obtenerPrecioProducto(int idProducto);
+    public double obtenerPrecioProducto(long idProducto);
 
 
 }
