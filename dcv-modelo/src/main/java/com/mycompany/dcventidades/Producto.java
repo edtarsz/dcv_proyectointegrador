@@ -50,6 +50,10 @@ public class Producto implements Serializable {
 
     @ManyToMany(mappedBy = "productos")
     private List<Categoria> categorias;
+    
+    @Column(name = "activo")
+    private boolean activo = true;
+
 
     public Producto() {
     }
@@ -67,8 +71,20 @@ public class Producto implements Serializable {
         this.precio = precio;
         this.insumos = insumos;
         this.categorias = categorias;
+        this.activo = true;
+    }
+    
+    
+
+    public boolean isActivo() {
+        return activo;
     }
 
+    public void setActivo(boolean activo) {
+        this.activo = activo;
+    }
+  
+    
     public long getId() {
         return id;
     }

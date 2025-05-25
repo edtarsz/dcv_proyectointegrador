@@ -71,20 +71,21 @@
                                     List<Long> idsCategorias = p.getCategorias().stream().map(Categoria::getId).collect(Collectors.toList());
                                 %>
                                 <button type="button" class="btn btn-secondary btn-sm"
-                                                    onclick="editarProducto(
-                                    '<%= p.getId()%>',
-                                    '<%= p.getNombre().replace("'", "\\'")%>',
-                                    '<%= p.getDescripcion().replace("'", "\\'")%>',
-                                    '<%= p.getPrecio()%>',
-                                                    <%= idsCategorias.toString()%>
-                                                          )">Editar</button>
+                                        onclick="editarProducto(
+                                                                    '<%= p.getId()%>',
+                                                                    '<%= p.getNombre().replace("'", "\\'")%>',
+                                                                    '<%= p.getDescripcion().replace("'", "\\'")%>',
+                                                                    '<%= p.getPrecio()%>',
+                                        <%= idsCategorias.toString()%>
+                                                            )">Editar</button>
 
 
-                                <form action="SVAdministrarProductos" method="post" style="display:inline;">
+                                <form action="SVAdministrarProductos" method="post" style="display:inline;" onsubmit="return eliminarYOcultar(this);">
                                     <input type="hidden" name="accion" value="eliminar">
                                     <input type="hidden" name="id" value="<%= p.getId()%>">
-                                    <button type="button" class="btn btn-danger btn-sm" onclick="eliminarVisualmente(this)">Eliminar</button>
+                                    <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
                                 </form>
+
                             </td>
                         </tr>
                         <% }
@@ -296,9 +297,10 @@
                 rows.forEach(row => tbody.appendChild(row));
             }
 
-            function eliminarVisualmente(button) {
-                const row = button.closest("tr");
-                row.style.display = "none";
+            function eliminarYOcultar(form) {
+                const row = form.closest("tr");
+                row.style.display = "none"; // oculta la fila inmediatamente
+                return true; // deja que el form se envíe al backend
             }
 
 

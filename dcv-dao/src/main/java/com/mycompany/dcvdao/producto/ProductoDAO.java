@@ -58,7 +58,7 @@ public class ProductoDAO implements IProductoDAO {
 
     @Override
     public List<Producto> obtenerTodosLosProductos() {
-        return entityManager.createQuery("SELECT p FROM Producto p", Producto.class).getResultList();
+        return entityManager.createQuery("SELECT p FROM Producto p WHERE p.activo = true", Producto.class).getResultList();
     }
 
     @Override

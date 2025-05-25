@@ -92,8 +92,10 @@ public class SVAdministrarProductos extends HttpServlet {
                 productoBO.actualizarProducto(producto);
 
             } else if ("eliminar".equals(accion)) {
-                long id = Long.parseLong(request.getParameter("id"));
-                productoBO.eliminarProducto(id);
+                 long id = Long.parseLong(request.getParameter("id"));
+                Producto producto = productoBO.obtenerProductoPorId(id);
+                producto.setActivo(false);  // solo lo marcamos como inactivo
+                productoBO.actualizarProducto(producto);
             }
 
             response.sendRedirect("SVAdministrarProductos");
