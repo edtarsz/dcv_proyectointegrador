@@ -36,4 +36,8 @@ public class CategoriaDAO implements ICategoriaDAO {
             return entityManager.createQuery("SELECT c FROM Categoria c", Categoria.class)
                      .getResultList();
     }
+     
+      public Categoria obtenerPorId(long id) {
+        return entityManager.find(Categoria.class, id);
+    }
 }
