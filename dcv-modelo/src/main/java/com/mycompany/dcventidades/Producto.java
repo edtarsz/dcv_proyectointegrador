@@ -48,8 +48,14 @@ public class Producto implements Serializable {
     )
     private List<Insumo> insumos;
 
-    @ManyToMany(mappedBy = "productos")
+    @ManyToMany
+    @JoinTable(
+            name = "categoria_producto",
+            joinColumns = @JoinColumn(name = "producto_id"),
+            inverseJoinColumns = @JoinColumn(name = "categoria_id")
+    )
     private List<Categoria> categorias;
+
     
     @Column(name = "activo")
     private boolean activo = true;

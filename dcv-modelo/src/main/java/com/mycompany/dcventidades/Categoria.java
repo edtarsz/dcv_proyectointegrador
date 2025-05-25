@@ -39,14 +39,8 @@ public class Categoria implements Serializable {
     @Column(name = "descripcion", nullable = false)
     private String descripcion;
 
-    @ManyToMany
-    @JoinTable(
-        name = "categoria_producto",  // Nombre de la tabla intermedia
-        joinColumns = @JoinColumn(name = "categoria_id"),
-        inverseJoinColumns = @JoinColumn(name = "producto_id")
-    )
+    @ManyToMany(mappedBy = "categorias")
     private List<Producto> productos;
-
 
     public Categoria() {
     }
@@ -88,8 +82,6 @@ public class Categoria implements Serializable {
     public void setProductos(List<Producto> productos) {
         this.productos = productos;
     }
-    
-    
 
     @Override
     public int hashCode() {
@@ -125,5 +117,4 @@ public class Categoria implements Serializable {
         return Objects.equals(this.productos, other.productos);
     }
 
-    
 }
