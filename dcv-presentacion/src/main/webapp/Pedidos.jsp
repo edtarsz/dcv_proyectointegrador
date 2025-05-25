@@ -155,7 +155,7 @@
                                             <button class="item-editar" data-id="${detalle.id}">
                                                 <img src="svg/edit.svg" alt="Editar">
                                             </button>
-                                           
+
                                         </div>
                                     </div>
                                 </c:forEach>
@@ -185,20 +185,9 @@
                         <button type="submit" class="btn-format-card btn-personalizar-card">Guardar cambios</button>
                     </div>
                 </form>
-                
+
             </div>
         </div>
     </body>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            console.log('Pedidos.jsp cargado');
-            console.log('Ventas disponibles:', ${not empty ventas});
-            if (${not empty ventas}) {
-                console.log('Número de ventas:', ${ventas.size()});
-            }
-            if (${not empty error}) {
-                console.log('Error:', '${error}');
-            }
-        });
-    </script>
+
 </html>
