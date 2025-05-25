@@ -79,6 +79,16 @@ public class SVAdministrarProductos extends HttpServlet {
                 producto.setNombre(request.getParameter("nombre"));
                 producto.setDescripcion(request.getParameter("descripcion"));
                 producto.setPrecio(Double.parseDouble(request.getParameter("precio")));
+                String[] categoriaIds = request.getParameterValues("categoriaId");
+                if (categoriaIds != null) {
+                    List<Categoria> categorias = new ArrayList<>();
+                    for (String catId : categoriaIds) {
+                        Categoria categoria = categoriaBO.obtenerPorId(Long.parseLong(catId));
+                        categorias.add(categoria);
+                    }
+                    producto.setCategorias(categorias);
+                }
+
                 productoBO.actualizarProducto(producto);
 
             } else if ("eliminar".equals(accion)) {

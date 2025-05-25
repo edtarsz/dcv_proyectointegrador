@@ -1,135 +1,152 @@
+<%@page import="java.util.stream.Collectors"%>
 <%@page import="com.mycompany.dcventidades.Categoria"%>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="com.mycompany.dcventidades.Producto" %>
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Productos</title>
-    <link rel="stylesheet" href="style/style.css">
-    <link rel="stylesheet" href="style/header.css">
-    <link rel="stylesheet" href="style/catalogo.css">
-    <link rel="stylesheet" href="style/inventario.css">
-    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap" rel="stylesheet">
-</head>
-<body>
-<%@ include file="/partials/header.jspf" %>
-<main class="main-content">
-    <div class="page-header">
-        <div class="search-container">
-            <input type="text" class="search-input" placeholder="Buscar producto" id="searchInput">
-            <button class="search-button" onclick="searchProducts()"></button>
-        </div>
-        <div class="action-buttons">
-            <button class="btn btn-primary" onclick="openAddModal()">Agregar</button>
-        </div>
-    </div>
-
-    <div class="table-container">
-        <table class="table" id="inventoryTable">
-            <thead>
-            <tr>
-                <th>ID del producto</th>
-                <th>Nombre</th>
-                <th>Descripción</th>
-                <th>Precio</th>
-                <th>Categoría</th>
-                <th>Acciones</th>
-            </tr>
-            </thead>
-            <% List<Producto> productos = (List<Producto>) request.getAttribute("productos"); %>
-
-            <tbody>
-                <% if (productos != null) {
-        for (Producto p : productos) {%>
-                <tr>
-                    <td><%= p.getId()%></td>
-                    <td><%= p.getNombre()%></td>
-                    <td><%= p.getDescripcion()%></td>
-                    <td>$<%= p.getPrecio()%></td>
-                    <% if (p.getCategorias() != null && !p.getCategorias().isEmpty()) {%>
-                    <td><%= p.getCategorias().get(0).getNombre()%></td>
-                    <% } else { %>
-                    <td>Sin categoría</td>
-                    <% }%>
-
-                    <td>
-                        <button type="button" class="btn btn-secondary btn-sm"
-                                onclick="editarProducto(
-                        '<%= p.getId()%>',
-                        '<%= p.getNombre().replace("'", "\\'")%>',
-                        '<%= p.getDescripcion().replace("'", "\\'")%>',
-                        '<%= p.getPrecio()%>'
-                    )">Editar</button>
-
-                        <form action="SVAdministrarProductos" method="post" style="display:inline;">
-                            <input type="hidden" name="accion" value="eliminar">
-                            <input type="hidden" name="id" value="<%= p.getId()%>">
-                            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
-                        </form>
-                    </td>
-                </tr>
-                <% }
-    }%>
-            </tbody>
-        </table>
-    </div>
-</main>
-
-<!-- Modal -->
-<div class="modal" id="productModal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2 class="modal-title" id="modalTitle">Agregar Producto</h2>
-            <button class="close-btn" onclick="closeModal()">&times;</button>
-        </div>
-        <form id="productForm" action="SVAdministrarProductos" method="post">
-            <input type="hidden" id="accion" name="accion" value="crear">
-            <input type="hidden" id="productoId" name="id">
-            <input type="hidden" name="usuario_id" value="1">
-
-            <div class="form-group">
-                <label class="form-label" for="nombre">Nombre</label>
-                <input type="text" class="form-input" name="nombre" id="nombre" required>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Descripcion</label>
-                <input type="text" class="form-input" name="descripcion" id="descripcion" required>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label" for="precio">Precio</label>
-                <input type="number" class="form-input" name="precio" id="precio" required min="1">
-            </div>
-
-            <div class="form-group">
-                <label class="form-label" for="categoria">Categoría</label>
-                <div id="categoria-container">
-                    <%-- Suponiendo que tienes cargadas las categorías como atributo "categorias" --%>
-                    <% List<Categoria> categorias = (List<Categoria>) request.getAttribute("categorias");
-                        if (categorias != null) {
-                            for (Categoria cat : categorias) {
-                    %>
-                    <label>
-                        <input type="radio" name="categoriaId" value="<%= cat.getId()%>">
-                        <%= cat.getNombre()%>
-                    </label><br>
-                    <%   }
-            }%>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Productos</title>
+        <link rel="stylesheet" href="style/style.css">
+        <link rel="stylesheet" href="style/header.css">
+        <link rel="stylesheet" href="style/catalogo.css">
+        <link rel="stylesheet" href="style/inventario.css">
+        <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <%@ include file="/partials/header.jspf" %>
+        <main class="main-content">
+            <div class="page-header">
+                <div class="search-container">
+                    <input type="text" class="search-input" placeholder="Buscar producto" id="searchInput">
+                    <button class="search-button" onclick="searchProducts()"></button>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="openAddModal()">Agregar</button>
                 </div>
             </div>
 
+            <div class="table-container">
+                <table class="table" id="inventoryTable">
+                    <thead>
+                        <tr>
+                            <th>ID del producto</th>
+                            <th>Nombre</th>
+                            <th>Descripción</th>
+                            <th>Precio</th>
+                            <th>Categoría</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <% List<Producto> productos = (List<Producto>) request.getAttribute("productos"); %>
 
-            <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" onclick="closeModal()">Cancelar</button>
-                <button class="btn btn-primary" type="submit">Guardar</button>
+                    <tbody>
+                        <% if (productos != null) {
+                                for (Producto p : productos) {%>
+                        <tr>
+                            <td><%= p.getId()%></td>
+                            <td><%= p.getNombre()%></td>
+                            <td><%= p.getDescripcion()%></td>
+                            <td>$<%= p.getPrecio()%></td>
+                            <td>
+                                <%
+                                    if (p.getCategorias() != null && !p.getCategorias().isEmpty()) {
+                                        for (int i = 0; i < p.getCategorias().size(); i++) {
+                                            out.print(p.getCategorias().get(i).getNombre());
+                                            if (i < p.getCategorias().size() - 1) {
+                                                out.print(", ");
+                                            }
+                                        }
+                                    } else {
+                                        out.print("Sin categoría");
+                                    }
+                                %>
+                            </td>
+
+
+                            <td>
+                                <%
+                                    List<Long> idsCategorias = p.getCategorias().stream().map(Categoria::getId).collect(Collectors.toList());
+                                %>
+                                <button type="button" class="btn btn-secondary btn-sm"
+                                                    onclick="editarProducto(
+                                    '<%= p.getId()%>',
+                                    '<%= p.getNombre().replace("'", "\\'")%>',
+                                    '<%= p.getDescripcion().replace("'", "\\'")%>',
+                                    '<%= p.getPrecio()%>',
+                                                    <%= idsCategorias.toString()%>
+                                                          )">Editar</button>
+
+
+                                <form action="SVAdministrarProductos" method="post" style="display:inline;">
+                                    <input type="hidden" name="accion" value="eliminar">
+                                    <input type="hidden" name="id" value="<%= p.getId()%>">
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="eliminarVisualmente(this)">Eliminar</button>
+                                </form>
+                            </td>
+                        </tr>
+                        <% }
+                            }%>
+                    </tbody>
+                </table>
             </div>
-        </form>
-    </div>
-</div>
+        </main>
+
+        <!-- Modal -->
+        <div class="modal" id="productModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="modalTitle">Agregar Producto</h2>
+                    <button class="close-btn" onclick="closeModal()">&times;</button>
+                </div>
+                <form id="productForm" action="SVAdministrarProductos" method="post">
+                    <input type="hidden" id="accion" name="accion" value="crear">
+                    <input type="hidden" id="productoId" name="id">
+                    <input type="hidden" name="usuario_id" value="1">
+
+                    <div class="form-group">
+                        <label class="form-label" for="nombre">Nombre</label>
+                        <input type="text" class="form-input" name="nombre" id="nombre" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Descripcion</label>
+                        <input type="text" class="form-input" name="descripcion" id="descripcion" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="precio">Precio</label>
+                        <input type="number" class="form-input" name="precio" id="precio" required min="1">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="categoria">Categoría</label>
+                        <div id="categoria-container">
+                            <%-- Suponiendo que tienes cargadas las categorías como atributo "categorias" --%>
+                            <% List<Categoria> categorias = (List<Categoria>) request.getAttribute("categorias");
+                                if (categorias != null) {
+                                    for (Categoria cat : categorias) {
+                            %>
+                            <label>
+                                <input type="checkbox" name="categoriaId" value="<%= cat.getId()%>">
+                                <%= cat.getNombre()%>
+                            </label><br>
+
+                            <%   }
+                                }%>
+                        </div>
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" onclick="closeModal()">Cancelar</button>
+                        <button class="btn btn-primary" type="submit">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
 
         <script>
 
@@ -171,28 +188,29 @@
                 document.getElementById('productModal').style.display = 'block';
             }
 
-       function editarProducto(id, nombre, descripcion, precio, categoriaId) {
-    document.getElementById("productModal").style.display = 'block';
-    setTimeout(() => {
-        document.getElementById("accion").value = "editar";
-        document.getElementById("productoId").value = id;
-        document.getElementById("nombre").value = nombre;
-        document.getElementById("descripcion").value = descripcion;
-        document.getElementById("precio").value = precio;
+            function editarProducto(id, nombre, descripcion, precio, categoriasIds) {
+                document.getElementById("productModal").style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById("accion").value = "editar";
+                    document.getElementById("productoId").value = id;
+                    document.getElementById("nombre").value = nombre;
+                    document.getElementById("descripcion").value = descripcion;
+                    document.getElementById("precio").value = precio;
 
-        // Marcar categoría seleccionada
-        const radios = document.getElementsByName("categoriaId");
-        radios.forEach(radio => {
-            radio.checked = radio.value === categoriaId;
-        });
-    }, 10);
-}
+                    // Desmarcar todo antes
+                    const checks = document.getElementsByName("categoriaId");
+                    checks.forEach(c => c.checked = false);
 
-
-
-
-
-
+                    // Marcar las que estén en la lista
+                    if (categoriasIds) {
+                        categoriasIds.forEach(idCat => {
+                            const checkbox = [...checks].find(c => c.value == idCat);
+                            if (checkbox)
+                                checkbox.checked = true;
+                        });
+                    }
+                }, 10);
+            }
 
             function closeModal() {
                 document.getElementById('productModal').style.display = 'none';
@@ -278,9 +296,11 @@
                 rows.forEach(row => tbody.appendChild(row));
             }
 
-            function generateReport() {
-                alert('Generando reporte de ventas...');
+            function eliminarVisualmente(button) {
+                const row = button.closest("tr");
+                row.style.display = "none";
             }
+
 
             function navigate(section) {
                 alert(`Navegando a: ${section}`);
