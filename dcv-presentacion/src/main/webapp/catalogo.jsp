@@ -99,11 +99,11 @@
                                             <button 
                                                 class="btn-format-card btn-personalizar-card"
                                                 onclick="seleccionarProducto(
-                                                    ${producto.id},
-                                                    '${producto.nombre}',
-                                                    '${producto.descripcion}',
-                                                    ${producto.precio}
-                                                )">
+                                                ${producto.id},
+                                                                '${producto.nombre}',
+                                                                '${producto.descripcion}',
+                                                ${producto.precio}
+                                                        )">
                                                 Personalizar
                                             </button>
                                         </div>
@@ -161,4 +161,21 @@
             </aside>
         </main>
     </body>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const searchInput = document.getElementById("search-bar");
+            const productCards = document.querySelectorAll(".card-producto");
+
+            searchInput.addEventListener("input", () => {
+                const query = searchInput.value.toLowerCase();
+
+                productCards.forEach(card => {
+                    const text = card.innerText.toLowerCase();
+                    const visible = text.includes(query);
+                    card.style.display = visible ? "block" : "none";
+                });
+            });
+        });
+    </script>
+
 </html>
