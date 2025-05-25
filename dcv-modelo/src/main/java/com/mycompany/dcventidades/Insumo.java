@@ -14,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.List;
 
@@ -25,10 +26,10 @@ import java.util.List;
 @Table(name = "Insumo")
 public class Insumo implements Serializable {
 
-    @Id
+      @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idInsumo", nullable = false)
-    private long id;
+    private Long id;
 
     @Column(name = "nombre", nullable = false)
     private String nombre;
@@ -42,24 +43,31 @@ public class Insumo implements Serializable {
     @Column(name = "unidadMedida", nullable = false)
     private String unidadMedida;
 
-    @ManyToOne
-    @JoinColumn(name = "merma_id")
-    private Merma merma;
+    @OneToMany(mappedBy = "insumo")
+    private List<DetalleCompraInsumo> detallesCompra;
 
     @ManyToMany(mappedBy = "insumos")
     private List<Producto> productos;
 
+    @ManyToOne
+    @JoinColumn(name = "merma_id")
+    private Merma merma;
+
+
     public Insumo() {
     }
 
-    public Insumo(String nombre, String descripcion, int stock, String unidadMedida, Merma merma, List<Producto> productos) {
+    public Insumo(String nombre, String descripcion, int stock, String unidadMedida, List<DetalleCompraInsumo> detallesCompra, List<Producto> productos, Merma merma) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.stock = stock;
         this.unidadMedida = unidadMedida;
-        this.merma = merma;
+        this.detallesCompra = detallesCompra;
         this.productos = productos;
+        this.merma = merma;
     }
+
+    
 
     public long getId() {
         return id;
@@ -116,6 +124,15 @@ public class Insumo implements Serializable {
     public void setProductos(List<Producto> productos) {
         this.productos = productos;
     }
+
+    public List<DetalleCompraInsumo> getDetallesCompra() {
+        return detallesCompra;
+    }
+
+    public void setDetallesCompra(List<DetalleCompraInsumo> detallesCompra) {
+        this.detallesCompra = detallesCompra;
+    }
+    
 
     @Override
     public int hashCode() {

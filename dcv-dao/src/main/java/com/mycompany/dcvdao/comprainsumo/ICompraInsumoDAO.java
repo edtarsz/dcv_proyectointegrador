@@ -4,10 +4,18 @@
  */
 package com.mycompany.dcvdao.comprainsumo;
 
+import com.mycompany.dcvconexion.ModelException;
+import com.mycompany.dcventidades.CompraInsumo;
+import java.util.List;
+
 /**
  *
  * @author Ramos
  */
 public interface ICompraInsumoDAO {
+     CompraInsumo crearCompraInsumo(CompraInsumo compra) throws ModelException;
+    CompraInsumo actualizarCompraInsumo(CompraInsumo compra) throws ModelException;
+    void eliminarCompraInsumo(long id) throws ModelException;
+    List<CompraInsumo> obtenerTodasLasCompras() throws ModelException;
 
 }

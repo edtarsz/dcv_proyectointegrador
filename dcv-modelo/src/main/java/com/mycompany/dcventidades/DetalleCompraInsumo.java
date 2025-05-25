@@ -11,6 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.util.Objects;
@@ -23,10 +24,10 @@ import java.util.Objects;
 @Table(name = "DetalleCompraInsumo")
 public class DetalleCompraInsumo implements Serializable {
 
-    @Id
+     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idDetalleCompraInsumo", nullable = false)
-    private long id;
+    @Column(name = "id", nullable = false)
+    private Long id;
 
     @Column(name = "cantidad", nullable = false)
     private int cantidad;
@@ -37,19 +38,34 @@ public class DetalleCompraInsumo implements Serializable {
     @Column(name = "subtotal", nullable = false)
     private double subtotal;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "compraInsumo_id")
     private CompraInsumo compraInsumo;
 
+    @ManyToOne
+    @JoinColumn(name = "insumo_id")
+    private Insumo insumo;
+    
     public DetalleCompraInsumo() {
     }
 
-    public DetalleCompraInsumo(int cantidad, double precioUnitario, double subtotal, CompraInsumo compraInsumo) {
+    public DetalleCompraInsumo(int cantidad, double precioUnitario, double subtotal, CompraInsumo compraInsumo, Insumo insumo) {
         this.cantidad = cantidad;
         this.precioUnitario = precioUnitario;
         this.subtotal = subtotal;
         this.compraInsumo = compraInsumo;
+        this.insumo = insumo;
     }
+
+    public Insumo getInsumo() {
+        return insumo;
+    }
+
+    public void setInsumo(Insumo insumo) {
+        this.insumo = insumo;
+    }
+
+    
 
     public long getId() {
         return id;

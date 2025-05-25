@@ -12,6 +12,16 @@
         <servlet-name>SVPedidos</servlet-name>
         <servlet-class>com.mycompany.dcv.servlet.SVPedidos</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SVMain</servlet-name>
+        <servlet-class>com.mycompany.dcv.servlet.SVMain</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>SVMain</servlet-name>
+        <url-pattern>/SVMain</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>SVCatalogo</servlet-name>
         <url-pattern>/SVCatalogo</url-pattern>

@@ -15,8 +15,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import java.util.List;
 
 /**
  *
@@ -26,10 +28,10 @@ import jakarta.persistence.Table;
 @Table(name = "CompraInsumo")
 public class CompraInsumo implements Serializable {
 
-    @Id
+   @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idCompraInsumo", nullable = false)
-    private long id;
+    @Column(name = "id", nullable = false)
+    private Long id;
 
     @Column(name = "fecha", nullable = false)
     private Date fecha;
@@ -37,27 +39,32 @@ public class CompraInsumo implements Serializable {
     @Column(name = "motivo", nullable = false)
     private String motivo;
 
-    @Column(name = "cantidad", nullable = false)
-    private int cantidad;
-
-    @OneToOne(mappedBy = "compraInsumo", cascade = CascadeType.ALL, orphanRemoval = true)
-    private DetalleCompraInsumo detalleCompraInsumo;
-
     @ManyToOne
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
+    @OneToMany(mappedBy = "compraInsumo", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DetalleCompraInsumo> detallesCompra;
+
     public CompraInsumo() {
     }
 
-    public CompraInsumo(Date fecha, String motivo, int cantidad, DetalleCompraInsumo detalleCompraInsumo, Usuario usuario) {
+    public CompraInsumo(Date fecha, String motivo, Usuario usuario, List<DetalleCompraInsumo> detallesCompra) {
         this.fecha = fecha;
         this.motivo = motivo;
-        this.cantidad = cantidad;
-        this.detalleCompraInsumo = detalleCompraInsumo;
         this.usuario = usuario;
+        this.detallesCompra = detallesCompra;
     }
 
+    public List<DetalleCompraInsumo> getDetallesCompra() {
+        return detallesCompra;
+    }
+
+    public void setDetallesCompra(List<DetalleCompraInsumo> detallesCompra) {
+        this.detallesCompra = detallesCompra;
+    }
+
+    
     public long getId() {
         return id;
     }
@@ -82,21 +89,7 @@ public class CompraInsumo implements Serializable {
         this.motivo = motivo;
     }
 
-    public int getCantidad() {
-        return cantidad;
-    }
-
-    public void setCantidad(int cantidad) {
-        this.cantidad = cantidad;
-    }
-
-    public DetalleCompraInsumo getDetalleCompraInsumo() {
-        return detalleCompraInsumo;
-    }
-
-    public void setDetalleCompraInsumo(DetalleCompraInsumo detalleCompraInsumo) {
-        this.detalleCompraInsumo = detalleCompraInsumo;
-    }
+    
 
     public Usuario getUsuario() {
         return usuario;
@@ -112,8 +105,6 @@ public class CompraInsumo implements Serializable {
         hash = 37 * hash + (int) (this.id ^ (this.id >>> 32));
         hash = 37 * hash + Objects.hashCode(this.fecha);
         hash = 37 * hash + Objects.hashCode(this.motivo);
-        hash = 37 * hash + this.cantidad;
-        hash = 37 * hash + Objects.hashCode(this.detalleCompraInsumo);
         hash = 37 * hash + Objects.hashCode(this.usuario);
         return hash;
     }
@@ -133,16 +124,10 @@ public class CompraInsumo implements Serializable {
         if (this.id != other.id) {
             return false;
         }
-        if (this.cantidad != other.cantidad) {
-            return false;
-        }
         if (!Objects.equals(this.motivo, other.motivo)) {
             return false;
         }
         if (!Objects.equals(this.fecha, other.fecha)) {
-            return false;
-        }
-        if (!Objects.equals(this.detalleCompraInsumo, other.detalleCompraInsumo)) {
             return false;
         }
         return Objects.equals(this.usuario, other.usuario);

@@ -4,9 +4,17 @@
  */
 package com.mycompany.dcvnegocio.detallecomprainsumo;
 
+
+import com.mycompany.dcventidades.DetalleCompraInsumo;
+import com.mycompany.dcvexceptions.ControllerException;
+import java.util.List;
+
 /**
  * @author
  */
 public interface IDetalleCompraInsumoBO {
-
+ DetalleCompraInsumo crearDetalleCompraInsumo(DetalleCompraInsumo detalle) throws ControllerException;
+    DetalleCompraInsumo actualizarDetalleCompraInsumo(DetalleCompraInsumo detalle) throws ControllerException;
+    void eliminarDetalleCompraInsumo(long id) throws ControllerException;
+    List<DetalleCompraInsumo> obtenerDetallesPorCompra(long idCompra) throws ControllerException;
 }

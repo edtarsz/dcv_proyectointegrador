@@ -4,6 +4,10 @@
  */
 package com.mycompany.dcvdao.detallecomprainsumo;
 
+import com.mycompany.dcvconexion.ModelException;
+import com.mycompany.dcventidades.DetalleCompraInsumo;
+import java.util.List;
+
 /**
  * @author Eduardo Talavera Ramos
  * @author Ana Cristina Castro Noriega
@@ -11,5 +15,8 @@ package com.mycompany.dcvdao.detallecomprainsumo;
  * @author Jesús Roberto García Armenta
  */
 public interface IDetalleCompraInsumoDAO {
-
+ DetalleCompraInsumo crearDetalleCompraInsumo(DetalleCompraInsumo detalle) throws ModelException;
+    DetalleCompraInsumo actualizarDetalleCompraInsumo(DetalleCompraInsumo detalle) throws ModelException;
+    void eliminarDetalleCompraInsumo(long id) throws ModelException;
+    List<DetalleCompraInsumo> obtenerDetallesPorCompra(long idCompra) throws ModelException;
 }
