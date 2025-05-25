@@ -17,12 +17,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  *
  * @author crist
- */@WebServlet(name = "SVAdministrarProductos", urlPatterns = {"/SVAdministrarProductos"})
+ */
+@WebServlet(name = "SVAdministrarProductos", urlPatterns = {"/SVAdministrarProductos"})
 public class SVAdministrarProductos extends HttpServlet {
 
     private IProductoBO productoBO;
@@ -60,6 +62,15 @@ public class SVAdministrarProductos extends HttpServlet {
                 nuevo.setNombre(request.getParameter("nombre"));
                 nuevo.setDescripcion(request.getParameter("descripcion"));
                 nuevo.setPrecio(Double.parseDouble(request.getParameter("precio")));
+                String categoriaIdStr = request.getParameter("categoriaId");
+                if (categoriaIdStr != null && !categoriaIdStr.isEmpty()) {
+                    long categoriaId = Long.parseLong(categoriaIdStr);
+                    Categoria categoria = categoriaBO.obtenerPorId(categoriaId);
+                    List<Categoria> categorias = new ArrayList<>();
+                    categorias.add(categoria);
+                    nuevo.setCategorias(categorias); // <- Este método debe existir en tu entidad Producto
+                }
+
                 productoBO.crearProducto(nuevo);
 
             } else if ("editar".equals(accion)) {

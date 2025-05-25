@@ -13,4 +13,5 @@ import java.util.List;
  */
 public interface ICategoriaBO {
   public List<Categoria> obtenerTodas() ;
+  public Categoria obtenerPorId(long id);
 }

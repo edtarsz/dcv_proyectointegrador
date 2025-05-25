@@ -14,5 +14,6 @@ import com.mycompany.dcvconexion.ModelException;
  */
 public interface ICategoriaDAO {
     public List<Categoria> obtenerTodas();
-    
+    public Categoria obtenerPorId(long id);
+            
 }

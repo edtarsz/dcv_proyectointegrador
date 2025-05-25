@@ -1,3 +1,4 @@
+<%@page import="com.mycompany.dcventidades.Categoria"%>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="com.mycompany.dcventidades.Producto" %>
@@ -34,8 +35,8 @@
                 <th>Nombre</th>
                 <th>Descripción</th>
                 <th>Precio</th>
+                <th>Categoría</th>
                 <th>Acciones</th>
-                <th>Selec.</th>
             </tr>
             </thead>
             <% List<Producto> productos = (List<Producto>) request.getAttribute("productos"); %>
@@ -48,7 +49,12 @@
                     <td><%= p.getNombre()%></td>
                     <td><%= p.getDescripcion()%></td>
                     <td>$<%= p.getPrecio()%></td>
-                    <td>${producto.categoria.nombre}</td>
+                    <% if (p.getCategorias() != null && !p.getCategorias().isEmpty()) {%>
+                    <td><%= p.getCategorias().get(0).getNombre()%></td>
+                    <% } else { %>
+                    <td>Sin categoría</td>
+                    <% }%>
+
                     <td>
                         <button type="button" class="btn btn-secondary btn-sm"
                                 onclick="editarProducto(
@@ -81,7 +87,7 @@
         </div>
         <form id="productForm" action="SVAdministrarProductos" method="post">
             <input type="hidden" id="accion" name="accion" value="crear">
-            <input type="hidden" id="insumoId" name="id">
+            <input type="hidden" id="productoId" name="id">
             <input type="hidden" name="usuario_id" value="1">
 
             <div class="form-group">
@@ -95,8 +101,8 @@
             </div>
 
             <div class="form-group">
-                <label class="form-label" for="stock">Precio</label>
-                <input type="number" class="form-input" name="stock" id="stock" required min="1">
+                <label class="form-label" for="precio">Precio</label>
+                <input type="number" class="form-input" name="precio" id="precio" required min="1">
             </div>
 
             <div class="form-group">
@@ -165,7 +171,7 @@
                 document.getElementById('productModal').style.display = 'block';
             }
 
-         function editarProducto(id, nombre, descripcion, precio) {
+       function editarProducto(id, nombre, descripcion, precio, categoriaId) {
     document.getElementById("productModal").style.display = 'block';
     setTimeout(() => {
         document.getElementById("accion").value = "editar";
@@ -173,8 +179,15 @@
         document.getElementById("nombre").value = nombre;
         document.getElementById("descripcion").value = descripcion;
         document.getElementById("precio").value = precio;
+
+        // Marcar categoría seleccionada
+        const radios = document.getElementsByName("categoriaId");
+        radios.forEach(radio => {
+            radio.checked = radio.value === categoriaId;
+        });
     }, 10);
 }
+
 
 
 

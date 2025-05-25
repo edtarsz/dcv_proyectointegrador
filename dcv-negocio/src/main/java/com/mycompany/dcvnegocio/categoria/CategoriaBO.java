@@ -39,4 +39,9 @@ public class CategoriaBO implements ICategoriaBO {
        
             return categoriaDAO.obtenerTodas();
     }
+
+    @Override
+    public Categoria obtenerPorId(long id) {
+        return categoriaDAO.obtenerPorId(id);
+       }
 }
