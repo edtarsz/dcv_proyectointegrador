@@ -4,10 +4,26 @@
  */
 package com.mycompany.dcvdao.categoria;
 
-/**
- *
- * @author Ramos
- */
+import com.mycompany.dcvconexion.ModelException;
+import com.mycompany.dcventidades.Categoria;
+import com.mycompany.dcventidades.Producto; // Necesario para el método de obtener productos
+import java.util.List;
+
 public interface ICategoriaDAO {
+
+    Categoria crearCategoria(Categoria categoria) throws ModelException;
+
+    Categoria obtenerCategoriaPorId(long id);
+
+    List<Categoria> obtenerTodasLasCategorias();
+
+    Categoria actualizarCategoria(Categoria categoria) throws ModelException;
+
+    boolean eliminarCategoria(long id) throws ModelException;
+
+    boolean categoriaTieneProductos(long idCategoria);
+
+    Categoria buscarCategoriaPorNombre(String nombre);
     
+    List<Producto> obtenerProductosPorCategoria(long idCategoria);
 }
