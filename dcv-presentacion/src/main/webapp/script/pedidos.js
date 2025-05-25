@@ -454,3 +454,18 @@ function mostrarError(mensaje) {
         errorContainer.style.display = 'none';
     }, 5000);
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    const searchInput = document.getElementById("search-bar");
+    const pedidos = document.querySelectorAll(".pedido-item");
+
+    searchInput.addEventListener("input", () => {
+        const query = searchInput.value.toLowerCase();
+
+        pedidos.forEach(pedido => {
+            const text = pedido.innerText.toLowerCase();
+            const visible = text.includes(query);
+            pedido.style.display = visible ? "flex" : "none"; // Usa "flex" porque seguramente usas Flexbox
+        });
+    });
+});

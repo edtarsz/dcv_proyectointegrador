@@ -9,7 +9,7 @@
             <li><a href="Reporte.jsp">REPORTES</a></li>
             <li><a href="SVInventario">INVENTARIO</a></li>
              <li><a href="Categorias.jsp">CATEGORIAS</a></li>
-            <li><a href="Pedidos.jsp">PEDIDOS</a></li>
+            <li><a href="SVPedidos">PEDIDOS</a></li>
         </ul>
         <ul class="right-nav">
             <li>
