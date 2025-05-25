@@ -42,7 +42,7 @@
                     </thead>
                     <% List<Producto> productos = (List<Producto>) request.getAttribute("productos"); %>
 
-                    <tbody>
+                    <tbody id="inventoryBody">
                         <% if (productos != null) {
                                 for (Producto p : productos) {%>
                         <tr>

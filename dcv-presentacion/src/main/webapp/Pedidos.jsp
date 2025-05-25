@@ -157,8 +157,8 @@
                                             </button>
                                             <button type="button" 
                                                     class="btn-delete" 
-                                                    data-id="${detalle.producto.id}"  <!-- Se corrigió 'item' por 'detalle' -->
-                                                    title="Eliminar producto">
+                                                    data-id="${detalle.producto.id}">  
+                                                    
                                                     <img src="svg/delete.svg" alt="Eliminar">
                                             </button>
                                         </div>
