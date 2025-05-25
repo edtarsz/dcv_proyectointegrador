@@ -48,25 +48,27 @@ public class Producto implements Serializable {
     )
     private List<Insumo> insumos;
 
-    @ManyToMany(mappedBy = "productos")
-    private List<Categoria> categorias;
+    @ManyToOne
+    @JoinColumn(name = "idCategoria", nullable = false)
+    private Categoria categoria;
 
     public Producto() {
     }
 
-    public Producto(long id, String nombre, String descripcion, Double precio) {
+    public Producto(long id, String nombre, String descripcion, Double precio, Categoria categoria) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.precio = precio;
+        this.categoria = categoria;
     }
 
-    public Producto(String nombre, String descripcion, Double precio, List<Insumo> insumos, List<Categoria> categorias) {
+    public Producto(String nombre, String descripcion, Double precio, List<Insumo> insumos, Categoria categoria) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.precio = precio;
         this.insumos = insumos;
-        this.categorias = categorias;
+        this.categoria = categoria;
     }
 
     public long getId() {
@@ -109,23 +111,23 @@ public class Producto implements Serializable {
         this.insumos = insumos;
     }
 
-    public List<Categoria> getCategorias() {
-        return categorias;
+    public Categoria getCategoria() {
+        return categoria;
     }
 
-    public void setCategorias(List<Categoria> categorias) {
-        this.categorias = categorias;
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
     }
 
-    @Override
+     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 79 * hash + (int) (this.id ^ (this.id >>> 32));
-        hash = 79 * hash + Objects.hashCode(this.nombre);
-        hash = 79 * hash + Objects.hashCode(this.descripcion);
-        hash = 79 * hash + Objects.hashCode(this.precio);
-        hash = 79 * hash + Objects.hashCode(this.insumos);
-        hash = 79 * hash + Objects.hashCode(this.categorias);
+        int hash = 7;
+        hash = 53 * hash + (int) (this.id ^ (this.id >>> 32));
+        hash = 53 * hash + Objects.hashCode(this.nombre);
+        hash = 53 * hash + Objects.hashCode(this.descripcion);
+        hash = 53 * hash + Objects.hashCode(this.precio);
+        hash = 53 * hash + Objects.hashCode(this.insumos);
+        hash = 53 * hash + Objects.hashCode(this.categoria);
         return hash;
     }
 
@@ -156,12 +158,12 @@ public class Producto implements Serializable {
         if (!Objects.equals(this.insumos, other.insumos)) {
             return false;
         }
-        return Objects.equals(this.categorias, other.categorias);
+        return Objects.equals(this.categoria, other.categoria);
     }
 
     @Override
     public String toString() {
-        return "Producto{" + "id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + ", precio=" + precio + ", insumos=" + insumos + ", categorias=" + categorias + '}';
+        return "Producto{" + "id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + ", precio=" + precio + ", insumos=" + insumos + ", categoria=" + categoria + '}';
     }
 
 }

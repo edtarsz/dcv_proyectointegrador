@@ -39,18 +39,19 @@ public class Categoria implements Serializable {
     @Column(name = "descripcion", nullable = false)
     private String descripcion;
 
-    @ManyToMany
-    @JoinTable(
-        name = "categoria_producto",  // Nombre de la tabla intermedia
-        joinColumns = @JoinColumn(name = "categoria_id"),
-        inverseJoinColumns = @JoinColumn(name = "producto_id")
-    )
+    @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL)
     private List<Producto> productos;
 
 
     public Categoria() {
     }
 
+    
+    public Categoria(String nombre, String descripcion) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+    }
+    
     public Categoria(String nombre, String descripcion, List<Producto> productos) {
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -93,11 +94,10 @@ public class Categoria implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 43 * hash + (int) (this.id ^ (this.id >>> 32));
-        hash = 43 * hash + Objects.hashCode(this.nombre);
-        hash = 43 * hash + Objects.hashCode(this.descripcion);
-        hash = 43 * hash + Objects.hashCode(this.productos);
+        int hash = 5;
+        hash = 71 * hash + (int) (this.id ^ (this.id >>> 32));
+        hash = 71 * hash + Objects.hashCode(this.nombre);
+        hash = 71 * hash + Objects.hashCode(this.descripcion);
         return hash;
     }
 
@@ -119,11 +119,12 @@ public class Categoria implements Serializable {
         if (!Objects.equals(this.nombre, other.nombre)) {
             return false;
         }
-        if (!Objects.equals(this.descripcion, other.descripcion)) {
-            return false;
-        }
-        return Objects.equals(this.productos, other.productos);
+
+        return Objects.equals(this.descripcion, other.descripcion);
     }
 
-    
+     @Override
+    public String toString() {
+        return "Categoria{" + "id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + '}';
+    }
 }
