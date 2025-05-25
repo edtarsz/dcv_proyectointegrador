@@ -74,4 +74,12 @@ public List<DetalleCompraInsumo> obtenerDetallesPorCompra(long idCompra) throws 
     
     }
 
+    public DetalleCompraInsumo obtenerUltimoDetallePorInsumo(Long insumoId) throws ControllerException {
+    try {
+        return detalleCompraInsumoDAO.obtenerUltimoDetallePorInsumo(insumoId);
+    } catch (ModelException e) {
+        throw new ControllerException("Error al obtener detalle", e);
+    }
+}
+
 }

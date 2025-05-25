@@ -4,6 +4,7 @@
     Author     : esmeraldamolinaestrada
 --%>
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.Map" %>
 <%@ page import="com.mycompany.dcventidades.Insumo" %>
 <!DOCTYPE html>
 <html lang="es">
@@ -56,15 +57,52 @@
                             <th onclick="sortTable(1)">Nombre <span class="sort-icon"></span></th>
                             <th onclick="sortTable(2)">Descripción <span class="sort-icon"></span></th>
                             <th onclick="sortTable(3)">Cantidad <span class="sort-icon"></span></th>
-                            <th onclick="sortTable(4)">Precio de venta <span class="sort-icon"></span></th>
-                            <th onclick="sortTable(5)">Precio de compra <span class="sort-icon"></span></th>
+                            <th onclick="sortTable(4)">Unidad Medida<span class="sort-icon"></span></th>
+                            <th onclick="sortTable(5)">Precio Unitario <span class="sort-icon"></span></th>
                             <th>Acciones</th>
                             <th>Selec.</th>
                         </tr>
                     </thead>
+                    <%
+                        List<Insumo> insumos = (List<Insumo>) request.getAttribute("insumos");
+                        Map<Long, Double> precios = (Map<Long, Double>) request.getAttribute("precios");
+                    %>
+
                     <tbody id="inventoryBody">
-                        <!-- Los datos se cargarán aquí -->
+                        <% if (insumos != null && !insumos.isEmpty()) {
+                                for (Insumo ins : insumos) {%>
+                        <tr>
+                            <td><%= ins.getId()%></td>
+                            <td><%= ins.getNombre()%></td>
+                            <td><%= ins.getDescripcion()%></td>
+                            <td><%= ins.getStock()%></td> 
+                            <td><%= ins.getUnidadMedida()%></td>
+                            <td>
+                                <%= precios.getOrDefault(ins.getId(), 0.0)%>
+                            </td>
+                            <td class="action-cell">
+                                <button type="button" class="btn btn-secondary btn-sm"
+                                        onclick="editarInsumo('<%= ins.getId()%>', '<%= ins.getNombre()%>', '<%= ins.getDescripcion()%>', '<%= ins.getStock()%>', '<%= ins.getUnidadMedida()%>')">
+                                    Editar
+                                </button>
+
+                                <form action="SVInventario" method="post" style="display:inline;" onsubmit="return confirm('¿Eliminar este insumo?');">
+                                    <input type="hidden" name="accion" value="eliminar">
+                                    <input type="hidden" name="id" value="<%= ins.getId()%>">
+                                    <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                                </form>
+                            </td>
+
+                            <td>
+                                <input type="checkbox" name="seleccionado" value="<%= ins.getId()%>" class="checkbox">
+                            </td>
+                        </tr>
+                        <% }
+                        } else { %>
+                        <tr><td colspan="8" style="text-align:center;">No hay insumos registrados</td></tr>
+                        <% } %>
                     </tbody>
+
                 </table>
             </div>
 
@@ -89,10 +127,7 @@
                     <button class="close-btn" onclick="closeModal()">&times;</button>
                 </div>
 
-<%
-    List<Insumo> insumos = (List<Insumo>) request.getAttribute("insumos");
-%>
-
+               
 
                 <form id="productForm" action="SVInventario" method="post">
                     <input type="hidden" name="accion" value="crear">
@@ -112,7 +147,7 @@
                         <label class="form-label" for="stock">Cantidad</label>
                         <input type="number" class="form-input" name="stock" required min="1">
                     </div>
-                    
+
                     <div class="form-group">
                         <label class="form-label" for="unidadMedida">Unidad Medida</label>
                         <input type="text" class="form-input" name="unidadMedida" required min="1">
@@ -122,7 +157,7 @@
                         <label class="form-label" for="precioUnitario">Precio Unitario</label>
                         <input type="number" class="form-input" name="precioUnitario" required step="0.01">
                     </div>
-                    
+
                     <div class="form-group">
                         <label class="form-label" for="motivo">Motivo</label>
                         <input type="text" class="form-input" name="motivo">
@@ -177,18 +212,23 @@
                 document.getElementById('productModal').style.display = 'block';
             }
 
-            function editProduct(index) {
-                const product = products[index];
-                document.getElementById('modalTitle').textContent = 'Editar Producto';
-                document.getElementById('productId').value = product.id;
-                document.getElementById('productName').value = product.name;
-                document.getElementById('productDescription').value = product.description;
-                document.getElementById('productQuantity').value = product.quantity;
-                document.getElementById('salePrice').value = product.salePrice;
-                document.getElementById('purchasePrice').value = product.purchasePrice;
-                editingIndex = index;
-                document.getElementById('productModal').style.display = 'block';
-            }
+            function editarInsumo(id, nombre, descripcion, stock, unidadMedida) {
+    document.getElementById('modalTitle').textContent = 'Editar Producto';
+
+    document.querySelector("input[name='accion']").value = "editar";
+    document.getElementById("insumoId").value = id;
+    document.getElementById("nombre").value = nombre;
+    document.getElementById("descripcion").value = descripcion;
+    document.getElementById("stock").value = stock;
+    document.getElementById("unidadMedida").value = unidadMedida;
+    document.getElementById("precioUnitario").value = precioUnitario;
+    document.getElementById("motivo").value = motivo;
+
+    // Si tienes otros campos (como motivo o precio), los puedes limpiar aquí o esconder
+
+    document.getElementById("productModal").style.display = 'block';
+}
+
 
             function closeModal() {
                 document.getElementById('productModal').style.display = 'none';
@@ -324,9 +364,6 @@
             document.getElementById('searchInput').addEventListener('input', searchProducts);
 
 
-            // Cargar productos al iniciar
-            loadProducts();
-            
 
         </script>
     </body>

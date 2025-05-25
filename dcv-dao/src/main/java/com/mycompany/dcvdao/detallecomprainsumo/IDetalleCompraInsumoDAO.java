@@ -19,4 +19,5 @@ public interface IDetalleCompraInsumoDAO {
     DetalleCompraInsumo actualizarDetalleCompraInsumo(DetalleCompraInsumo detalle) throws ModelException;
     void eliminarDetalleCompraInsumo(long id) throws ModelException;
     List<DetalleCompraInsumo> obtenerDetallesPorCompra(long idCompra) throws ModelException;
+    public DetalleCompraInsumo obtenerUltimoDetallePorInsumo(Long insumoId) throws ModelException;
 }

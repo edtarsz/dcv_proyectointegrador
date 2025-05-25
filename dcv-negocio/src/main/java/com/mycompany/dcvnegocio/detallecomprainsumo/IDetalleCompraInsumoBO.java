@@ -17,4 +17,5 @@ public interface IDetalleCompraInsumoBO {
     DetalleCompraInsumo actualizarDetalleCompraInsumo(DetalleCompraInsumo detalle) throws ControllerException;
     void eliminarDetalleCompraInsumo(long id) throws ControllerException;
     List<DetalleCompraInsumo> obtenerDetallesPorCompra(long idCompra) throws ControllerException;
+    public DetalleCompraInsumo obtenerUltimoDetallePorInsumo(Long insumoId) throws ControllerException;
 }

@@ -10,7 +10,9 @@ import com.mycompany.dcvconexion.IConexion;
 import com.mycompany.dcvconexion.ModelException;
 import com.mycompany.dcvdao.DAOFactory;
 import com.mycompany.dcvdao.insumo.IInsumoDAO;
+import com.mycompany.dcvdao.insumo.InsumoDAO;
 import com.mycompany.dcvexceptions.ControllerException;
+import com.mycompany.dcvnegocio.usuario.UsuarioBO;
 import jakarta.persistence.Persistence;
 
 import java.util.List;
@@ -19,18 +21,16 @@ import java.util.logging.Logger;
 
 public class InsumoBO implements IInsumoBO {
 
-    private final IInsumoDAO insumoDAO;
+    IInsumoDAO insumoDAO;
     IConexion conexion;
 
     public InsumoBO() {
          conexion = new Conexion(Persistence.createEntityManagerFactory("detallesConVasosPU"));
-        IInsumoDAO tempDAO = null;
-        try {
-            tempDAO = DAOFactory.instanciaInsumoDAO(conexion);
-        } catch (ModelException e) {
-            Logger.getLogger(InsumoBO.class.getName()).log(Level.SEVERE, null, e);
+         try {
+            this.insumoDAO = DAOFactory.instanciaInsumoDAO(conexion);
+        } catch (ModelException ex) {
+            Logger.getLogger(UsuarioBO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.insumoDAO = tempDAO;
     }
 
     @Override

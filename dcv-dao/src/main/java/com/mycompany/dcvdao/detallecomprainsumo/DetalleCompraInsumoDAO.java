@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.NoResultException;
 import java.util.List;
 
 /**
@@ -87,5 +88,20 @@ public List<DetalleCompraInsumo> obtenerDetallesPorCompra(long idCompra) throws 
         throw new ModelException("Error al obtener detalles", e);
     }
 }
+
+public DetalleCompraInsumo obtenerUltimoDetallePorInsumo(Long insumoId) throws ModelException {
+    try {
+        return entityManager.createQuery(
+            "SELECT d FROM DetalleCompraInsumo d WHERE d.insumo.id = :insumoId ORDER BY d.id DESC", DetalleCompraInsumo.class)
+            .setParameter("insumoId", insumoId)
+            .setMaxResults(1)
+            .getSingleResult();
+    } catch (NoResultException e) {
+        return null;
+    } catch (Exception e) {
+        throw new ModelException("Error al obtener el último detalle del insumo", e);
+    }
+}
+
 
 }

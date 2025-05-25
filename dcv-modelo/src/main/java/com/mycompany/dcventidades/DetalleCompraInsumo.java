@@ -26,7 +26,7 @@ public class DetalleCompraInsumo implements Serializable {
 
      @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "idDetalleCompraInsumo", nullable = false)
     private Long id;
 
     @Column(name = "cantidad", nullable = false)

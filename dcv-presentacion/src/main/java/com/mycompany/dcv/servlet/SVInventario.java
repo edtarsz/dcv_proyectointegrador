@@ -24,12 +24,15 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
  * @author crist
- */@WebServlet(name = "SVInventario", urlPatterns = {"/SVInventario"})
+ */
+@WebServlet(name = "SVInventario", urlPatterns = {"/SVInventario"})
 public class SVInventario extends HttpServlet {
 
     private IInsumoBO insumoBO;
@@ -49,14 +52,28 @@ public class SVInventario extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        System.out.println("✅ SVInventario.doGet ejecutado correctamente");
+
+
         try {
             List<Insumo> insumos = insumoBO.obtenerTodosLosInsumos();
+            System.out.println("Cantidad de insumos: " + insumos.size());
             request.setAttribute("insumos", insumos);
+            Map<Long, Double> preciosUnitarios = new HashMap<>();
+            for (Insumo insumo : insumos) {
+                DetalleCompraInsumo detalle = detalleBO.obtenerUltimoDetallePorInsumo(insumo.getId());
+                if (detalle != null) {
+                    preciosUnitarios.put(insumo.getId(), detalle.getPrecioUnitario());
+                }
+            }
+            request.setAttribute("precios", preciosUnitarios);
+
             request.getRequestDispatcher("Inventario.jsp").forward(request, response);
         } catch (ControllerException e) {
-            e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al cargar los insumos.");
+            e.printStackTrace(); // ← Este imprime en consola: revisa ahí
+            throw new ServletException("❌ Error interno real al cargar insumos", e); // Te permite ver el stack completo en navegador
         }
+
     }
 
     @Override
@@ -117,6 +134,6 @@ public class SVInventario extends HttpServlet {
             return;
         }
 
-        response.sendRedirect("Inventario.jsp");
+        response.sendRedirect("SVInventario");
     }
 }

@@ -30,7 +30,7 @@ public class CompraInsumo implements Serializable {
 
    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "idCompraInsumo", nullable = false)
     private Long id;
 
     @Column(name = "fecha", nullable = false)
