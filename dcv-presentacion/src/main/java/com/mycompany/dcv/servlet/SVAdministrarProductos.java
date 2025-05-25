@@ -91,6 +91,7 @@ public class SVAdministrarProductos extends HttpServlet {
                 }
 
                 productoBO.actualizarProducto(producto);
+                
 
             } else if ("eliminar".equals(accion)) {
                  long id = Long.parseLong(request.getParameter("id"));

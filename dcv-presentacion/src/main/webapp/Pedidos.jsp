@@ -155,12 +155,7 @@
                                             <button class="item-editar" data-id="${detalle.id}">
                                                 <img src="svg/edit.svg" alt="Editar">
                                             </button>
-                                            <button type="button" 
-                                                    class="btn-delete" 
-                                                    data-id="${detalle.producto.id}">  
-                                                    
-                                                    <img src="svg/delete.svg" alt="Eliminar">
-                                            </button>
+                                           
                                         </div>
                                     </div>
                                 </c:forEach>

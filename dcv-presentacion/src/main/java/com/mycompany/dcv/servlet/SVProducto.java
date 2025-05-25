@@ -27,10 +27,13 @@ public class SVProducto extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
+            response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
+            response.setHeader("Pragma", "no-cache");
+            response.setDateHeader("Expires", 0);
+
             // Llamamos al método del negocio/DAO para obtener la lista de productos
             List<Producto> productos = productoBO.obtenerTodosLosProductos();
             System.out.println("Productos obtenidos: " + productos);
-
             // Asignamos la lista de productos como atributo de la solicitud
             request.setAttribute("productos", productos);
 

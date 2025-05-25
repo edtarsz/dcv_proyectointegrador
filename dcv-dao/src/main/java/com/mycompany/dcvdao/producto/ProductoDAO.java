@@ -58,7 +58,13 @@ public class ProductoDAO implements IProductoDAO {
 
     @Override
     public List<Producto> obtenerTodosLosProductos() {
-        return entityManager.createQuery("SELECT p FROM Producto p WHERE p.activo = true", Producto.class).getResultList();
+        return entityManager.createQuery(
+                "SELECT DISTINCT p FROM Producto p LEFT JOIN FETCH p.categorias WHERE p.activo = true",
+                Producto.class
+        )
+                .setHint("jakarta.persistence.cache.storeMode", "REFRESH") // 🔁 Forzar recarga
+                .setHint("jakarta.persistence.cache.retrieveMode", "BYPASS") // 🛑 Evita usar caché L2
+                .getResultList();
     }
 
     @Override
